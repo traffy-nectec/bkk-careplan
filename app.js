@@ -190,7 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // DOM Elements
   const stepCards = document.querySelectorAll('.step-card');
   const progressBar = document.getElementById('progressBar');
-  const stepIndicator = document.getElementById('stepIndicator');
   const btnPrev = document.getElementById('btnPrev');
   const btnNext = document.getElementById('btnNext');
   const btnGetLocation = document.getElementById('btnGetLocation');
@@ -730,7 +729,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update Progress Bar
     const pct = Math.round((currentStep / TOTAL_STEPS) * 100);
     progressBar.style.width = `${pct}%`;
-    stepIndicator.textContent = currentStep === TOTAL_STEPS ? `ขั้นตอนสุดท้าย` : `ข้อที่ ${currentStep} / ${TOTAL_STEPS - 1}`;
 
     // Prev Button Visibility
     btnPrev.style.display = currentStep === 1 ? 'none' : 'inline-block';
