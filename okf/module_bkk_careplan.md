@@ -3,51 +3,112 @@
 ## 📌 Module Overview
 * **Module Name:** `bkk_careplan_diaper_form`
 * **Domain:** BKK Public Health Care Plan & Adult Diapers Support
-* **Target Users:** Citizen (ผู้ป่วย / ญาติผู้ดูแลผู้ป่วย)
-* **Integration Points:** Traffy Fondue Webview, BKK Public Health Centers (ศบส. 69 แห่ง), สปสช.
+* **Target Users:** Citizen (ผู้ป่วย / ญาติผู้ดูแลผู้ป่วย) & Public Health Nurses (พยาบาล ศบส.)
+* **Integration Points:** Traffy Fondue Webview, BKK Public Health Centers (ศบส. 69 แห่ง), สปสช., PostgreSQL Database
 
 ---
 
-## 📐 Data Entity Model Diagram (JSON Schema ER)
+## 🔁 1. End-to-End Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as ประชาชน / ผู้ดูแล
+    participant Webview as BKK Careplan Webview
+    participant API as Traffy Fondue Gateway
+    participant DB as PostgreSQL Database
+    participant Nurse as พยาบาลวิชาชีพ ศบส.
+
+    User->>Webview: 1. ปักหมุด GPS พิกัดที่พักอาศัย (Step 4)
+    Webview-->>User: 2. Reverse Geocoding เติม แขวง/เขต ให้อัตโนมัติ (Step 5)
+    User->>Webview: 3. กรอกข้อมูล 12 ข้อ และกดส่งเรื่อง (Step 13)
+    Webview->>API: 4. POST /api/careplan/diaper-requests (JSON Payload)
+    API->>DB: 5. INSERT into diaper_requests & patients
+    API->>Nurse: 6. กระจาย Ticket คำร้องเข้า Queue ของ ศบส. 69 แห่ง
+    Nurse->>User: 7. โทรนัดหมายและลงพื้นที่เยี่ยมบ้าน (Stage 2)
+    Nurse->>DB: 8. ประเมิน ADL 10 ข้อ, บัตรคนพิการ ➔ INSERT into in_home_assessments
+    Nurse->>DB: 9. อนุมัติโควตาผ้าอ้อม/เดือน ➔ INSERT into diaper_approvals
+    Nurse->>User: 10. ส่งมอบผ้าอ้อมผู้ใหญ่ประจำเดือน
+```
+
+---
+
+## 🗄️ 2. PostgreSQL Relational Database ER Diagram (Phase 2 Backend Schema)
 
 ```mermaid
 erDiagram
-    DIAPER_REQUEST ||--|| PATIENT_INFO : "belongs to"
-    DIAPER_REQUEST ||--|| CONTACT_INFO : "delivers to"
-    DIAPER_REQUEST ||--|| MEDICAL_CONDITIONS : "requires"
-    DIAPER_REQUEST ||--o| CAREGIVER_INFO : "assisted by"
-    
-    DIAPER_REQUEST {
-        string request_timestamp
-        string source
-        string applicant_type
-        int attachments_count
+    PATIENTS ||--o{ DIAPER_REQUESTS : "files"
+    PATIENTS ||--o| CAREGIVERS : "cared by"
+    DIAPER_REQUESTS ||--o{ IN_HOME_ASSESSMENTS : "evaluated by"
+    IN_HOME_ASSESSMENTS ||--o| DIAPER_APPROVALS : "approves"
+    DIAPER_REQUESTS ||--o{ REQUEST_ATTACHMENTS : "includes"
+
+    PATIENTS {
+        uuid id PK
+        string national_id UK "เลขบัตรประชาชน 13 หลัก"
+        string fullname "ชื่อ-นามสกุล ผู้ป่วย"
+        string health_coverage "สิทธิการรักษาพยาบาลหลัก"
+        string contact_phone "เบอร์โทรศัพท์"
+        timestamp created_at
     }
-    PATIENT_INFO {
-        string fullname
-        string id_card
-        string health_coverage
-    }
-    CONTACT_INFO {
-        string phone
-        string district
-        string subdistrict
-        string zipcode
-        string address_detail
-        string landmark
-        string full_address
+
+    DIAPER_REQUESTS {
+        uuid id PK
+        string ticket_code UK "รหัสคำร้อง Traffy Fondue"
+        uuid patient_id FK
+        string applicant_type "patient / caregiver"
+        string subdistrict "แขวง"
+        string district "เขต"
+        string zipcode "รหัสไปรษณีย์"
+        text address_detail "บ้านเลขที่/ซอย/ถนน"
+        string landmark "จุดสังเกตใกล้บ้าน"
+        text full_address
         float latitude
         float longitude
-    }
-    MEDICAL_CONDITIONS {
         boolean is_bedridden
         boolean has_incontinence
         string preferred_diaper_size
+        string status "pending / visiting / approved / rejected"
+        timestamp created_at
     }
-    CAREGIVER_INFO {
-        boolean is_self_care
+
+    CAREGIVERS {
+        uuid id PK
+        uuid patient_id FK
         string fullname
         string phone
+        string relationship
+    }
+
+    IN_HOME_ASSESSMENTS {
+        uuid id PK
+        uuid request_id FK
+        string nurse_id "รหัสพยาบาลผู้ประเมิน ศบส."
+        string health_center_code "รหัส ศบส. 69 แห่ง"
+        string disability_card_id "เลขบัตรคนพิการ"
+        int adl_score "คะแนน ADL (0-20)"
+        text medical_conditions_detail "โรคประจำตัว/แผลกดทับ"
+        text care_precautions "ข้อระวัง สายอาหาร/สายปัสสาวะ"
+        timestamp visited_at
+    }
+
+    DIAPER_APPROVALS {
+        uuid id PK
+        uuid assessment_id FK
+        int approved_pieces_per_day "จำนวนชิ้น/วัน"
+        int approved_pieces_per_month "จำนวนชิ้น/เดือน"
+        date start_date
+        date end_date
+        string approved_by "หัวหน้า ศบส. ผู้อนุมัติ"
+        timestamp approved_at
+    }
+
+    REQUEST_ATTACHMENTS {
+        uuid id PK
+        uuid request_id FK
+        string file_path
+        string file_type
+        timestamp uploaded_at
     }
 ```
 
@@ -55,7 +116,7 @@ erDiagram
 
 ## 🏗️ Technical Specification
 
-### 1. Form Step Pipeline & UX Architecture (13 Steps)
+### 3. Form Step Pipeline & UX Architecture (13 Steps)
 | Step | Field Code | Label (ภาษาไทย) | Input Type | Required | UX & Processing Logic |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | 1 | `applicant_type` | สถานะผู้กรอกข้อมูล | Radio Card | Required | เลือก "ผู้ป่วย" หรือ "ญาติ/ผู้ดูแล" |

@@ -7,28 +7,108 @@
 
 ---
 
-## 🗺️ แผนผังการทำงานภาพรวมของระบบ (System Architecture & Integration Diagram)
+## 🔁 แผนผังลำดับการส่งรับข้อมูล (End-to-End Sequence Diagram)
 
 ```mermaid
-flowchart TD
-    subgraph Citizen["📱 Citizen Intake Stage 1 (ฟอร์มประชาชน 12 ข้อ)"]
-        A["👤 Applicant (ผู้ป่วย / ผู้ดูแล)"] --> B["📍 Step 4: GPS Location Pinning"]
-        B --> C["✨ Reverse Geocoding (Auto-fill แขวง & เขต)"]
-        C --> D["🏠 Step 5: BKK Address Autocomplete & Landmark"]
-        D --> E["📋 Step 6-12: Patient Info, National ID, Phone & Attachments"]
-        E --> F["🚀 Step 13: Final Review & Submit Payload"]
-    end
+sequenceDiagram
+    autonumber
+    actor User as ประชาชน / ผู้ดูแล
+    participant Webview as BKK Careplan Webview
+    participant API as Traffy Fondue Gateway
+    participant DB as PostgreSQL Database
+    participant Nurse as พยาบาลวิชาชีพ ศบส.
 
-    subgraph Traffy["⚙️ System Integration Layer"]
-        F --> G["🔌 JSON Payload to Traffy Fondue API"]
-        G --> H["🗺️ BKK District & Health Center Routing Engine"]
-    end
+    User->>Webview: 1. ปักหมุด GPS พิกัดที่พักอาศัย (Step 4)
+    Webview-->>User: 2. Reverse Geocoding เติม แขวง/เขต ให้อัตโนมัติ (Step 5)
+    User->>Webview: 3. กรอกข้อมูล 12 ข้อ และกดส่งเรื่อง (Step 13)
+    Webview->>API: 4. POST /api/careplan/diaper-requests (JSON Payload)
+    API->>DB: 5. INSERT into diaper_requests & patients
+    API->>Nurse: 6. กระจาย Ticket คำร้องเข้า Queue ของ ศบส. 69 แห่ง
+    Nurse->>User: 7. โทรนัดหมายและลงพื้นที่เยี่ยมบ้าน (Stage 2)
+    Nurse->>DB: 8. ประเมิน ADL 10 ข้อ, บัตรคนพิการ ➔ INSERT into in_home_assessments
+    Nurse->>DB: 9. อนุมัติโควตาผ้าอ้อม/เดือน ➔ INSERT into diaper_approvals
+    Nurse->>User: 10. ส่งมอบผ้าอ้อมผู้ใหญ่ประจำเดือน
+```
 
-    subgraph BKKHealth["🏥 Public Health Center Stage 2 (ศบส. เยี่ยมบ้าน)"]
-        H --> I["🏥 Public Health Center (ศบส. 69 แห่ง) Ticket Queue"]
-        I --> J["🩺 Nurse In-Home Clinical Visit (แบบ 01/02)"]
-        J --> K["✅ Medical Approval & Monthly Diaper Supply Delivery"]
-    end
+---
+
+## 🗄️ โครงสร้างฐานข้อมูล PostgreSQL สำหรับระยะถัดไป (Phase 2 Backend Relational DB Schema)
+
+```mermaid
+erDiagram
+    PATIENTS ||--o{ DIAPER_REQUESTS : "files"
+    PATIENTS ||--o| CAREGIVERS : "cared by"
+    DIAPER_REQUESTS ||--o{ IN_HOME_ASSESSMENTS : "evaluated by"
+    IN_HOME_ASSESSMENTS ||--o| DIAPER_APPROVALS : "approves"
+    DIAPER_REQUESTS ||--o{ REQUEST_ATTACHMENTS : "includes"
+
+    PATIENTS {
+        uuid id PK
+        string national_id UK "เลขบัตรประชาชน 13 หลัก"
+        string fullname "ชื่อ-นามสกุล ผู้ป่วย"
+        string health_coverage "สิทธิการรักษาพยาบาลหลัก"
+        string contact_phone "เบอร์โทรศัพท์"
+        timestamp created_at
+    }
+
+    DIAPER_REQUESTS {
+        uuid id PK
+        string ticket_code UK "รหัสคำร้อง Traffy Fondue"
+        uuid patient_id FK
+        string applicant_type "patient / caregiver"
+        string subdistrict "แขวง"
+        string district "เขต"
+        string zipcode "รหัสไปรษณีย์"
+        text address_detail "บ้านเลขที่/ซอย/ถนน"
+        string landmark "จุดสังเกตใกล้บ้าน"
+        text full_address
+        float latitude
+        float longitude
+        boolean is_bedridden
+        boolean has_incontinence
+        string preferred_diaper_size
+        string status "pending / visiting / approved / rejected"
+        timestamp created_at
+    }
+
+    CAREGIVERS {
+        uuid id PK
+        uuid patient_id FK
+        string fullname
+        string phone
+        string relationship
+    }
+
+    IN_HOME_ASSESSMENTS {
+        uuid id PK
+        uuid request_id FK
+        string nurse_id "รหัสพยาบาลผู้ประเมิน ศบส."
+        string health_center_code "รหัส ศบส. 69 แห่ง"
+        string disability_card_id "เลขบัตรคนพิการ"
+        int adl_score "คะแนน ADL (0-20)"
+        text medical_conditions_detail "โรคประจำตัว/แผลกดทับ"
+        text care_precautions "ข้อระวัง สายอาหาร/สายปัสสาวะ"
+        timestamp visited_at
+    }
+
+    DIAPER_APPROVALS {
+        uuid id PK
+        uuid assessment_id FK
+        int approved_pieces_per_day "จำนวนชิ้น/วัน"
+        int approved_pieces_per_month "จำนวนชิ้น/เดือน"
+        date start_date
+        date end_date
+        string approved_by "หัวหน้า ศบส. ผู้อนุมัติ"
+        timestamp approved_at
+    }
+
+    REQUEST_ATTACHMENTS {
+        uuid id PK
+        uuid request_id FK
+        string file_path
+        string file_type
+        timestamp uploaded_at
+    }
 ```
 
 ---
@@ -77,7 +157,7 @@ flowchart TD
 ### 1. คำถามที่ปรับไปไว้ Stage 2 (Omitted from Stage 1) และเหตุผลทาง UX/UI
 | คำถามในเอกสารเดิม | ย้ายไปอยู่ที่ไหน | เหตุผลทางตรรกะและหลักการ UX/UI (Rationale) |
 | :--- | :---: | :--- |
-| **บัตรคนพิการ / ประวัติโรคประจำตัว / ข้อระวังการดูแล** | **Stage 2 (ศบส. เยี่ยมบ้าน)** 🩺 | เป็นข้อมูลสุขภาพเชิงลึก ให้พยาบาลวิชาชีพสอบถามและประเมินเมื่อลงเยี่ยมบ้าน เพื่อป้องกันภาระการกรอกคำร้องเบื้องต้นของผู้สูงอายุ/ผู้ดูแล |
+| **บัตรคนพิการ / ประวัติโรคประจำตัว / ข้อระวังการดูแล** | **Stage 2 (ศบส. เยเยี่ยมบ้าน)** 🩺 | เป็นข้อมูลสุขภาพเชิงลึก ให้พยาบาลวิชาชีพสอบถามและประเมินเมื่อลงเยี่ยมบ้าน เพื่อป้องกันภาระการกรอกคำร้องเบื้องต้นของผู้สูงอายุ/ผู้ดูแล |
 | **การประเมินคะแนน ADL 10 ข้อรายละเอียด** <br>*(กินอาหาร, อาบน้ำ, แต่งตัว ฯลฯ)* | **Stage 2 (ศบส. เยี่ยมบ้าน)** 🩺 | เป็นการประเมินทางการแพทย์ (Clinical Assessment) **ใน Stage 1 สรุปเหลือปุ่มเลือกสภาวะ "ติดเตียง / กลั้นไม่ได้" ในข้อ 2** |
 | **รหัสศูนย์บริการสาธารณสุข (ศบส. 69 แห่ง)** | **Backend System** ⚙️ | ประชาชนไม่ทราบรหัส ศบส. **ระบบใช้พิกัด GPS (ข้อ 4) + เขต/แขวง (ข้อ 5)** ไปค้นหารหัส ศบส. ที่รับผิดชอบให้อัตโนมัติ |
 | **การลงนามของแพทย์ผู้ดูแล / หัวหน้า ศบส.** | **Internal Workflow** 🏛️ | เป็นกระบวนการอนุมัติฝั่งเจ้าหน้าที่ (Internal Approval Chain) |
