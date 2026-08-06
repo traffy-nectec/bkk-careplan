@@ -5,52 +5,164 @@ document.addEventListener('DOMContentLoaded', () => {
   let leafletMarker = null;
   let isMapFullscreen = false;
   
-  // Bangkok Districts & Subdistricts Sample Mapping
-  const bkkDistrictsData = {
-    "พระนคร": ["พระบรมมหาราชวัง", "วังบูรพาภิรมย์", "วัดราชบพิธ", "สำราญราษฎร์", "ศาลเจ้าพ่อเสือ", "เสาชิงช้า", "บวรนิเวศน์", "ตลาดยอด", "ชนะสงคราม", "บ้านพานถม", "บางขุนพรหม", "วัดสามพระยา"],
-    "ดุสิต": ["ดุสิต", "วชิรพยาบาล", "สวนจิตรลดา", "สี่แยกมหานาค", "ถนนนครไชยศรี"],
-    "หนองจอก": ["กระทุ่มราย", "หนองจอก", "คลองสิบ", "คลองสิบสอง", "โคกแฝด", "คู้ฝ้าย", "คลองสิบสี่"],
-    "บางรัก": ["มหาพฤฒาราม", "สีลม", "สุริยวงศ์", "บางรัก", "สี่พระยา"],
-    "บางเขน": ["อนุสาวรีย์", "ท่าแร้ง"],
-    "บางกะปิ": ["คลองจั่น", "หัวหมาก"],
-    "ปทุมวัน": ["รองเมือง", "วังใหม่", "ปทุมวัน", "ลุมพินี"],
-    "ป้อมปราบศัตรูพ่าย": ["ป้อมปราบ", "วัดเทพศิรินทร์", "คลองมหานาค", "บ้านบาตร", "วัดโสมนัส"],
-    "พญาไท": ["สามเสนใน", "พญาไท"],
-    "ธนบุรี": ["วัดกัลยาณ์", "หิรัญรูจี", "บางยี่เรือ", "บุคคโล", "ตลาดพลู", "ดาวคะนอง", "สำเหร่"],
-    "บางกอกใหญ่": ["วัดอรุณ", "วัดท่าพระ"],
-    "ห้วยขวาง": ["ห้วยขวาง", "บางกะปิ", "สามเสนนอก"],
-    "คลองสาน": ["สมเด็จเจ้าพระยา", "คลองสาน", "บางลำภูล่าง", "คลองต้นไทร"],
-    "ตลิ่งชัน": ["คลองชักพระ", "ตลิ่งชัน", "ฉิมพลี", "บางพรม", "บางระมาด", "บางเชือกหนัง"],
-    "บางกอกน้อย": ["ศิริราช", "บ้านช่างหล่อ", "บางขุนนนท์", "บางขุนศรี", "อรุณอมรินทร์"],
-    "บางขุนเทียน": ["ท่าข้าม", "แสมดำ"],
-    "ภาษีเจริญ": ["บางหว้า", "บางด้วน", "บางจาก", "บางแวก", "คลองขวาง", "ปากคลองภาษีเจริญ"],
-    "หนองแขม": ["หนองแขม", "หนองค้างพลู"],
-    "ราษฎร์บูรณะ": ["ราษฎร์บูรณะ", "บางปะกอก"],
-    "บางพลัด": ["บางพลัด", "บางอ้อ", "บางบำหรุ", "บางยี่ขัน"],
-    "ดินแดง": ["ดินแดง", "รัชดาภิเษก"],
-    "บึงกุ่ม": ["คลองกุ่ม", "นวมินทร์", "นวลจันทร์"],
-    "สาทร": ["ทุ่งมหาเมฆ", "ยานนาวา", "ทุ่งวัดดอน"],
-    "บางซื่อ": ["บางซื่อ", "วงศ์สว่าง"],
-    "จตุจักร": ["ลาดยาว", "เสนานิคม", "จันทรเกษม", "จอมพล", "จตุจักร"],
-    "ประเวศ": ["ประเวศ", "หนองบอน", "ดอกไม้"],
-    "คลองเตย": ["คลองเตย", "คลองตัน", "พระโขนง"],
-    "สวนหลวง": ["สวนหลวง", "อ่อนนุช", "พัฒนาการ"],
-    "ดอนเมือง": ["สีกัน", "ดอนเมือง", "สนามบิน"],
-    "ราชเทวี": ["ทุ่งพญาไท", "ถนนพญาไท", "ถนนเพชรบุรี", "มักกะสัน"],
-    "ลาดพร้าว": ["ลาดพร้าว", "จรเข้บัว"],
-    "วัฒนา": ["คลองเตยเหนือ", "คลองตันเหนือ", "พระโขนงเหนือ"],
-    "บางแค": ["บางแค", "บางแคเหนือ", "บางไผ่", "หลักสอง"],
-    "หลักสี่": ["ทุ่งสองห้อง", "ตลาดบางเขน"],
-    "สายไหม": ["สายไหม", "ออเงิน", "คลองถนน"],
-    "คันนายาว": ["คันนายาว", "รามอินทรา"],
-    "สะพานสูง": ["สะพานสูง", "ทับช้าง", "ราษฎร์พัฒนา"],
-    "วังทองหลาง": ["วังทองหลาง", "สะพานสอง", "คลองเจ้าคุณสิงห์", "พลับพลา"],
-    "คลองสามวา": ["สามวาตะวันตก", "สามวาตะวันออก", "บางชัน", "ทรายกองดิน", "ทรายกองดินใต้"],
-    "บางนา": ["บางนาเหนือ", "บางนาใต้"],
-    "ทวีวัฒนา": ["ทวีวัฒนา", "ศาลาธรรมสพน์"],
-    "ทุ่งครุ": ["บางมด", "ทุ่งครุ"],
-    "บางบอน": ["บางบอนเหนือ", "บางบอนใต้", "คลองบางพราน", "คลองบางบอน"]
-  };
+  // Bangkok 50 Districts & 180 Subdistricts Dataset
+  const bkkSubdistrictList = [
+    { subdistrict: "พระบรมมหาราชวัง", district: "พระนคร", zipcode: "10200" },
+    { subdistrict: "วังบูรพาภิรมย์", district: "พระนคร", zipcode: "10200" },
+    { subdistrict: "วัดราชบพิธ", district: "พระนคร", zipcode: "10200" },
+    { subdistrict: "สำราญราษฎร์", district: "พระนคร", zipcode: "10200" },
+    { subdistrict: "ศาลเจ้าพ่อเสือ", district: "พระนคร", zipcode: "10200" },
+    { subdistrict: "เสาชิงช้า", district: "พระนคร", zipcode: "10200" },
+    { subdistrict: "บวรนิเวศน์", district: "พระนคร", zipcode: "10200" },
+    { subdistrict: "ตลาดยอด", district: "พระนคร", zipcode: "10200" },
+    { subdistrict: "ชนะสงคราม", district: "พระนคร", zipcode: "10200" },
+    { subdistrict: "บ้านพานถม", district: "พระนคร", zipcode: "10200" },
+    { subdistrict: "บางขุนพรหม", district: "พระนคร", zipcode: "10200" },
+    { subdistrict: "วัดสามพระยา", district: "พระนคร", zipcode: "10200" },
+    { subdistrict: "ดุสิต", district: "ดุสิต", zipcode: "10300" },
+    { subdistrict: "วชิรพยาบาล", district: "ดุสิต", zipcode: "10300" },
+    { subdistrict: "สวนจิตรลดา", district: "ดุสิต", zipcode: "10300" },
+    { subdistrict: "สี่แยกมหานาค", district: "ดุสิต", zipcode: "10300" },
+    { subdistrict: "ถนนนครไชยศรี", district: "ดุสิต", zipcode: "10300" },
+    { subdistrict: "กระทุ่มราย", district: "หนองจอก", zipcode: "10530" },
+    { subdistrict: "หนองจอก", district: "หนองจอก", zipcode: "10530" },
+    { subdistrict: "คลองสิบ", district: "หนองจอก", zipcode: "10530" },
+    { subdistrict: "คลองสิบสอง", district: "หนองจอก", zipcode: "10530" },
+    { subdistrict: "โคกแฝด", district: "หนองจอก", zipcode: "10530" },
+    { subdistrict: "คู้ฝ้าย", district: "หนองจอก", zipcode: "10530" },
+    { subdistrict: "คลองสิบสี่", district: "หนองจอก", zipcode: "10530" },
+    { subdistrict: "มหาพฤฒาราม", district: "บางรัก", zipcode: "10500" },
+    { subdistrict: "สีลม", district: "บางรัก", zipcode: "10500" },
+    { subdistrict: "สุริยวงศ์", district: "บางรัก", zipcode: "10500" },
+    { subdistrict: "บางรัก", district: "บางรัก", zipcode: "10500" },
+    { subdistrict: "สี่พระยา", district: "บางรัก", zipcode: "10500" },
+    { subdistrict: "อนุสาวรีย์", district: "บางเขน", zipcode: "10220" },
+    { subdistrict: "ท่าแร้ง", district: "บางเขน", zipcode: "10220" },
+    { subdistrict: "คลองจั่น", district: "บางกะปิ", zipcode: "10240" },
+    { subdistrict: "หัวหมาก", district: "บางกะปิ", zipcode: "10240" },
+    { subdistrict: "รองเมือง", district: "ปทุมวัน", zipcode: "10330" },
+    { subdistrict: "วังใหม่", district: "ปทุมวัน", zipcode: "10330" },
+    { subdistrict: "ปทุมวัน", district: "ปทุมวัน", zipcode: "10330" },
+    { subdistrict: "ลุมพินี", district: "ปทุมวัน", zipcode: "10330" },
+    { subdistrict: "ป้อมปราบ", district: "ป้อมปราบศัตรูพ่าย", zipcode: "10100" },
+    { subdistrict: "วัดเทพศิรินทร์", district: "ป้อมปราบศัตรูพ่าย", zipcode: "10100" },
+    { subdistrict: "คลองมหานาค", district: "ป้อมปราบศัตรูพ่าย", zipcode: "10100" },
+    { subdistrict: "บ้านบาตร", district: "ป้อมปราบศัตรูพ่าย", zipcode: "10100" },
+    { subdistrict: "วัดโสมนัส", district: "ป้อมปราบศัตรูพ่าย", zipcode: "10100" },
+    { subdistrict: "สามเสนใน", district: "พญาไท", zipcode: "10400" },
+    { subdistrict: "พญาไท", district: "พญาไท", zipcode: "10400" },
+    { subdistrict: "วัดกัลยาณ์", district: "ธนบุรี", zipcode: "10600" },
+    { subdistrict: "หิรัญรูจี", district: "ธนบุรี", zipcode: "10600" },
+    { subdistrict: "บางยี่เรือ", district: "ธนบุรี", zipcode: "10600" },
+    { subdistrict: "บุคคโล", district: "ธนบุรี", zipcode: "10600" },
+    { subdistrict: "ตลาดพลู", district: "ธนบุรี", zipcode: "10600" },
+    { subdistrict: "ดาวคะนอง", district: "ธนบุรี", zipcode: "10600" },
+    { subdistrict: "สำเหร่", district: "ธนบุรี", zipcode: "10600" },
+    { subdistrict: "วัดอรุณ", district: "บางกอกใหญ่", zipcode: "10600" },
+    { subdistrict: "วัดท่าพระ", district: "บางกอกใหญ่", zipcode: "10600" },
+    { subdistrict: "ห้วยขวาง", district: "ห้วยขวาง", zipcode: "10310" },
+    { subdistrict: "สามเสนนอก", district: "ห้วยขวาง", zipcode: "10310" },
+    { subdistrict: "สมเด็จเจ้าพระยา", district: "คลองสาน", zipcode: "10600" },
+    { subdistrict: "คลองสาน", district: "คลองสาน", zipcode: "10600" },
+    { subdistrict: "บางลำภูล่าง", district: "คลองสาน", zipcode: "10600" },
+    { subdistrict: "คลองต้นไทร", district: "คลองสาน", zipcode: "10600" },
+    { subdistrict: "คลองชักพระ", district: "ตลิ่งชัน", zipcode: "10170" },
+    { subdistrict: "ตลิ่งชัน", district: "ตลิ่งชัน", zipcode: "10170" },
+    { subdistrict: "ฉิมพลี", district: "ตลิ่งชัน", zipcode: "10170" },
+    { subdistrict: "บางพรม", district: "ตลิ่งชัน", zipcode: "10170" },
+    { subdistrict: "บางระมาด", district: "ตลิ่งชัน", zipcode: "10170" },
+    { subdistrict: "บางเชือกหนัง", district: "ตลิ่งชัน", zipcode: "10170" },
+    { subdistrict: "ศิริราช", district: "บางกอกน้อย", zipcode: "10700" },
+    { subdistrict: "บ้านช่างหล่อ", district: "บางกอกน้อย", zipcode: "10700" },
+    { subdistrict: "บางขุนนนท์", district: "บางกอกน้อย", zipcode: "10700" },
+    { subdistrict: "บางขุนศรี", district: "บางกอกน้อย", zipcode: "10700" },
+    { subdistrict: "อรุณอมรินทร์", district: "บางกอกน้อย", zipcode: "10700" },
+    { subdistrict: "ท่าข้าม", district: "บางขุนเทียน", zipcode: "10150" },
+    { subdistrict: "แสมดำ", district: "บางขุนเทียน", zipcode: "10150" },
+    { subdistrict: "บางหว้า", district: "ภาษีเจริญ", zipcode: "10160" },
+    { subdistrict: "บางด้วน", district: "ภาษีเจริญ", zipcode: "10160" },
+    { subdistrict: "บางจาก", district: "ภาษีเจริญ", zipcode: "10160" },
+    { subdistrict: "บางแวก", district: "ภาษีเจริญ", zipcode: "10160" },
+    { subdistrict: "คลองขวาง", district: "ภาษีเจริญ", zipcode: "10160" },
+    { subdistrict: "ปากคลองภาษีเจริญ", district: "ภาษีเจริญ", zipcode: "10160" },
+    { subdistrict: "หนองแขม", district: "หนองแขม", zipcode: "10160" },
+    { subdistrict: "หนองค้างพลู", district: "หนองแขม", zipcode: "10160" },
+    { subdistrict: "ราษฎร์บูรณะ", district: "ราษฎร์บูรณะ", zipcode: "10140" },
+    { subdistrict: "บางปะกอก", district: "ราษฎร์บูรณะ", zipcode: "10140" },
+    { subdistrict: "บางพลัด", district: "บางพลัด", zipcode: "10700" },
+    { subdistrict: "บางอ้อ", district: "บางพลัด", zipcode: "10700" },
+    { subdistrict: "บางบำหรุ", district: "บางพลัด", zipcode: "10700" },
+    { subdistrict: "บางยี่ขัน", district: "บางพลัด", zipcode: "10700" },
+    { subdistrict: "ดินแดง", district: "ดินแดง", zipcode: "10400" },
+    { subdistrict: "รัชดาภิเษก", district: "ดินแดง", zipcode: "10400" },
+    { subdistrict: "คลองกุ่ม", district: "บึงกุ่ม", zipcode: "10240" },
+    { subdistrict: "นวมินทร์", district: "บึงกุ่ม", zipcode: "10240" },
+    { subdistrict: "นวลจันทร์", district: "บึงกุ่ม", zipcode: "10230" },
+    { subdistrict: "ทุ่งมหาเมฆ", district: "สาทร", zipcode: "10120" },
+    { subdistrict: "ยานนาวา", district: "สาทร", zipcode: "10120" },
+    { subdistrict: "ทุ่งวัดดอน", district: "สาทร", zipcode: "10120" },
+    { subdistrict: "บางซื่อ", district: "บางซื่อ", zipcode: "10800" },
+    { subdistrict: "วงศ์สว่าง", district: "บางซื่อ", zipcode: "10800" },
+    { subdistrict: "ลาดยาว", district: "จตุจักร", zipcode: "10900" },
+    { subdistrict: "เสนานิคม", district: "จตุจักร", zipcode: "10900" },
+    { subdistrict: "จันทรเกษม", district: "จตุจักร", zipcode: "10900" },
+    { subdistrict: "จอมพล", district: "จตุจักร", zipcode: "10900" },
+    { subdistrict: "จตุจักร", district: "จตุจักร", zipcode: "10900" },
+    { subdistrict: "ประเวศ", district: "ประเวศ", zipcode: "10250" },
+    { subdistrict: "หนองบอน", district: "ประเวศ", zipcode: "10250" },
+    { subdistrict: "ดอกไม้", district: "ประเวศ", zipcode: "10250" },
+    { subdistrict: "คลองเตย", district: "คลองเตย", zipcode: "10110" },
+    { subdistrict: "คลองตัน", district: "คลองเตย", zipcode: "10110" },
+    { subdistrict: "พระโขนง", district: "คลองเตย", zipcode: "10110" },
+    { subdistrict: "สวนหลวง", district: "สวนหลวง", zipcode: "10250" },
+    { subdistrict: "อ่อนนุช", district: "สวนหลวง", zipcode: "10250" },
+    { subdistrict: "พัฒนาการ", district: "สวนหลวง", zipcode: "10250" },
+    { subdistrict: "สีกัน", district: "ดอนเมือง", zipcode: "10210" },
+    { subdistrict: "ดอนเมือง", district: "ดอนเมือง", zipcode: "10210" },
+    { subdistrict: "สนามบิน", district: "ดอนเมือง", zipcode: "10210" },
+    { subdistrict: "ทุ่งพญาไท", district: "ราชเทวี", zipcode: "10400" },
+    { subdistrict: "ถนนพญาไท", district: "ราชเทวี", zipcode: "10400" },
+    { subdistrict: "ถนนเพชรบุรี", district: "ราชเทวี", zipcode: "10400" },
+    { subdistrict: "มักกะสัน", district: "ราชเทวี", zipcode: "10400" },
+    { subdistrict: "ลาดพร้าว", district: "ลาดพร้าว", zipcode: "10230" },
+    { subdistrict: "จรเข้บัว", district: "ลาดพร้าว", zipcode: "10230" },
+    { subdistrict: "คลองเตยเหนือ", district: "วัฒนา", zipcode: "10110" },
+    { subdistrict: "คลองตันเหนือ", district: "วัฒนา", zipcode: "10110" },
+    { subdistrict: "พระโขนงเหนือ", district: "วัฒนา", zipcode: "10110" },
+    { subdistrict: "บางแค", district: "บางแค", zipcode: "10160" },
+    { subdistrict: "บางแคเหนือ", district: "บางแค", zipcode: "10160" },
+    { subdistrict: "บางไผ่", district: "บางแค", zipcode: "10160" },
+    { subdistrict: "หลักสอง", district: "บางแค", zipcode: "10160" },
+    { subdistrict: "ทุ่งสองห้อง", district: "หลักสี่", zipcode: "10210" },
+    { subdistrict: "ตลาดบางเขน", district: "หลักสี่", zipcode: "10210" },
+    { subdistrict: "สายไหม", district: "สายไหม", zipcode: "10220" },
+    { subdistrict: "ออเงิน", district: "สายไหม", zipcode: "10220" },
+    { subdistrict: "คลองถนน", district: "สายไหม", zipcode: "10220" },
+    { subdistrict: "คันนายาว", district: "คันนายาว", zipcode: "10230" },
+    { subdistrict: "รามอินทรา", district: "คันนายาว", zipcode: "10230" },
+    { subdistrict: "สะพานสูง", district: "สะพานสูง", zipcode: "10240" },
+    { subdistrict: "ทับช้าง", district: "สะพานสูง", zipcode: "10250" },
+    { subdistrict: "ราษฎร์พัฒนา", district: "สะพานสูง", zipcode: "10240" },
+    { subdistrict: "วังทองหลาง", district: "วังทองหลาง", zipcode: "10310" },
+    { subdistrict: "สะพานสอง", district: "วังทองหลาง", zipcode: "10310" },
+    { subdistrict: "คลองเจ้าคุณสิงห์", district: "วังทองหลาง", zipcode: "10310" },
+    { subdistrict: "พลับพลา", district: "วังทองหลาง", zipcode: "10310" },
+    { subdistrict: "สามวาตะวันตก", district: "คลองสามวา", zipcode: "10510" },
+    { subdistrict: "สามวาตะวันออก", district: "คลองสามวา", zipcode: "10510" },
+    { subdistrict: "บางชัน", district: "คลองสามวา", zipcode: "10510" },
+    { subdistrict: "ทรายกองดิน", district: "คลองสามวา", zipcode: "10510" },
+    { subdistrict: "ทรายกองดินใต้", district: "คลองสามวา", zipcode: "10510" },
+    { subdistrict: "บางนาเหนือ", district: "บางนา", zipcode: "10260" },
+    { subdistrict: "บางนาใต้", district: "บางนา", zipcode: "10260" },
+    { subdistrict: "ทวีวัฒนา", district: "ทวีวัฒนา", zipcode: "10170" },
+    { subdistrict: "ศาลาธรรมสพน์", district: "ทวีวัฒนา", zipcode: "10170" },
+    { subdistrict: "บางมด", district: "ทุ่งครุ", zipcode: "10140" },
+    { subdistrict: "ทุ่งครุ", district: "ทุ่งครุ", zipcode: "10140" },
+    { subdistrict: "บางบอนเหนือ", district: "บางบอน", zipcode: "10150" },
+    { subdistrict: "บางบอนใต้", district: "บางบอน", zipcode: "10150" },
+    { subdistrict: "คลองบางพราน", district: "บางบอน", zipcode: "10150" },
+    { subdistrict: "คลองบางบอน", district: "บางบอน", zipcode: "10150" }
+  ];
 
   // State Object
   let formData = {
@@ -61,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
     contact_phone: '',
     district: '',
     subdistrict: '',
+    zipcode: '',
     patient_address_detail: '',
     patient_address: '',
     latitude: null,
@@ -84,8 +197,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const mapSearchInput = document.getElementById('mapSearchInput');
   const btnSearchMap = document.getElementById('btnSearchMap');
   const coordsDisplay = document.getElementById('coordsDisplay');
-  const districtSelect = document.getElementById('districtSelect');
-  const subdistrictSelect = document.getElementById('subdistrictSelect');
+  const bkkAddressSearch = document.getElementById('bkkAddressSearch');
+  const bkkAddressSuggestions = document.getElementById('bkkAddressSuggestions');
+  const selectedAddressBadge = document.getElementById('selectedAddressBadge');
+  const geocodeNotification = document.getElementById('geocodeNotification');
   const patientAddressDetail = document.getElementById('patient_address_detail');
   const fileUpload = document.getElementById('fileUpload');
   const filePreviewList = document.getElementById('filePreviewList');
@@ -96,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const patientIdInput = document.getElementById('patient_id');
   const idValidationMsg = document.getElementById('idValidationMsg');
 
-  // Accessibility Font Size Toggle (3.2)
+  // Accessibility Font Size Toggle
   document.querySelectorAll('.btn-font-size').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.btn-font-size').forEach(b => b.classList.remove('active'));
@@ -106,37 +221,39 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Init BKK District Select (2.3)
-  if (districtSelect) {
-    Object.keys(bkkDistrictsData).sort().forEach(d => {
-      const opt = document.createElement('option');
-      opt.value = d;
-      opt.textContent = `เขต${d}`;
-      districtSelect.appendChild(opt);
-    });
-
-    districtSelect.addEventListener('change', () => {
-      const dist = districtSelect.value;
-      formData.district = dist;
-      subdistrictSelect.innerHTML = '<option value="">-- เลือกแขวง --</option>';
-      if (dist && bkkDistrictsData[dist]) {
-        bkkDistrictsData[dist].forEach(sub => {
-          const opt = document.createElement('option');
-          opt.value = sub;
-          opt.textContent = `แขวง${sub}`;
-          subdistrictSelect.appendChild(opt);
-        });
+  // BKK Address Autocomplete Engine (jquery.Thailand.js style)
+  if (bkkAddressSearch) {
+    bkkAddressSearch.addEventListener('input', (e) => {
+      const q = e.target.value.trim().toLowerCase();
+      if (!q) {
+        bkkAddressSuggestions.style.display = 'none';
+        return;
       }
-      updateFullAddressText();
-      checkCurrentStepValidity();
-      saveDraft();
+      const matches = bkkSubdistrictList.filter(item => 
+        item.subdistrict.toLowerCase().includes(q) || 
+        item.district.toLowerCase().includes(q) ||
+        item.zipcode.includes(q)
+      ).slice(0, 8);
+
+      if (matches.length > 0) {
+        bkkAddressSuggestions.innerHTML = '';
+        matches.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'suggestion-item';
+          div.innerHTML = `แขวง<b>${item.subdistrict}</b> » เขต<b>${item.district}</b> » ${item.zipcode}`;
+          div.addEventListener('click', () => selectBkkAddress(item));
+          bkkAddressSuggestions.appendChild(div);
+        });
+        bkkAddressSuggestions.style.display = 'block';
+      } else {
+        bkkAddressSuggestions.style.display = 'none';
+      }
     });
 
-    subdistrictSelect.addEventListener('change', () => {
-      formData.subdistrict = subdistrictSelect.value;
-      updateFullAddressText();
-      checkCurrentStepValidity();
-      saveDraft();
+    document.addEventListener('click', (e) => {
+      if (!bkkAddressSearch.contains(e.target) && !bkkAddressSuggestions.contains(e.target)) {
+        bkkAddressSuggestions.style.display = 'none';
+      }
     });
 
     patientAddressDetail.addEventListener('input', () => {
@@ -147,11 +264,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function selectBkkAddress(item) {
+    formData.subdistrict = item.subdistrict;
+    formData.district = item.district;
+    formData.zipcode = item.zipcode;
+    bkkAddressSearch.value = `แขวง${item.subdistrict} เขต${item.district} ${item.zipcode}`;
+    bkkAddressSuggestions.style.display = 'none';
+    selectedAddressBadge.innerHTML = `✅ เลือกแล้ว: <b>แขวง${item.subdistrict} เขต${item.district} ${item.zipcode}</b>`;
+    selectedAddressBadge.style.display = 'block';
+    updateFullAddressText();
+    checkCurrentStepValidity();
+    saveDraft();
+  }
+
   function updateFullAddressText() {
     const detail = formData.patient_address_detail || '';
     const sub = formData.subdistrict ? ` แขวง${formData.subdistrict}` : '';
     const dist = formData.district ? ` เขต${formData.district}` : '';
-    formData.patient_address = `${detail}${sub}${dist} กรุงเทพมหานคร`.trim();
+    const zip = formData.zipcode ? ` ${formData.zipcode}` : '';
+    formData.patient_address = `${detail}${sub}${dist} กรุงเทพมหานคร${zip}`.trim();
   }
 
   // Restore Draft from LocalStorage
@@ -187,10 +318,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (formData.contact_phone) document.getElementById('contact_phone').value = formData.contact_phone;
     
-    if (formData.district && districtSelect) {
-      districtSelect.value = formData.district;
-      districtSelect.dispatchEvent(new Event('change'));
-      if (formData.subdistrict) subdistrictSelect.value = formData.subdistrict;
+    if (formData.subdistrict && formData.district && bkkAddressSearch) {
+      bkkAddressSearch.value = `แขวง${formData.subdistrict} เขต${formData.district} ${formData.zipcode || ''}`;
+      selectedAddressBadge.innerHTML = `✅ เลือกแล้ว: <b>แขวง${formData.subdistrict} เขต${formData.district} ${formData.zipcode || ''}</b>`;
+      selectedAddressBadge.style.display = 'block';
     }
     if (formData.patient_address_detail) patientAddressDetail.value = formData.patient_address_detail;
 
@@ -212,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formData.caregiver_phone) document.getElementById('caregiver_phone').value = formData.caregiver_phone;
   }
 
-  // Thai Citizen ID Mask Formatting (2.2)
+  // Thai Citizen ID Mask Formatting
   function formatThaiIDString(val) {
     const digits = val.replace(/\D/g, '').slice(0, 13);
     let formatted = '';
@@ -244,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return check === parseInt(idDigits.charAt(12));
   }
 
-  // Initialize Leaflet Draggable Map (2.1)
+  // Initialize Leaflet Draggable Map & Reverse Geocoding
   function initLeafletMap() {
     if (leafletMap) {
       setTimeout(() => leafletMap.invalidateSize(), 200);
@@ -267,25 +398,40 @@ document.addEventListener('DOMContentLoaded', () => {
       updateCoordsDisplay(formData.latitude, formData.longitude);
     }
 
-    // Drag marker event
     leafletMarker.on('dragend', function (e) {
-      const position = leafletMarker.getLatLng();
-      setCoords(position.lat, position.lng);
+      const pos = leafletMarker.getLatLng();
+      setCoordsAndReverseGeocode(pos.lat, pos.lng);
     });
 
-    // Click map event
     leafletMap.on('click', function (e) {
       leafletMarker.setLatLng(e.latlng);
-      setCoords(e.latlng.lat, e.latlng.lng);
+      setCoordsAndReverseGeocode(e.latlng.lat, e.latlng.lng);
     });
   }
 
-  function setCoords(lat, lng) {
+  function setCoordsAndReverseGeocode(lat, lng) {
     formData.latitude = lat;
     formData.longitude = lng;
     updateCoordsDisplay(lat, lng);
     checkCurrentStepValidity();
     saveDraft();
+
+    // Reverse Geocoding to auto-fill BKK District/Subdistrict
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=th`)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.address) {
+          const rawAddr = JSON.stringify(data.address);
+          const matched = bkkSubdistrictList.find(item => 
+            rawAddr.includes(item.subdistrict) || rawAddr.includes(item.district)
+          );
+          if (matched) {
+            selectBkkAddress(matched);
+            geocodeNotification.style.display = 'block';
+          }
+        }
+      })
+      .catch(err => console.log('Reverse geocode skip', err));
   }
 
   function updateCoordsDisplay(lat, lng) {
@@ -293,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
     coordsDisplay.classList.add('active');
   }
 
-  // Map Fullscreen Toggle (2.1)
+  // Map Fullscreen Toggle
   if (btnToggleFullscreenMap) {
     btnToggleFullscreenMap.addEventListener('click', () => {
       const mapContainer = document.getElementById('map');
@@ -309,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Search Map Location via OpenStreetMap Nominatim API (2.1)
+  // Search Map Location via OpenStreetMap Nominatim API
   if (btnSearchMap && mapSearchInput) {
     btnSearchMap.addEventListener('click', () => {
       const query = mapSearchInput.value.trim();
@@ -324,7 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const lon = parseFloat(data[0].lon);
             leafletMap.setView([lat, lon], 16);
             leafletMarker.setLatLng([lat, lon]);
-            setCoords(lat, lon);
+            setCoordsAndReverseGeocode(lat, lon);
           } else {
             alert('ไม่พบสถานที่ดังกล่าว กรุณาลองค้นหาด้วยชื่อถนนหรือสถานที่สำคัญใกล้เคียง');
           }
@@ -345,7 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
           (pos) => {
             const lat = pos.coords.latitude;
             const lng = pos.coords.longitude;
-            setCoords(lat, lng);
+            setCoordsAndReverseGeocode(lat, lng);
             if (leafletMap && leafletMarker) {
               leafletMap.setView([lat, lng], 16);
               leafletMarker.setLatLng([lat, lng]);
@@ -396,8 +542,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentStep === 1) {
       isValid = !!document.querySelector('input[name="applicant_type"]:checked');
     } else if (currentStep === 2) {
-      isValid = document.getElementById('patient_name').value.trim().length > 0;
+      const cbs = document.querySelectorAll('input[name="health_condition"]:checked');
+      isValid = cbs.length > 0;
     } else if (currentStep === 3) {
+      isValid = true; // Recommended step
+    } else if (currentStep === 4) {
+      isValid = formData.latitude !== null && formData.longitude !== null;
+    } else if (currentStep === 5) {
+      isValid = !!formData.district && !!formData.subdistrict && !!formData.patient_address_detail;
+    } else if (currentStep === 6) {
+      isValid = document.getElementById('patient_name').value.trim().length > 0;
+    } else if (currentStep === 7) {
       const idDigits = formData.patient_id;
       isValid = validateThaiID(idDigits);
       if (idDigits.length === 13) {
@@ -412,20 +567,11 @@ document.addEventListener('DOMContentLoaded', () => {
         idValidationMsg.textContent = 'ป้อนตัวเลขให้ครบ 13 หลัก';
         idValidationMsg.classList.remove('error');
       }
-    } else if (currentStep === 4) {
+    } else if (currentStep === 8) {
       isValid = !!document.querySelector('input[name="health_coverage"]:checked');
-    } else if (currentStep === 5) {
+    } else if (currentStep === 9) {
       const phone = document.getElementById('contact_phone').value.trim();
       isValid = phone.length >= 9;
-    } else if (currentStep === 6) {
-      isValid = !!formData.district && !!formData.subdistrict && !!formData.patient_address_detail;
-    } else if (currentStep === 7) {
-      isValid = formData.latitude !== null && formData.longitude !== null;
-    } else if (currentStep === 8) {
-      const cbs = document.querySelectorAll('input[name="health_condition"]:checked');
-      isValid = cbs.length > 0;
-    } else if (currentStep === 9) {
-      isValid = true; // Recommended step
     } else if (currentStep === 10) {
       isValid = !!document.querySelector('input[name="self_care_status"]:checked');
     } else if (currentStep === 11) {
@@ -448,21 +594,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const sel = document.querySelector('input[name="applicant_type"]:checked');
       if (sel) formData.applicant_type = sel.value;
     } else if (currentStep === 2) {
-      formData.patient_name = document.getElementById('patient_name').value.trim();
-    } else if (currentStep === 3) {
-      formData.patient_id = patientIdInput.value.replace(/\D/g, '');
-    } else if (currentStep === 4) {
-      const sel = document.querySelector('input[name="health_coverage"]:checked');
-      if (sel) formData.health_coverage = sel.value;
-    } else if (currentStep === 5) {
-      formData.contact_phone = document.getElementById('contact_phone').value.trim();
-    } else if (currentStep === 6) {
-      updateFullAddressText();
-    } else if (currentStep === 8) {
       formData.health_conditions = Array.from(document.querySelectorAll('input[name="health_condition"]:checked')).map(cb => cb.value);
-    } else if (currentStep === 9) {
+    } else if (currentStep === 3) {
       const sel = document.querySelector('input[name="diaper_size"]:checked');
       if (sel) formData.diaper_size = sel.value;
+    } else if (currentStep === 5) {
+      updateFullAddressText();
+    } else if (currentStep === 6) {
+      formData.patient_name = document.getElementById('patient_name').value.trim();
+    } else if (currentStep === 7) {
+      formData.patient_id = patientIdInput.value.replace(/\D/g, '');
+    } else if (currentStep === 8) {
+      const sel = document.querySelector('input[name="health_coverage"]:checked');
+      if (sel) formData.health_coverage = sel.value;
+    } else if (currentStep === 9) {
+      formData.contact_phone = document.getElementById('contact_phone').value.trim();
     } else if (currentStep === 10) {
       const sel = document.querySelector('input[name="self_care_status"]:checked');
       if (sel) formData.self_care_status = sel.value;
@@ -473,8 +619,8 @@ document.addEventListener('DOMContentLoaded', () => {
     saveDraft();
   }
 
-  // Real-time input listeners to enable/disable Next button (1.2 Explicit Next button)
-  document.querySelectorAll('input, textarea, select').forEach(el => {
+  // Real-time input listeners to enable/disable Next button
+  document.querySelectorAll('input, textarea').forEach(el => {
     el.addEventListener('input', () => {
       syncCurrentStepData();
       checkCurrentStepValidity();
@@ -491,7 +637,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!checkCurrentStepValidity()) return;
 
     if (currentStep === 10 && formData.self_care_status === 'self') {
-      // Skip Step 11 (Caregiver details) if patient can self care
       currentStep = 12;
     } else if (currentStep < TOTAL_STEPS) {
       currentStep++;
@@ -506,7 +651,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Go to Previous Step
   function goPrevStep() {
     if (currentStep === 12 && formData.self_care_status === 'self') {
-      // Skip back over Step 11 to Step 10
       currentStep = 10;
     } else if (currentStep > 1) {
       currentStep--;
@@ -533,8 +677,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Initialize Map if on Step 7
-    if (currentStep === 7) {
+    // Initialize Map if on Step 4
+    if (currentStep === 4) {
       setTimeout(initLeafletMap, 150);
     }
 
@@ -568,7 +712,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="review-section-card">
         <div class="review-card-header">
           <div class="review-card-title">🩺 สิทธิและสภาวะความต้องการ</div>
-          <button type="button" class="review-edit-btn" onclick="jumpToStep(8)">แก้ไข</button>
+          <button type="button" class="review-edit-btn" onclick="jumpToStep(2)">แก้ไข</button>
         </div>
         <div class="review-data-row">
           <span class="review-label">สภาวะสุขภาพ:</span>
@@ -584,11 +728,27 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
 
-      <!-- Card 2: Patient & Caregiver Info -->
+      <!-- Card 2: Location & Address -->
+      <div class="review-section-card">
+        <div class="review-card-header">
+          <div class="review-card-title">📍 ที่อยู่และพิกัดจัดส่ง (Auto-filled)</div>
+          <button type="button" class="review-edit-btn" onclick="jumpToStep(4)">แก้ไข</button>
+        </div>
+        <div class="review-data-row">
+          <span class="review-label">ที่อยู่ กทม.:</span>
+          <span class="review-value">${formData.patient_address || '-'}</span>
+        </div>
+        <div class="review-data-row">
+          <span class="review-label">พิกัด GPS:</span>
+          <span class="review-value">${formData.latitude ? `Lat ${formData.latitude.toFixed(4)}, Lon ${formData.longitude.toFixed(4)}` : 'ไม่ได้ระบุ'}</span>
+        </div>
+      </div>
+
+      <!-- Card 3: Patient & Caregiver Info -->
       <div class="review-section-card">
         <div class="review-card-header">
           <div class="review-card-title">👤 ข้อมูลผู้ขอรับสิทธิและผู้ดูแล</div>
-          <button type="button" class="review-edit-btn" onclick="jumpToStep(2)">แก้ไข</button>
+          <button type="button" class="review-edit-btn" onclick="jumpToStep(6)">แก้ไข</button>
         </div>
         <div class="review-data-row">
           <span class="review-label">ชื่อผู้ป่วย:</span>
@@ -611,22 +771,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <span class="review-label">ชื่อผู้ดูแล:</span>
           <span class="review-value">${formData.caregiver_name} (${formData.caregiver_phone})</span>
         </div>` : ''}
-      </div>
-
-      <!-- Card 3: Address & Location -->
-      <div class="review-section-card">
-        <div class="review-card-header">
-          <div class="review-card-title">📍 ที่อยู่และพิกัดจัดส่ง</div>
-          <button type="button" class="review-edit-btn" onclick="jumpToStep(6)">แก้ไข</button>
-        </div>
-        <div class="review-data-row">
-          <span class="review-label">ที่อยู่ กทม.:</span>
-          <span class="review-value">${formData.patient_address || '-'}</span>
-        </div>
-        <div class="review-data-row">
-          <span class="review-label">พิกัด GPS:</span>
-          <span class="review-value">${formData.latitude ? `Lat ${formData.latitude.toFixed(4)}, Lon ${formData.longitude.toFixed(4)}` : 'ไม่ได้ระบุ'}</span>
-        </div>
       </div>
 
       <!-- Card 4: Attachments -->
@@ -658,6 +802,7 @@ document.addEventListener('DOMContentLoaded', () => {
         phone: formData.contact_phone,
         district: formData.district,
         subdistrict: formData.subdistrict,
+        zipcode: formData.zipcode,
         address_detail: formData.patient_address_detail,
         full_address: formData.patient_address,
         coordinates: {
