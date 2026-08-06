@@ -741,6 +741,17 @@ document.addEventListener('DOMContentLoaded', () => {
       btnNext.textContent = 'ถัดไป →';
     }
 
+    // Auto-focus primary input field on step transition to trigger virtual keyboard / numpad
+    setTimeout(() => {
+      const activeCard = document.querySelector('.step-card.active');
+      if (activeCard) {
+        const firstInput = activeCard.querySelector('input[type="text"], input[type="tel"], textarea');
+        if (firstInput) {
+          firstInput.focus();
+        }
+      }
+    }, 200);
+
     checkCurrentStepValidity();
   }
 
