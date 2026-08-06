@@ -8,6 +8,51 @@
 
 ---
 
+## 📐 Data Entity Model Diagram (JSON Schema ER)
+
+```mermaid
+erDiagram
+    DIAPER_REQUEST ||--|| PATIENT_INFO : "belongs to"
+    DIAPER_REQUEST ||--|| CONTACT_INFO : "delivers to"
+    DIAPER_REQUEST ||--|| MEDICAL_CONDITIONS : "requires"
+    DIAPER_REQUEST ||--o| CAREGIVER_INFO : "assisted by"
+    
+    DIAPER_REQUEST {
+        string request_timestamp
+        string source
+        string applicant_type
+        int attachments_count
+    }
+    PATIENT_INFO {
+        string fullname
+        string id_card
+        string health_coverage
+    }
+    CONTACT_INFO {
+        string phone
+        string district
+        string subdistrict
+        string zipcode
+        string address_detail
+        string landmark
+        string full_address
+        float latitude
+        float longitude
+    }
+    MEDICAL_CONDITIONS {
+        boolean is_bedridden
+        boolean has_incontinence
+        string preferred_diaper_size
+    }
+    CAREGIVER_INFO {
+        boolean is_self_care
+        string fullname
+        string phone
+    }
+```
+
+---
+
 ## 🏗️ Technical Specification
 
 ### 1. Form Step Pipeline & UX Architecture (13 Steps)

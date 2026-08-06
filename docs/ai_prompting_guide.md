@@ -6,10 +6,13 @@
 
 ## 📜 ลำดับขั้นตอนการพัฒนาจริง (Step-by-Step Prompting Trajectory)
 
-```
-[Step 1: /grill-me สัมภาษณ์ความต้องการ] ➔ [Step 2: วิเคราะห์ UX/UI แบบไม่อวย] ➔ [Step 3: Location-First & Autocomplete]
-                                                                                            ↓
-[Step 6: สรุป 2-Stage Data Model]        [Step 5: Clean Header Single-Point UI]  [Step 4: จุดสังเกต & Realistic Placeholder]
+```mermaid
+flowchart TD
+    A["1. /grill-me สัมภาษณ์ตั้งกรอบความต้องการ"] --> B["2. สั่งวิเคราะห์ UX/UI & จัดลำดับ IA ใหม่"]
+    B --> C["3. กำหนด Location-First GPS & BKK Address Autocomplete"]
+    C --> D["4. เพิ่มจุดสังเกตใกล้บ้าน & Realistic Placeholders"]
+    D --> E["5. ปรับ Clean Header & Single-Point Focus (คำถามที่ X / 12)"]
+    E --> F["6. นิยาม 2-Stage Data Model (Citizen Intake vs In-Home Visit)"]
 ```
 
 ---

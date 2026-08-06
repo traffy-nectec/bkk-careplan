@@ -7,6 +7,32 @@
 
 ---
 
+## 🗺️ แผนผังการทำงานภาพรวมของระบบ (System Architecture & Integration Diagram)
+
+```mermaid
+flowchart TD
+    subgraph Citizen["📱 Citizen Intake Stage 1 (ฟอร์มประชาชน 12 ข้อ)"]
+        A["👤 Applicant (ผู้ป่วย / ผู้ดูแล)"] --> B["📍 Step 4: GPS Location Pinning"]
+        B --> C["✨ Reverse Geocoding (Auto-fill แขวง & เขต)"]
+        C --> D["🏠 Step 5: BKK Address Autocomplete & Landmark"]
+        D --> E["📋 Step 6-12: Patient Info, National ID, Phone & Attachments"]
+        E --> F["🚀 Step 13: Final Review & Submit Payload"]
+    end
+
+    subgraph Traffy["⚙️ System Integration Layer"]
+        F --> G["🔌 JSON Payload to Traffy Fondue API"]
+        G --> H["🗺️ BKK District & Health Center Routing Engine"]
+    end
+
+    subgraph BKKHealth["🏥 Public Health Center Stage 2 (ศบส. เยี่ยมบ้าน)"]
+        H --> I["🏥 Public Health Center (ศบส. 69 แห่ง) Ticket Queue"]
+        I --> J["🩺 Nurse In-Home Clinical Visit (แบบ 01/02)"]
+        J --> K["✅ Medical Approval & Monthly Diaper Supply Delivery"]
+    end
+```
+
+---
+
 ## 📱 ภาพถ่ายตัวอย่างหน้าจอแอปพลิเคชัน (Mobile UI Screen Captures)
 
 <div align="center">
@@ -35,6 +61,12 @@
   • เลขบัตร 13 หลัก & เบอร์ติดต่อ                    • บันทึกโรคประจำตัว, แผลกดทับ & ข้อระวัง
   • ไซส์ผ้าอ้อม & ผู้ดูแล                            • อนุมัติโควตาผ้าอ้อม/เดือน & Care Plan
 ```
+
+### คำถามในแบบ 01-2 ที่อยู่ใน Stage 2 (เมื่อพยาบาล ศบส. ลงเยี่ยมบ้าน):
+* **บัตรคนพิการ & สิทธิคนพิการ:** เลขบัตรคนพิการ / สิทธิสวัสดิการ พม.
+* **สถานะสุขภาพ & ประวัติโรคประจำตัว:** โรคสโตรก, สมองเสื่อม, อัมพฤกษ์/อัมพาต, แผลกดทับ (Stage 1-4)
+* **ข้อระวังและคำแนะนำในการดูแล:** สายอาหาร (NG Tube), สายปัสสาวะ (Foley Cath), ภาวะติดเชื้อ, การแพ้วัสดุ
+* **การประเมินคะแนน ADL (10 ข้อ):** ประเมินทักษะการดำเนินชีวิตประจำวันอย่างเป็นทางการ เพื่อตั้งเบิกงบประมาณ กองทุนหลักประกันสุขภาพ กทม.
 
 ---
 

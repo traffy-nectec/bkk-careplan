@@ -7,7 +7,29 @@
 
 ---
 
-## 2. สถาปัตยกรรมข้อมูลแบบ 2 ระยะ (2-Stage Data Collection Model)
+## 2. แผนผังลำดับขั้นตอนการทำงาน (End-to-End Sequence Diagram)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as ประชาชน / ผู้ดูแล
+    participant Webview as BKK Careplan Webview
+    participant API as Traffy Fondue Engine
+    participant Staff as พยาบาลวิชาชีพ ศบส.
+
+    User->>Webview: 1. ปักหมุด GPS พิกัดที่พักอาศัย (Step 4)
+    Webview-->>User: 2. Reverse Geocoding เติม แขวง/เขต ให้อัตโนมัติ (Step 5)
+    User->>Webview: 3. กรอกข้อมูล 12 ข้อ และกดส่งเรื่อง (Step 13)
+    Webview->>API: 4. ส่ง JSON Payload เข้าระบบ Traffy Fondue
+    API->>Staff: 5. กระจาย Ticket คำร้องไปยัง ศบส. ที่รับผิดชอบ
+    Staff->>User: 6. โทรนัดหมายและลงพื้นที่เยี่ยมบ้าน (Stage 2)
+    Staff->>Staff: 7. ประเมิน ADL, บัตรคนพิการ & ทำแผน Care Plan
+    Staff->>User: 8. อนุมัติสิทธิและส่งมอบผ้าอ้อมผู้ใหญ่ประจำเดือน
+```
+
+---
+
+## 3. สถาปัตยกรรมข้อมูลแบบ 2 ระยะ (2-Stage Data Collection Model)
 
 ระบบสวัสดิการผ้าอ้อมผู้ใหญ่ กทม. แบ่งการเก็บข้อมูลออกเป็น 2 ระยะ เพื่อประสิทธิภาพสูงสุด:
 
@@ -15,7 +37,7 @@
 [ Stage 1: Citizen Webview Form ]  ➔  [ Stage 2: In-Home Clinical Assessment ]
 (ประชาชน/ผู้ดูแล ยื่นคำร้องผ่านมือถือ)     (พยาบาลวิชาชีพ ศบส. ประเมินเมื่อเยี่ยมบ้าน)
        • พิกัด GPS & ที่อยู่ กทม.                   • ตรวจสอบบัตรคนพิการ & สิทธิซ้ำซ้อน
-       • สภาวะเดือดร้อนเบื้องต้น                      • ประเมินคะแนน ADL 10 ข้อละเอียด
+       • สภาวะเดือดร้อนเบื้องต้น                      • ประเมินคะแนน ADL 10 ข้อรายละเอียด
        • เลขบัตร 13 หลัก & เบอร์ติดต่อ                 • บันทึกโรคประจำตัว, ข้อระวัง & แผลกดทับ
        • ไซส์ผ้าอ้อม & ผู้ดูแล                         • อนุมัติจำนวนชิ้น/เดือน & Care Plan
 ```
@@ -36,7 +58,7 @@
 
 ---
 
-## 3. เอกสารอ้างอิงที่ใช้ในโครงการ (Reference Documents)
+## 4. เอกสารอ้างอิงที่ใช้ในโครงการ (Reference Documents)
 * `docs/references/2.Diapers 01-2, 02 D3 16-12-2568.pdf`: หลักเกณฑ์แบบประเมินทางการแพทย์ สปสช. (แบบ 01 และ 02)
 * `docs/references/ขั้นตอนการรับผ้าอ้อม Traffy Fondue4-8-2569_5pm.pdf`: กระบวนการประสานงานรับเรื่องผ่าน Traffy Fondue และ ศบส. กทม.
 * `okf/module_bkk_careplan.md`: ข้อกำหนดทางเทคนิค โครงสร้างฟอร์ม และ JSON Payload Schema
