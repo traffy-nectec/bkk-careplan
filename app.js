@@ -463,19 +463,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Map Fullscreen Toggle
+  const btnCloseFullscreenMap = document.getElementById('btnCloseFullscreenMap');
+
+  function toggleFullscreenMap() {
+    const mapContainer = document.getElementById('map');
+    isMapFullscreen = !isMapFullscreen;
+    if (isMapFullscreen) {
+      mapContainer.classList.add('fullscreen');
+      btnToggleFullscreenMap.textContent = '❌ ย่อแผนที่กลับ';
+      if (btnCloseFullscreenMap) btnCloseFullscreenMap.style.display = 'block';
+    } else {
+      mapContainer.classList.remove('fullscreen');
+      btnToggleFullscreenMap.textContent = '🔍 ขยายแผนที่เต็มจอ';
+      if (btnCloseFullscreenMap) btnCloseFullscreenMap.style.display = 'none';
+    }
+    setTimeout(() => leafletMap.invalidateSize(), 200);
+  }
+
   if (btnToggleFullscreenMap) {
-    btnToggleFullscreenMap.addEventListener('click', () => {
-      const mapContainer = document.getElementById('map');
-      isMapFullscreen = !isMapFullscreen;
-      if (isMapFullscreen) {
-        mapContainer.classList.add('fullscreen');
-        btnToggleFullscreenMap.textContent = '❌ ย่อแผนที่กลับ';
-      } else {
-        mapContainer.classList.remove('fullscreen');
-        btnToggleFullscreenMap.textContent = '🔍 ขยายแผนที่เต็มจอ';
-      }
-      setTimeout(() => leafletMap.invalidateSize(), 200);
-    });
+    btnToggleFullscreenMap.addEventListener('click', toggleFullscreenMap);
+  }
+
+  if (btnCloseFullscreenMap) {
+    btnCloseFullscreenMap.addEventListener('click', toggleFullscreenMap);
   }
 
   // Search Map Location via OpenStreetMap Nominatim API
