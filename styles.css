@@ -305,6 +305,12 @@ body {
   color: var(--primary-green);
 }
 
+.label-sub {
+  font-size: calc(0.78rem * var(--base-font-scale));
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
 .custom-input, .custom-textarea {
   width: 100%;
   padding: 13px 15px;

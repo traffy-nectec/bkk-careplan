@@ -175,6 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
     subdistrict: '',
     zipcode: '',
     patient_address_detail: '',
+    patient_address_landmark: '',
     patient_address: '',
     latitude: null,
     longitude: null,
@@ -202,6 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectedAddressBadge = document.getElementById('selectedAddressBadge');
   const geocodeNotification = document.getElementById('geocodeNotification');
   const patientAddressDetail = document.getElementById('patient_address_detail');
+  const patientAddressLandmark = document.getElementById('patient_address_landmark');
   const fileUpload = document.getElementById('fileUpload');
   const filePreviewList = document.getElementById('filePreviewList');
   const reviewSummaryGrid = document.getElementById('reviewSummaryGrid');
@@ -285,6 +287,14 @@ document.addEventListener('DOMContentLoaded', () => {
       checkCurrentStepValidity();
       saveDraft();
     });
+
+    if (patientAddressLandmark) {
+      patientAddressLandmark.addEventListener('input', () => {
+        formData.patient_address_landmark = patientAddressLandmark.value.trim();
+        updateFullAddressText();
+        saveDraft();
+      });
+    }
   }
 
   function selectBkkAddress(item) {
@@ -302,10 +312,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateFullAddressText() {
     const detail = formData.patient_address_detail || '';
+    const landmark = formData.patient_address_landmark ? ` (จุดสังเกต: ${formData.patient_address_landmark})` : '';
     const sub = formData.subdistrict ? ` แขวง${formData.subdistrict}` : '';
     const dist = formData.district ? ` เขต${formData.district}` : '';
     const zip = formData.zipcode ? ` ${formData.zipcode}` : '';
-    formData.patient_address = `${detail}${sub}${dist} กรุงเทพมหานคร${zip}`.trim();
+    formData.patient_address = `${detail}${landmark}${sub}${dist} กรุงเทพมหานคร${zip}`.trim();
   }
 
   // Restore Draft from LocalStorage
@@ -347,6 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
       selectedAddressBadge.style.display = 'block';
     }
     if (formData.patient_address_detail) patientAddressDetail.value = formData.patient_address_detail;
+    if (formData.patient_address_landmark && patientAddressLandmark) patientAddressLandmark.value = formData.patient_address_landmark;
 
     if (formData.health_conditions && formData.health_conditions.length) {
       formData.health_conditions.forEach(val => {
@@ -771,6 +783,11 @@ document.addEventListener('DOMContentLoaded', () => {
           <span class="review-label">ที่อยู่ กทม.:</span>
           <span class="review-value">${formData.patient_address || '-'}</span>
         </div>
+        ${formData.patient_address_landmark ? `
+        <div class="review-data-row">
+          <span class="review-label">จุดสังเกตใกล้บ้าน:</span>
+          <span class="review-value">${formData.patient_address_landmark}</span>
+        </div>` : ''}
         <div class="review-data-row">
           <span class="review-label">พิกัด GPS:</span>
           <span class="review-value">${formData.latitude ? `Lat ${formData.latitude.toFixed(4)}, Lon ${formData.longitude.toFixed(4)}` : 'ไม่ได้ระบุ'}</span>
@@ -837,6 +854,7 @@ document.addEventListener('DOMContentLoaded', () => {
         subdistrict: formData.subdistrict,
         zipcode: formData.zipcode,
         address_detail: formData.patient_address_detail,
+        landmark: formData.patient_address_landmark,
         full_address: formData.patient_address,
         coordinates: {
           latitude: formData.latitude,
