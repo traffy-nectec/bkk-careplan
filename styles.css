@@ -344,6 +344,15 @@ body {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
+.suggestion-header {
+  padding: 8px 12px;
+  font-size: calc(0.76rem * var(--base-font-scale));
+  font-weight: 700;
+  color: var(--primary-green);
+  background: #f0fdf4;
+  border-bottom: 1px solid #bbf7d0;
+}
+
 .suggestion-item {
   padding: 12px 14px;
   font-size: calc(0.88rem * var(--base-font-scale));

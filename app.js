@@ -7,6 +7,84 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Bangkok 50 Districts & 180 Subdistricts Dataset
   const bkkSubdistrictList = [
+    { subdistrict: "ทุ่งสองห้อง", district: "หลักสี่", zipcode: "10210" },
+    { subdistrict: "ตลาดบางเขน", district: "หลักสี่", zipcode: "10210" },
+    { subdistrict: "ลาดยาว", district: "จตุจักร", zipcode: "10900" },
+    { subdistrict: "เสนานิคม", district: "จตุจักร", zipcode: "10900" },
+    { subdistrict: "จันทรเกษม", district: "จตุจักร", zipcode: "10900" },
+    { subdistrict: "จอมพล", district: "จตุจักร", zipcode: "10900" },
+    { subdistrict: "จตุจักร", district: "จตุจักร", zipcode: "10900" },
+    { subdistrict: "สามเสนใน", district: "พญาไท", zipcode: "10400" },
+    { subdistrict: "พญาไท", district: "พญาไท", zipcode: "10400" },
+    { subdistrict: "สีกัน", district: "ดอนเมือง", zipcode: "10210" },
+    { subdistrict: "ดอนเมือง", district: "ดอนเมือง", zipcode: "10210" },
+    { subdistrict: "สนามบิน", district: "ดอนเมือง", zipcode: "10210" },
+    { subdistrict: "คลองจั่น", district: "บางกะปิ", zipcode: "10240" },
+    { subdistrict: "หัวหมาก", district: "บางกะปิ", zipcode: "10240" },
+    { subdistrict: "อนุสาวรีย์", district: "บางเขน", zipcode: "10220" },
+    { subdistrict: "ท่าแร้ง", district: "บางเขน", zipcode: "10220" },
+    { subdistrict: "สายไหม", district: "สายไหม", zipcode: "10220" },
+    { subdistrict: "ออเงิน", district: "สายไหม", zipcode: "10220" },
+    { subdistrict: "คลองถนน", district: "สายไหม", zipcode: "10220" },
+    { subdistrict: "ดินแดง", district: "ดินแดง", zipcode: "10400" },
+    { subdistrict: "รัชดาภิเษก", district: "ดินแดง", zipcode: "10400" },
+    { subdistrict: "ห้วยขวาง", district: "ห้วยขวาง", zipcode: "10310" },
+    { subdistrict: "สามเสนนอก", district: "ห้วยขวาง", zipcode: "10310" },
+    { subdistrict: "บางซื่อ", district: "บางซื่อ", zipcode: "10800" },
+    { subdistrict: "วงศ์สว่าง", district: "บางซื่อ", zipcode: "10800" },
+    { subdistrict: "คลองเตย", district: "คลองเตย", zipcode: "10110" },
+    { subdistrict: "คลองตัน", district: "คลองเตย", zipcode: "10110" },
+    { subdistrict: "พระโขนง", district: "คลองเตย", zipcode: "10110" },
+    { subdistrict: "สวนหลวง", district: "สวนหลวง", zipcode: "10250" },
+    { subdistrict: "อ่อนนุช", district: "สวนหลวง", zipcode: "10250" },
+    { subdistrict: "พัฒนาการ", district: "สวนหลวง", zipcode: "10250" },
+    { subdistrict: "ประเวศ", district: "ประเวศ", zipcode: "10250" },
+    { subdistrict: "หนองบอน", district: "ประเวศ", zipcode: "10250" },
+    { subdistrict: "ดอกไม้", district: "ประเวศ", zipcode: "10250" },
+    { subdistrict: "บางนาเหนือ", district: "บางนา", zipcode: "10260" },
+    { subdistrict: "บางนาใต้", district: "บางนา", zipcode: "10260" },
+    { subdistrict: "สีลม", district: "บางรัก", zipcode: "10500" },
+    { subdistrict: "สุริยวงศ์", district: "บางรัก", zipcode: "10500" },
+    { subdistrict: "บางรัก", district: "บางรัก", zipcode: "10500" },
+    { subdistrict: "สี่พระยา", district: "บางรัก", zipcode: "10500" },
+    { subdistrict: "มหาพฤฒาราม", district: "บางรัก", zipcode: "10500" },
+    { subdistrict: "รองเมือง", district: "ปทุมวัน", zipcode: "10330" },
+    { subdistrict: "วังใหม่", district: "ปทุมวัน", zipcode: "10330" },
+    { subdistrict: "ปทุมวัน", district: "ปทุมวัน", zipcode: "10330" },
+    { subdistrict: "ลุมพินี", district: "ปทุมวัน", zipcode: "10330" },
+    { subdistrict: "ทุ่งพญาไท", district: "ราชเทวี", zipcode: "10400" },
+    { subdistrict: "ถนนพญาไท", district: "ราชเทวี", zipcode: "10400" },
+    { subdistrict: "ถนนเพชรบุรี", district: "ราชเทวี", zipcode: "10400" },
+    { subdistrict: "มักกะสัน", district: "ราชเทวี", zipcode: "10400" },
+    { subdistrict: "คลองเตยเหนือ", district: "วัฒนา", zipcode: "10110" },
+    { subdistrict: "คลองตันเหนือ", district: "วัฒนา", zipcode: "10110" },
+    { subdistrict: "พระโขนงเหนือ", district: "วัฒนา", zipcode: "10110" },
+    { subdistrict: "ลาดพร้าว", district: "ลาดพร้าว", zipcode: "10230" },
+    { subdistrict: "จรเข้บัว", district: "ลาดพร้าว", zipcode: "10230" },
+    { subdistrict: "คลองกุ่ม", district: "บึงกุ่ม", zipcode: "10240" },
+    { subdistrict: "นวมินทร์", district: "บึงกุ่ม", zipcode: "10240" },
+    { subdistrict: "นวลจันทร์", district: "บึงกุ่ม", zipcode: "10230" },
+    { subdistrict: "คันนายาว", district: "คันนายาว", zipcode: "10230" },
+    { subdistrict: "รามอินทรา", district: "คันนายาว", zipcode: "10230" },
+    { subdistrict: "สะพานสูง", district: "สะพานสูง", zipcode: "10240" },
+    { subdistrict: "ทับช้าง", district: "สะพานสูง", zipcode: "10250" },
+    { subdistrict: "ราษฎร์พัฒนา", district: "สะพานสูง", zipcode: "10240" },
+    { subdistrict: "วังทองหลาง", district: "วังทองหลาง", zipcode: "10310" },
+    { subdistrict: "สะพานสอง", district: "วังทองหลาง", zipcode: "10310" },
+    { subdistrict: "คลองเจ้าคุณสิงห์", district: "วังทองหลาง", zipcode: "10310" },
+    { subdistrict: "พลับพลา", district: "วังทองหลาง", zipcode: "10310" },
+    { subdistrict: "สามวาตะวันตก", district: "คลองสามวา", zipcode: "10510" },
+    { subdistrict: "สามวาตะวันออก", district: "คลองสามวา", zipcode: "10510" },
+    { subdistrict: "บางชัน", district: "คลองสามวา", zipcode: "10510" },
+    { subdistrict: "ทรายกองดิน", district: "คลองสามวา", zipcode: "10510" },
+    { subdistrict: "ทรายกองดินใต้", district: "คลองสามวา", zipcode: "10510" },
+    { subdistrict: "กระทุ่มราย", district: "หนองจอก", zipcode: "10530" },
+    { subdistrict: "หนองจอก", district: "หนองจอก", zipcode: "10530" },
+    { subdistrict: "คลองสิบ", district: "หนองจอก", zipcode: "10530" },
+    { subdistrict: "คลองสิบสอง", district: "หนองจอก", zipcode: "10530" },
+    { subdistrict: "โคกแฝด", district: "หนองจอก", zipcode: "10530" },
+    { subdistrict: "คู้ฝ้าย", district: "หนองจอก", zipcode: "10530" },
+    { subdistrict: "คลองสิบสี่", district: "หนองจอก", zipcode: "10530" },
     { subdistrict: "พระบรมมหาราชวัง", district: "พระนคร", zipcode: "10200" },
     { subdistrict: "วังบูรพาภิรมย์", district: "พระนคร", zipcode: "10200" },
     { subdistrict: "วัดราชบพิธ", district: "พระนคร", zipcode: "10200" },
@@ -24,33 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
     { subdistrict: "สวนจิตรลดา", district: "ดุสิต", zipcode: "10300" },
     { subdistrict: "สี่แยกมหานาค", district: "ดุสิต", zipcode: "10300" },
     { subdistrict: "ถนนนครไชยศรี", district: "ดุสิต", zipcode: "10300" },
-    { subdistrict: "กระทุ่มราย", district: "หนองจอก", zipcode: "10530" },
-    { subdistrict: "หนองจอก", district: "หนองจอก", zipcode: "10530" },
-    { subdistrict: "คลองสิบ", district: "หนองจอก", zipcode: "10530" },
-    { subdistrict: "คลองสิบสอง", district: "หนองจอก", zipcode: "10530" },
-    { subdistrict: "โคกแฝด", district: "หนองจอก", zipcode: "10530" },
-    { subdistrict: "คู้ฝ้าย", district: "หนองจอก", zipcode: "10530" },
-    { subdistrict: "คลองสิบสี่", district: "หนองจอก", zipcode: "10530" },
-    { subdistrict: "มหาพฤฒาราม", district: "บางรัก", zipcode: "10500" },
-    { subdistrict: "สีลม", district: "บางรัก", zipcode: "10500" },
-    { subdistrict: "สุริยวงศ์", district: "บางรัก", zipcode: "10500" },
-    { subdistrict: "บางรัก", district: "บางรัก", zipcode: "10500" },
-    { subdistrict: "สี่พระยา", district: "บางรัก", zipcode: "10500" },
-    { subdistrict: "อนุสาวรีย์", district: "บางเขน", zipcode: "10220" },
-    { subdistrict: "ท่าแร้ง", district: "บางเขน", zipcode: "10220" },
-    { subdistrict: "คลองจั่น", district: "บางกะปิ", zipcode: "10240" },
-    { subdistrict: "หัวหมาก", district: "บางกะปิ", zipcode: "10240" },
-    { subdistrict: "รองเมือง", district: "ปทุมวัน", zipcode: "10330" },
-    { subdistrict: "วังใหม่", district: "ปทุมวัน", zipcode: "10330" },
-    { subdistrict: "ปทุมวัน", district: "ปทุมวัน", zipcode: "10330" },
-    { subdistrict: "ลุมพินี", district: "ปทุมวัน", zipcode: "10330" },
     { subdistrict: "ป้อมปราบ", district: "ป้อมปราบศัตรูพ่าย", zipcode: "10100" },
     { subdistrict: "วัดเทพศิรินทร์", district: "ป้อมปราบศัตรูพ่าย", zipcode: "10100" },
     { subdistrict: "คลองมหานาค", district: "ป้อมปราบศัตรูพ่าย", zipcode: "10100" },
     { subdistrict: "บ้านบาตร", district: "ป้อมปราบศัตรูพ่าย", zipcode: "10100" },
     { subdistrict: "วัดโสมนัส", district: "ป้อมปราบศัตรูพ่าย", zipcode: "10100" },
-    { subdistrict: "สามเสนใน", district: "พญาไท", zipcode: "10400" },
-    { subdistrict: "พญาไท", district: "พญาไท", zipcode: "10400" },
     { subdistrict: "วัดกัลยาณ์", district: "ธนบุรี", zipcode: "10600" },
     { subdistrict: "หิรัญรูจี", district: "ธนบุรี", zipcode: "10600" },
     { subdistrict: "บางยี่เรือ", district: "ธนบุรี", zipcode: "10600" },
@@ -60,8 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
     { subdistrict: "สำเหร่", district: "ธนบุรี", zipcode: "10600" },
     { subdistrict: "วัดอรุณ", district: "บางกอกใหญ่", zipcode: "10600" },
     { subdistrict: "วัดท่าพระ", district: "บางกอกใหญ่", zipcode: "10600" },
-    { subdistrict: "ห้วยขวาง", district: "ห้วยขวาง", zipcode: "10310" },
-    { subdistrict: "สามเสนนอก", district: "ห้วยขวาง", zipcode: "10310" },
     { subdistrict: "สมเด็จเจ้าพระยา", district: "คลองสาน", zipcode: "10600" },
     { subdistrict: "คลองสาน", district: "คลองสาน", zipcode: "10600" },
     { subdistrict: "บางลำภูล่าง", district: "คลองสาน", zipcode: "10600" },
@@ -93,67 +147,13 @@ document.addEventListener('DOMContentLoaded', () => {
     { subdistrict: "บางอ้อ", district: "บางพลัด", zipcode: "10700" },
     { subdistrict: "บางบำหรุ", district: "บางพลัด", zipcode: "10700" },
     { subdistrict: "บางยี่ขัน", district: "บางพลัด", zipcode: "10700" },
-    { subdistrict: "ดินแดง", district: "ดินแดง", zipcode: "10400" },
-    { subdistrict: "รัชดาภิเษก", district: "ดินแดง", zipcode: "10400" },
-    { subdistrict: "คลองกุ่ม", district: "บึงกุ่ม", zipcode: "10240" },
-    { subdistrict: "นวมินทร์", district: "บึงกุ่ม", zipcode: "10240" },
-    { subdistrict: "นวลจันทร์", district: "บึงกุ่ม", zipcode: "10230" },
     { subdistrict: "ทุ่งมหาเมฆ", district: "สาทร", zipcode: "10120" },
     { subdistrict: "ยานนาวา", district: "สาทร", zipcode: "10120" },
     { subdistrict: "ทุ่งวัดดอน", district: "สาทร", zipcode: "10120" },
-    { subdistrict: "บางซื่อ", district: "บางซื่อ", zipcode: "10800" },
-    { subdistrict: "วงศ์สว่าง", district: "บางซื่อ", zipcode: "10800" },
-    { subdistrict: "ลาดยาว", district: "จตุจักร", zipcode: "10900" },
-    { subdistrict: "เสนานิคม", district: "จตุจักร", zipcode: "10900" },
-    { subdistrict: "จันทรเกษม", district: "จตุจักร", zipcode: "10900" },
-    { subdistrict: "จอมพล", district: "จตุจักร", zipcode: "10900" },
-    { subdistrict: "จตุจักร", district: "จตุจักร", zipcode: "10900" },
-    { subdistrict: "ประเวศ", district: "ประเวศ", zipcode: "10250" },
-    { subdistrict: "หนองบอน", district: "ประเวศ", zipcode: "10250" },
-    { subdistrict: "ดอกไม้", district: "ประเวศ", zipcode: "10250" },
-    { subdistrict: "คลองเตย", district: "คลองเตย", zipcode: "10110" },
-    { subdistrict: "คลองตัน", district: "คลองเตย", zipcode: "10110" },
-    { subdistrict: "พระโขนง", district: "คลองเตย", zipcode: "10110" },
-    { subdistrict: "สวนหลวง", district: "สวนหลวง", zipcode: "10250" },
-    { subdistrict: "อ่อนนุช", district: "สวนหลวง", zipcode: "10250" },
-    { subdistrict: "พัฒนาการ", district: "สวนหลวง", zipcode: "10250" },
-    { subdistrict: "สีกัน", district: "ดอนเมือง", zipcode: "10210" },
-    { subdistrict: "ดอนเมือง", district: "ดอนเมือง", zipcode: "10210" },
-    { subdistrict: "สนามบิน", district: "ดอนเมือง", zipcode: "10210" },
-    { subdistrict: "ทุ่งพญาไท", district: "ราชเทวี", zipcode: "10400" },
-    { subdistrict: "ถนนพญาไท", district: "ราชเทวี", zipcode: "10400" },
-    { subdistrict: "ถนนเพชรบุรี", district: "ราชเทวี", zipcode: "10400" },
-    { subdistrict: "มักกะสัน", district: "ราชเทวี", zipcode: "10400" },
-    { subdistrict: "ลาดพร้าว", district: "ลาดพร้าว", zipcode: "10230" },
-    { subdistrict: "จรเข้บัว", district: "ลาดพร้าว", zipcode: "10230" },
-    { subdistrict: "คลองเตยเหนือ", district: "วัฒนา", zipcode: "10110" },
-    { subdistrict: "คลองตันเหนือ", district: "วัฒนา", zipcode: "10110" },
-    { subdistrict: "พระโขนงเหนือ", district: "วัฒนา", zipcode: "10110" },
     { subdistrict: "บางแค", district: "บางแค", zipcode: "10160" },
     { subdistrict: "บางแคเหนือ", district: "บางแค", zipcode: "10160" },
     { subdistrict: "บางไผ่", district: "บางแค", zipcode: "10160" },
     { subdistrict: "หลักสอง", district: "บางแค", zipcode: "10160" },
-    { subdistrict: "ทุ่งสองห้อง", district: "หลักสี่", zipcode: "10210" },
-    { subdistrict: "ตลาดบางเขน", district: "หลักสี่", zipcode: "10210" },
-    { subdistrict: "สายไหม", district: "สายไหม", zipcode: "10220" },
-    { subdistrict: "ออเงิน", district: "สายไหม", zipcode: "10220" },
-    { subdistrict: "คลองถนน", district: "สายไหม", zipcode: "10220" },
-    { subdistrict: "คันนายาว", district: "คันนายาว", zipcode: "10230" },
-    { subdistrict: "รามอินทรา", district: "คันนายาว", zipcode: "10230" },
-    { subdistrict: "สะพานสูง", district: "สะพานสูง", zipcode: "10240" },
-    { subdistrict: "ทับช้าง", district: "สะพานสูง", zipcode: "10250" },
-    { subdistrict: "ราษฎร์พัฒนา", district: "สะพานสูง", zipcode: "10240" },
-    { subdistrict: "วังทองหลาง", district: "วังทองหลาง", zipcode: "10310" },
-    { subdistrict: "สะพานสอง", district: "วังทองหลาง", zipcode: "10310" },
-    { subdistrict: "คลองเจ้าคุณสิงห์", district: "วังทองหลาง", zipcode: "10310" },
-    { subdistrict: "พลับพลา", district: "วังทองหลาง", zipcode: "10310" },
-    { subdistrict: "สามวาตะวันตก", district: "คลองสามวา", zipcode: "10510" },
-    { subdistrict: "สามวาตะวันออก", district: "คลองสามวา", zipcode: "10510" },
-    { subdistrict: "บางชัน", district: "คลองสามวา", zipcode: "10510" },
-    { subdistrict: "ทรายกองดิน", district: "คลองสามวา", zipcode: "10510" },
-    { subdistrict: "ทรายกองดินใต้", district: "คลองสามวา", zipcode: "10510" },
-    { subdistrict: "บางนาเหนือ", district: "บางนา", zipcode: "10260" },
-    { subdistrict: "บางนาใต้", district: "บางนา", zipcode: "10260" },
     { subdistrict: "ทวีวัฒนา", district: "ทวีวัฒนา", zipcode: "10170" },
     { subdistrict: "ศาลาธรรมสพน์", district: "ทวีวัฒนา", zipcode: "10170" },
     { subdistrict: "บางมด", district: "ทุ่งครุ", zipcode: "10140" },
@@ -221,22 +221,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // BKK Address Autocomplete Engine (jquery.Thailand.js style)
+  // BKK Address Autocomplete Engine (Focus & Click Suggestions Support)
   if (bkkAddressSearch) {
-    bkkAddressSearch.addEventListener('input', (e) => {
-      const q = e.target.value.trim().toLowerCase();
-      if (!q) {
-        bkkAddressSuggestions.style.display = 'none';
-        return;
-      }
-      const matches = bkkSubdistrictList.filter(item => 
-        item.subdistrict.toLowerCase().includes(q) || 
-        item.district.toLowerCase().includes(q) ||
-        item.zipcode.includes(q)
-      ).slice(0, 8);
-
+    function renderSuggestions(matches, headerTitle = '') {
       if (matches.length > 0) {
         bkkAddressSuggestions.innerHTML = '';
+        if (headerTitle) {
+          const header = document.createElement('div');
+          header.className = 'suggestion-header';
+          header.textContent = headerTitle;
+          bkkAddressSuggestions.appendChild(header);
+        }
         matches.forEach(item => {
           const div = document.createElement('div');
           div.className = 'suggestion-item';
@@ -248,6 +243,34 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         bkkAddressSuggestions.style.display = 'none';
       }
+    }
+
+    // Show initial top recommendations on click / focus before typing
+    bkkAddressSearch.addEventListener('focus', () => {
+      if (!bkkAddressSearch.value.trim()) {
+        renderSuggestions(bkkSubdistrictList.slice(0, 8), '💡 ตัวเลือกแขวง/เขตยอดนิยมใน กทม.:');
+      }
+    });
+
+    bkkAddressSearch.addEventListener('click', () => {
+      if (!bkkAddressSearch.value.trim()) {
+        renderSuggestions(bkkSubdistrictList.slice(0, 8), '💡 ตัวเลือกแขวง/เขตยอดนิยมใน กทม.:');
+      }
+    });
+
+    bkkAddressSearch.addEventListener('input', (e) => {
+      const q = e.target.value.trim().toLowerCase();
+      if (!q) {
+        renderSuggestions(bkkSubdistrictList.slice(0, 8), '💡 ตัวเลือกแขวง/เขตยอดนิยมใน กทม.:');
+        return;
+      }
+      const matches = bkkSubdistrictList.filter(item => 
+        item.subdistrict.toLowerCase().includes(q) || 
+        item.district.toLowerCase().includes(q) ||
+        item.zipcode.includes(q)
+      ).slice(0, 8);
+
+      renderSuggestions(matches);
     });
 
     document.addEventListener('click', (e) => {
