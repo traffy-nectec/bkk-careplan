@@ -15,55 +15,58 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- ARIA Live Region for Screen Reader Announcements (WCAG 4.1.3) -->
+  <div id="ariaLiveRegion" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+
   <!-- Clean App Header with Font Controls -->
-  <header class="app-header">
+  <header class="app-header" role="banner">
     <div class="header-content">
-      <div class="logo-group">
+      <div class="logo-group" aria-label="โลโก้ BKK Careplan และ Traffy Fondue">
         <div class="bkk-badge">BKK Careplan</div>
         <span class="tf-badge">Traffy Fondue</span>
       </div>
       
-      <!-- Accessibility Font Controls -->
-      <div class="font-size-toggle">
-        <button type="button" class="btn-font-size active" data-size="normal" title="ขนาดอักษรปกติ">A</button>
-        <button type="button" class="btn-font-size" data-size="large" title="ขยายตัวอักษร">A+</button>
-        <button type="button" class="btn-font-size" data-size="xlarge" title="ตัวอักษรใหญ่พิเศษ">A++</button>
+      <!-- Accessibility Font Controls (WCAG 1.4.4) -->
+      <div class="font-size-toggle" role="group" aria-label="เครื่องมือปรับขนาดตัวอักษร">
+        <button type="button" class="btn-font-size active" data-size="normal" aria-label="ขนาดอักษรปกติ" title="ขนาดอักษรปกติ">A</button>
+        <button type="button" class="btn-font-size" data-size="large" aria-label="ขยายตัวอักษร" title="ขยายตัวอักษร">A+</button>
+        <button type="button" class="btn-font-size" data-size="xlarge" aria-label="ตัวอักษรใหญ่พิเศษ" title="ตัวอักษรใหญ่พิเศษ">A++</button>
       </div>
     </div>
     <!-- Progress Bar -->
-    <div class="progress-container">
+    <div class="progress-container" role="progressbar" id="progressBarContainer" aria-label="ความคืบหน้าฟอร์ม">
       <div class="progress-bar" id="progressBar"></div>
     </div>
   </header>
 
   <!-- Main Multi-step Form App -->
-  <main class="app-container">
+  <main class="app-container" role="main">
     <form id="diaperForm" onsubmit="return false;">
       
       <!-- PHASE 1: Context & Needs -->
 
       <!-- STEP 1: Applicant Type -->
-      <section class="step-card active" data-step="1">
+      <section class="step-card active" data-step="1" aria-labelledby="step1_title">
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">คำถามที่ 1 / 12</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
-          <h2>ท่านกำลังกรอกข้อมูลในฐานะใด?</h2>
+          <h2 id="step1_title">ท่านกำลังกรอกข้อมูลในฐานะใด?</h2>
           <p class="question-desc">กรุณาเลือกสถานะของผู้กรอกข้อมูล แล้วกดปุ่มถัดไป</p>
         </div>
-        <div class="option-grid">
+        <div class="option-grid" role="radiogroup" aria-labelledby="step1_title">
           <label class="option-card">
-            <input type="radio" name="applicant_type" value="patient">
+            <input type="radio" name="applicant_type" value="patient" class="visually-hidden">
             <div class="card-content">
-              <div class="icon">👤</div>
+              <div class="icon" aria-hidden="true">👤</div>
               <div class="label-text">ผู้ป่วย (ยื่นขอรับด้วยตนเอง)</div>
             </div>
           </label>
           <label class="option-card">
-            <input type="radio" name="applicant_type" value="caregiver">
+            <input type="radio" name="applicant_type" value="caregiver" class="visually-hidden">
             <div class="card-content">
-              <div class="icon">🧑‍⚕️</div>
+              <div class="icon" aria-hidden="true">🧑‍⚕️</div>
               <div class="label-text">ญาติ / ผู้ดูแลผู้ป่วย (กรอกแทนผู้ป่วย)</div>
             </div>
           </label>
@@ -71,27 +74,27 @@
       </section>
 
       <!-- STEP 2: Health Condition -->
-      <section class="step-card" data-step="2">
+      <section class="step-card" data-step="2" aria-labelledby="step2_title">
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">คำถามที่ 2 / 12</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
-          <h2>สภาวะความเดือดร้อน / ความต้องการผ้าอ้อมผู้ใหญ่</h2>
+          <h2 id="step2_title">สภาวะความเดือดร้อน / ความต้องการผ้าอ้อมผู้ใหญ่</h2>
           <p class="question-desc">เลือกสภาวะของผู้ป่วย (เลือกได้มากกว่า 1 ข้อ)</p>
         </div>
-        <div class="option-grid">
+        <div class="option-grid" role="group" aria-labelledby="step2_title">
           <label class="checkbox-card">
-            <input type="checkbox" name="health_condition" value="bedridden">
+            <input type="checkbox" name="health_condition" value="bedridden" class="visually-hidden">
             <div class="card-content">
-              <div class="icon">🛏️</div>
+              <div class="icon" aria-hidden="true">🛏️</div>
               <div class="label-text">เป็นผู้ป่วยติดเตียง / ไม่สามารถช่วยเหลือตัวเองได้</div>
             </div>
           </label>
           <label class="checkbox-card">
-            <input type="checkbox" name="health_condition" value="incontinence">
+            <input type="checkbox" name="health_condition" value="incontinence" class="visually-hidden">
             <div class="card-content">
-              <div class="icon">💧</div>
+              <div class="icon" aria-hidden="true">💧</div>
               <div class="label-text">มีปัญหาภาวะกลั้นปัสสาวะหรืออุจจาระไม่ได้</div>
             </div>
           </label>
@@ -99,46 +102,46 @@
       </section>
 
       <!-- STEP 3: Preferred Diaper Size -->
-      <section class="step-card" data-step="3">
+      <section class="step-card" data-step="3" aria-labelledby="step3_title">
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">คำถามที่ 3 / 12</span>
             <span class="badge-optional">แนะนำให้ระบุ</span>
           </div>
-          <h2>ขนาดผ้าอ้อมผู้ใหญ่ที่ต้องการ (ถ้าทราบ)</h2>
+          <h2 id="step3_title">ขนาดผ้าอ้อมผู้ใหญ่ที่ต้องการ (ถ้าทราบ)</h2>
           <p class="question-desc">เลือกตามขนาดรอบเอวจริงของผู้ป่วย</p>
         </div>
-        <div class="option-grid size-grid">
+        <div class="option-grid size-grid" role="radiogroup" aria-labelledby="step3_title">
           <label class="option-card">
-            <input type="radio" name="diaper_size" value="S">
+            <input type="radio" name="diaper_size" value="S" class="visually-hidden">
             <div class="card-content">
               <div class="size-title">Size S</div>
               <div class="size-desc">รอบเอว 24 - 35 นิ้ว</div>
             </div>
           </label>
           <label class="option-card">
-            <input type="radio" name="diaper_size" value="M">
+            <input type="radio" name="diaper_size" value="M" class="visually-hidden">
             <div class="card-content">
               <div class="size-title">Size M</div>
               <div class="size-desc">รอบเอว 32 - 44 นิ้ว</div>
             </div>
           </label>
           <label class="option-card">
-            <input type="radio" name="diaper_size" value="L">
+            <input type="radio" name="diaper_size" value="L" class="visually-hidden">
             <div class="card-content">
               <div class="size-title">Size L</div>
               <div class="size-desc">รอบเอว 40 - 55 นิ้ว</div>
             </div>
           </label>
           <label class="option-card">
-            <input type="radio" name="diaper_size" value="XL">
+            <input type="radio" name="diaper_size" value="XL" class="visually-hidden">
             <div class="card-content">
               <div class="size-title">Size XL</div>
               <div class="size-desc">รอบเอว 50 - 62 นิ้ว</div>
             </div>
           </label>
           <label class="option-card">
-            <input type="radio" name="diaper_size" value="unknown">
+            <input type="radio" name="diaper_size" value="unknown" class="visually-hidden">
             <div class="card-content">
               <div class="size-title">ไม่แน่ใจ</div>
               <div class="size-desc">ให้เจ้าหน้าที่ประเมินเมื่อเยี่ยมบ้าน</div>
@@ -150,18 +153,19 @@
       <!-- PHASE 2: Location-First & Smart Auto-Fill -->
 
       <!-- STEP 4: Interactive Leaflet Map & Reverse Geocoding -->
-      <section class="step-card" data-step="4">
+      <section class="step-card" data-step="4" aria-labelledby="step4_title">
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">คำถามที่ 4 / 12</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
-          <h2>พิกัดสถานที่พักอาศัย (ปักหมุดบนแผนที่)</h2>
-          <p class="question-desc">ระบบจะนำพิกัดนี้ไประบุ เขต/แขวง ในที่อยู่ให้อัตโนมัติในข้อถัดไป</p>
+          <h2 id="step4_title">พิกัดสถานที่พักอาศัย (ปักหมุดบนแผนที่)</h2>
+          <p class="question-desc">กดปุ่มดึงตำแหน่ง GPS หรือพิมพ์ค้นหา หรือลากหมุดบนแผนที่</p>
         </div>
         <div class="map-wrapper">
           <div class="map-toolbar">
-            <input type="text" id="mapSearchInput" class="custom-input map-search-input" placeholder="🔍 ตัวอย่าง: ถนนวิภาวดีรังสิต หรือ โรงเรียนหอวัง">
+            <label for="mapSearchInput" class="visually-hidden">ค้นหาตำแหน่งบนแผนที่</label>
+            <input type="text" id="mapSearchInput" class="custom-input map-search-input" placeholder="🔍 ค้นหาชื่อถนน หรือ สถานที่สำคัญใกล้เคียง">
             <button type="button" id="btnSearchMap" class="btn-map-action">ค้นหา</button>
           </div>
           
@@ -179,39 +183,39 @@
             ❌ ย่อแผนที่กลับ
           </button>
 
-          <div id="map" class="leaflet-map-container"></div>
-          <div class="coords-display" id="coordsDisplay">ยังไม่ได้เลือกตำแหน่ง (ลากหมุดบนแผนที่)</div>
+          <div id="map" class="leaflet-map-container" role="region" aria-label="แผนที่สำหรับปักหมุดพิกัดพักอาศัย"></div>
+          <div class="coords-display" id="coordsDisplay" aria-live="polite">ยังไม่ได้เลือกตำแหน่ง (ลากหมุดบนแผนที่)</div>
         </div>
       </section>
 
       <!-- STEP 5: BKK Address Autocomplete + Landmark Option -->
-      <section class="step-card" data-step="5">
+      <section class="step-card" data-step="5" aria-labelledby="step5_title">
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">คำถามที่ 5 / 12</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
-          <h2>ที่อยู่ปัจจุบันของผู้ป่วยในพื้นที่กรุงเทพมหานคร</h2>
+          <h2 id="step5_title">ที่อยู่ปัจจุบันของผู้ป่วยในพื้นที่กรุงเทพมหานคร</h2>
           <p class="question-desc">พิมพ์ค้นหา แขวง/เขต หรือตรวจสอบข้อมูลที่เติมให้อัตโนมัติจากแผนที่</p>
         </div>
         <div class="input-group">
           <!-- Auto-filled Geocode Notification Badge -->
-          <div id="geocodeNotification" class="geocode-badge" style="display: none;">
+          <div id="geocodeNotification" class="geocode-badge" style="display: none;" role="status">
             ✨ ระบบเติม แขวง และ เขต อัตโนมัติจากพิกัดแผนที่เรียบร้อยแล้ว
           </div>
 
-          <label class="form-label">ค้นหา แขวง / เขต ในกรุงเทพมหานคร</label>
+          <label for="bkkAddressSearch" class="form-label">ค้นหา แขวง / เขต ในกรุงเทพมหานคร</label>
           <div class="autocomplete-wrapper">
             <input type="text" id="bkkAddressSearch" class="custom-input" placeholder="พิมพ์ชื่อแขวง หรือ เขต (เช่น ทุ่งสองห้อง หรือ หลักสี่)" autocomplete="off">
-            <div id="bkkAddressSuggestions" class="suggestions-dropdown" style="display: none;"></div>
+            <div id="bkkAddressSuggestions" class="suggestions-dropdown" style="display: none;" role="listbox"></div>
           </div>
-          <div id="selectedAddressBadge" class="selected-address-tag" style="display: none;"></div>
+          <div id="selectedAddressBadge" class="selected-address-tag" style="display: none;" role="status"></div>
 
-          <label class="form-label mt-12">บ้านเลขที่ / ซอย / ถนน / อาคาร</label>
+          <label for="patient_address_detail" class="form-label mt-12">บ้านเลขที่ / ซอย / ถนน / อาคาร</label>
           <textarea id="patient_address_detail" class="custom-textarea" rows="2" placeholder="ตัวอย่าง: 99/1 ซอยวิภาวดี 16 ถนนวิภาวดีรังสิต อาคาร A ชั้น 2"></textarea>
 
           <!-- Landmark Option (Not Required) -->
-          <label class="form-label mt-12">จุดสังเกตใกล้บ้าน <span class="label-sub">(ไม่บังคับกรอก)</span></label>
+          <label for="patient_address_landmark" class="form-label mt-12">จุดสังเกตใกล้บ้าน <span class="label-sub">(ไม่บังคับกรอก)</span></label>
           <input type="text" id="patient_address_landmark" class="custom-input" placeholder="ตัวอย่าง: ตรงข้ามวัดบางนาใน / ปากซอยมีร้านเซเว่น / ข้างร้านขายของชำป้าเจ้น">
           <span class="field-hint">ช่วยให้เจ้าหน้าที่พยาบาลเดินทางไปเยี่ยมบ้านและส่งมอบผ้าอ้อมได้รวดเร็วขึ้น</span>
         </div>
@@ -220,75 +224,77 @@
       <!-- PHASE 3: Identity & Coverage -->
 
       <!-- STEP 6: Patient Full Name -->
-      <section class="step-card" data-step="6">
+      <section class="step-card" data-step="6" aria-labelledby="step6_title">
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">คำถามที่ 6 / 12</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
-          <h2>ชื่อ - นามสกุล ของผู้ป่วยผู้ขอรับสิทธิ</h2>
+          <h2 id="step6_title">ชื่อ - นามสกุล ของผู้ป่วยผู้ขอรับสิทธิ</h2>
           <p class="question-desc">กรุณากรอกชื่อและนามสกุลจริงตามบัตรประชาชนของผู้ป่วย</p>
         </div>
         <div class="input-group">
+          <label for="patient_name" class="visually-hidden">ชื่อ - นามสกุล ผู้ป่วย</label>
           <input type="text" id="patient_name" class="custom-input" placeholder="ตัวอย่าง: นายสมชาย ใจดี" autocomplete="name">
         </div>
       </section>
 
       <!-- STEP 7: Patient National ID -->
-      <section class="step-card" data-step="7">
+      <section class="step-card" data-step="7" aria-labelledby="step7_title">
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">คำถามที่ 7 / 12</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
-          <h2>เลขบัตรประจำตัวประชาชน 13 หลัก ของผู้ป่วย</h2>
+          <h2 id="step7_title">เลขบัตรประจำตัวประชาชน 13 หลัก ของผู้ป่วย</h2>
           <p class="question-desc">ระบบจะใส่ขีดให้อัตโนมัติ เพื่อใช้ตรวจสอบสิทธิหลักประกันสุขภาพ (สปสช.)</p>
         </div>
         <div class="input-group">
+          <label for="patient_id" class="visually-hidden">เลขบัตรประชาชน 13 หลัก</label>
           <input type="tel" id="patient_id" class="custom-input" placeholder="ตัวอย่าง: 1-2345-67890-12-3" maxlength="17" inputmode="numeric">
-          <span class="field-hint" id="idValidationMsg">ป้อนตัวเลขให้ครบ 13 หลัก</span>
+          <span class="field-hint" id="idValidationMsg" role="status">ป้อนตัวเลขให้ครบ 13 หลัก</span>
           <div class="privacy-note">
-            <span>🔒</span> ข้อมูลนี้ใช้เพื่อตรวจสอบสิทธิระบบหลักประกันสุขภาพแห่งชาติเท่านั้น (ไม่เผยแพร่ต่อสาธารณะ)
+            <span aria-hidden="true">🔒</span> ข้อมูลนี้ใช้เพื่อตรวจสอบสิทธิระบบหลักประกันสุขภาพแห่งชาติเท่านั้น (ไม่เผยแพร่ต่อสาธารณะ)
           </div>
         </div>
       </section>
 
       <!-- STEP 8: Health Coverage -->
-      <section class="step-card" data-step="8">
+      <section class="step-card" data-step="8" aria-labelledby="step8_title">
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">คำถามที่ 8 / 12</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
-          <h2>สิทธิการรักษาพยาบาลหลักของผู้ป่วย</h2>
+          <h2 id="step8_title">สิทธิการรักษาพยาบาลหลักของผู้ป่วย</h2>
           <p class="question-desc">เลือกสิทธิประโยชน์หลักที่คุณใช้อยู่ในปัจจุบัน</p>
         </div>
-        <div class="option-grid">
+        <div class="option-grid" role="radiogroup" aria-labelledby="step8_title">
           <label class="option-card">
-            <input type="radio" name="health_coverage" value="บัตรทอง">
+            <input type="radio" name="health_coverage" value="บัตรทอง" class="visually-hidden">
             <div class="card-content">
-              <div class="icon">💳</div>
+              <div class="icon" aria-hidden="true">💳</div>
               <div class="label-text">หลักประกันสุขภาพแห่งชาติ (บัตรทอง 30 บาท)</div>
             </div>
           </label>
           <label class="option-card">
-            <input type="radio" name="health_coverage" value="ประกันสังคม">
+            <input type="radio" name="health_coverage" value="ประกันสังคม" class="visually-hidden">
             <div class="card-content">
-              <div class="icon">🏥</div>
+              <div class="icon" aria-hidden="true">🏥</div>
               <div class="label-text">ประกันสังคม</div>
             </div>
           </label>
           <label class="option-card">
-            <input type="radio" name="health_coverage" value="ข้าราชการ">
+            <input type="radio" name="health_coverage" value="ข้าราชการ" class="visually-hidden">
             <div class="card-content">
-              <div class="icon">🏛️</div>
+              <div class="icon" aria-hidden="true">🏛️</div>
               <div class="label-text">สิทธิข้าราชการ / รัฐวิสาหกิจ</div>
             </div>
           </label>
           <label class="option-card">
-            <input type="radio" name="health_coverage" value="อื่นๆ">
+            <input type="radio" name="health_coverage" value="อื่นๆ" class="visually-hidden">
             <div class="card-content">
-              <div class="icon">📋</div>
+              <div class="icon" aria-hidden="true">📋</div>
               <div class="label-text">อื่นๆ / ชำระเงินเอง</div>
             </div>
           </label>
@@ -296,16 +302,17 @@
       </section>
 
       <!-- STEP 9: Phone Number -->
-      <section class="step-card" data-step="9">
+      <section class="step-card" data-step="9" aria-labelledby="step9_title">
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">คำถามที่ 9 / 12</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
-          <h2>เบอร์โทรศัพท์ที่สะดวกให้เจ้าหน้าที่ติดต่อนัดหมาย</h2>
+          <h2 id="step9_title">เบอร์โทรศัพท์ที่สะดวกให้เจ้าหน้าที่ติดต่อนัดหมาย</h2>
           <p class="question-desc">เจ้าหน้าที่ศูนย์บริการสาธารณสุขจะโทรนัดหมายประเมินล่วงหน้า</p>
         </div>
         <div class="input-group">
+          <label for="contact_phone" class="visually-hidden">เบอร์โทรศัพท์ติดต่อนัดหมาย</label>
           <input type="tel" id="contact_phone" class="custom-input" placeholder="ตัวอย่าง: 0812345678" maxlength="10" inputmode="tel">
         </div>
       </section>
@@ -313,27 +320,27 @@
       <!-- PHASE 4: Caregiver & Evidence -->
 
       <!-- STEP 10: Can Self Care Check? -->
-      <section class="step-card" data-step="10">
+      <section class="step-card" data-step="10" aria-labelledby="step10_title">
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">คำถามที่ 10 / 12</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
-          <h2>ผู้ป่วยสามารถดูแลตัวเองในการรับมอบและติดต่อประสานงานได้หรือไม่?</h2>
+          <h2 id="step10_title">ผู้ป่วยสามารถดูแลตัวเองในการรับมอบและติดต่อประสานงานได้หรือไม่?</h2>
           <p class="question-desc">หากดูแลตัวเองได้ ระบบจะข้ามการขอข้อมูลผู้ดูแลให้อัตโนมัติ</p>
         </div>
-        <div class="option-grid">
+        <div class="option-grid" role="radiogroup" aria-labelledby="step10_title">
           <label class="option-card">
-            <input type="radio" name="self_care_status" value="self">
+            <input type="radio" name="self_care_status" value="self" class="visually-hidden">
             <div class="card-content">
-              <div class="icon">✅</div>
+              <div class="icon" aria-hidden="true">✅</div>
               <div class="label-text">ดูแลตัวเองได้ (ไม่ต้องกรอกข้อมูลผู้ดูแล)</div>
             </div>
           </label>
           <label class="option-card">
-            <input type="radio" name="self_care_status" value="need_caregiver">
+            <input type="radio" name="self_care_status" value="need_caregiver" class="visually-hidden">
             <div class="card-content">
-              <div class="icon">🤝</div>
+              <div class="icon" aria-hidden="true">🤝</div>
               <div class="label-text">ต้องมีญาติ / ผู้ดูแลช่วยเหลือในการประสานงาน</div>
             </div>
           </label>
@@ -341,38 +348,38 @@
       </section>
 
       <!-- STEP 11: Caregiver Details (Shown only if need_caregiver) -->
-      <section class="step-card" data-step="11">
+      <section class="step-card" data-step="11" aria-labelledby="step11_title">
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">คำถามที่ 11 / 12</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
-          <h2>ข้อมูลญาติ / ผู้ดูแลผู้ป่วยสำหรับติดต่อประสานงาน</h2>
+          <h2 id="step11_title">ข้อมูลญาติ / ผู้ดูแลผู้ป่วยสำหรับติดต่อประสานงาน</h2>
           <p class="question-desc">ระบุชื่อและเบอร์โทรศัพท์ของผู้ดูแลหลัก</p>
         </div>
         <div class="input-group">
-          <label class="form-label">ชื่อ - นามสกุล ผู้ดูแล</label>
+          <label for="caregiver_name" class="form-label">ชื่อ - นามสกุล ผู้ดูแล</label>
           <input type="text" id="caregiver_name" class="custom-input mb-12" placeholder="ตัวอย่าง: นางสาวสมหญิง ใจดี (บุตรสาว)">
           
-          <label class="form-label">เบอร์โทรศัพท์ผู้ดูแล</label>
+          <label for="caregiver_phone" class="form-label">เบอร์โทรศัพท์ผู้ดูแล</label>
           <input type="tel" id="caregiver_phone" class="custom-input" placeholder="ตัวอย่าง: 0898765432" maxlength="10" inputmode="tel">
         </div>
       </section>
 
       <!-- STEP 12: Attachments -->
-      <section class="step-card" data-step="12">
+      <section class="step-card" data-step="12" aria-labelledby="step12_title">
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">คำถามที่ 12 / 12</span>
             <span class="badge-optional">แนะนำให้ระบุ</span>
           </div>
-          <h2>แนบรูปถ่ายผู้ป่วย / สถานที่พักอาศัย / ใบรับรองแพทย์ (ถ้ามี)</h2>
+          <h2 id="step12_title">แนบรูปถ่ายผู้ป่วย / สถานที่พักอาศัย / ใบรับรองแพทย์ (ถ้ามี)</h2>
           <p class="question-desc">ช่วยเพิ่มความเร็วในการพิจารณาอนุมัติของศูนย์บริการสาธารณสุข</p>
         </div>
         <div class="upload-box">
-          <input type="file" id="fileUpload" class="file-input" accept="image/*" multiple>
+          <input type="file" id="fileUpload" class="file-input" accept="image/*" multiple aria-label="แนบรูปถ่ายประกอบ">
           <label for="fileUpload" class="upload-label">
-            <div class="upload-icon">📷</div>
+            <div class="upload-icon" aria-hidden="true">📷</div>
             <div>กดที่นี่เพื่อเลือกหรือถ่ายรูปภาพ</div>
             <span class="upload-sub">รองรับไฟล์รูปภาพ JPG, PNG</span>
           </label>
@@ -383,13 +390,13 @@
       <!-- PHASE 5: Review & Submit -->
 
       <!-- STEP 13: Final Review UX Structured -->
-      <section class="step-card" data-step="13">
+      <section class="step-card" data-step="13" aria-labelledby="step13_title">
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">ขั้นตอนสุดท้าย</span>
             <span class="badge-review">ตรวจสอบข้อมูล</span>
           </div>
-          <h2>สรุปข้อมูลการยื่นขอรับสิทธิผ้าอ้อมผู้ใหญ่</h2>
+          <h2 id="step13_title">สรุปข้อมูลการยื่นขอรับสิทธิผ้าอ้อมผู้ใหญ่</h2>
           <p class="question-desc">ตรวจสอบความถูกต้องก่อนกดส่งเรื่องไปยังศูนย์บริการสาธารณสุข</p>
         </div>
         <div class="review-grid" id="reviewSummaryGrid">
@@ -401,20 +408,20 @@
   </main>
 
   <!-- Bottom Navigation Action Bar -->
-  <footer class="action-footer">
-    <button type="button" class="btn-secondary" id="btnPrev" style="display: none;">
+  <footer class="action-footer" role="contentinfo">
+    <button type="button" class="btn-secondary" id="btnPrev" style="display: none;" aria-label="ย้อนกลับไปข้อก่อนหน้า">
       ← ย้อนกลับ
     </button>
-    <button type="button" class="btn-primary" id="btnNext" disabled>
+    <button type="button" class="btn-primary" id="btnNext" disabled aria-label="ไปยังข้อถัดไป">
       ถัดไป →
     </button>
   </footer>
 
   <!-- Submission Success / Payload Modal -->
-  <div class="modal-backdrop" id="payloadModal">
+  <div class="modal-backdrop" id="payloadModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-card">
-      <div class="modal-icon">✅</div>
-      <h3>ส่งเรื่องขอรับผ้าอ้อมผู้ใหญ่เรียบร้อยแล้ว</h3>
+      <div class="modal-icon" aria-hidden="true">✅</div>
+      <h3 id="modalTitle">ส่งเรื่องขอรับผ้าอ้อมผู้ใหญ่เรียบร้อยแล้ว</h3>
       <p>ระบบบันทึกข้อมูลและส่งไปยังศูนย์บริการสาธารณสุขเรียบร้อยแล้ว (เจ้าหน้าที่รับเรื่องภายใน 3 วันทำการ)</p>
       
       <div class="payload-preview-header">

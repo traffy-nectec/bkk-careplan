@@ -5,7 +5,7 @@
   --light-bg: #f4fbf7;
   --card-bg: #ffffff;
   --text-main: #1e293b;
-  --text-muted: #64748b;
+  --text-muted: #475569; /* WCAG 2.1 AA Contrast Compliant (7.1:1) */
   --border-color: #cbd5e1;
   --primary-gradient: linear-gradient(135deg, #0d5c3a 0%, #16a085 100%);
   --shadow-sm: 0 2px 8px rgba(13, 92, 58, 0.08);
@@ -13,6 +13,19 @@
   --radius-lg: 18px;
   --radius-md: 12px;
   --base-font-scale: 1;
+}
+
+/* Accessibility Visually Hidden Utility for Screen Readers (WCAG 4.1.2) */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 /* Accessibility Font Size Scaling */
@@ -243,18 +256,19 @@ body {
   display: flex;
   align-items: center;
   background: #f8fafc;
-  border: 2px solid #e2e8f0;
+  border: 2px solid #cbd5e1;
   border-radius: var(--radius-md);
   padding: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
+  min-height: 48px; /* Touch target minimum size */
 }
 
-.option-card input, .checkbox-card input {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
+/* Keyboard Focus Outline for Accessibility (WCAG 2.4.7) */
+.option-card:focus-within, .checkbox-card:focus-within {
+  outline: 3px solid var(--primary-green);
+  border-color: var(--primary-green);
+  background: #e8f5e9;
 }
 
 .card-content {
@@ -335,7 +349,7 @@ body {
 
 .custom-input:focus, .custom-textarea:focus {
   border-color: var(--primary-green);
-  box-shadow: 0 0 0 3px rgba(13, 92, 58, 0.12);
+  box-shadow: 0 0 0 3px rgba(13, 92, 58, 0.25);
 }
 
 /* Autocomplete Dropdown List */
@@ -407,16 +421,16 @@ body {
 
 .field-hint {
   font-size: calc(0.78rem * var(--base-font-scale));
-  color: var(--text-muted);
+  color: #334155; /* WCAG 2.1 AAA High Contrast */
 }
 
 .field-hint.error {
-  color: #dc2626;
-  font-weight: 500;
+  color: #b91c1c;
+  font-weight: 600;
 }
 
 .privacy-note {
-  font-size: calc(0.75rem * var(--base-font-scale));
+  font-size: calc(0.78rem * var(--base-font-scale));
   color: #0369a1;
   background: #f0f9ff;
   border: 1px dashed #bae6fd;
@@ -712,7 +726,7 @@ body {
 
 .btn-primary:disabled {
   background: #cbd5e1;
-  color: #94a3b8;
+  color: #64748b;
   box-shadow: none;
   cursor: not-allowed;
 }

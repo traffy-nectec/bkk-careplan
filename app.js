@@ -710,6 +710,14 @@ document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const ariaLiveRegion = document.getElementById('ariaLiveRegion');
+  function announceToScreenReader(msg) {
+    if (ariaLiveRegion) {
+      ariaLiveRegion.textContent = '';
+      setTimeout(() => { ariaLiveRegion.textContent = msg; }, 100);
+    }
+  }
+
   // Update UI Step Visibility & Progress
   function updateStepUI() {
     stepCards.forEach(card => {
@@ -720,6 +728,12 @@ document.addEventListener('DOMContentLoaded', () => {
         card.classList.remove('active');
       }
     });
+
+    // Screen Reader Step Announcement (WCAG 4.1.3)
+    const titleEl = document.querySelector(`.step-card[data-step="${currentStep}"] h2`);
+    if (titleEl) {
+      announceToScreenReader(`ขั้นตอนที่ ${currentStep} จาก 13: ${titleEl.textContent}`);
+    }
 
     // Initialize Map if on Step 4
     if (currentStep === 4) {
