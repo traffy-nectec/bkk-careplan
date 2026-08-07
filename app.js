@@ -923,6 +923,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function submitPayload() {
     const payload = {
       request_timestamp: new Date().toISOString(),
+      form_id: "bkk_careplan_diaper_v1",
+      form_name: "แบบแจ้งความประสงค์ขอรับผ้าอ้อมผู้ใหญ่",
+      liff_id: LIFF_ID || "",
       source: "bkk_careplan_traffy_fondue_webview",
       org_id: formData.org_id || "",
       applicant_type: formData.applicant_type,

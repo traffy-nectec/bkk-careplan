@@ -228,6 +228,9 @@ bkk-careplan/
 ```json
 {
   "request_timestamp": "2026-08-07T10:15:00.000Z",
+  "form_id": "bkk_careplan_diaper_v1",
+  "form_name": "แบบแจ้งความประสงค์ขอรับผ้าอ้อมผู้ใหญ่",
+  "liff_id": "2000158432-95uKB5EW",
   "source": "bkk_careplan_traffy_fondue_webview",
   "org_id": "BKK.HEALTH_CENTER.01",
   "applicant_type": "caregiver",
@@ -286,6 +289,9 @@ bkk-careplan/
 | ฟิลด์ (Field) | ประเภท (Type) | คำอธิบาย (Description) |
 | :--- | :---: | :--- |
 | `request_timestamp` | String (ISO8601) | วันเวลาที่ยื่นคำร้องแบบ UTC |
+| `form_id` | String | รหัสอ้างอิงฟอร์มสำหรับ Gateway Router (`"bkk_careplan_diaper_v1"`) |
+| `form_name` | String | ชื่อแบบฟอร์มประเมิน |
+| `liff_id` | String | รหัส LINE LIFF Application ID |
 | `source` | String | ระบบต้นทางของคำร้อง |
 | `org_id` | String / Array | รหัสหน่วยงานปลายทาง หรือ รหัส ศบส. ที่รับผิดชอบ |
 | `applicant_type` | String | สถานะผู้ยื่นเรื่อง (`"patient"` = ผู้ป่วยยื่นเอง, `"caregiver"` = ญาติยื่นแทน) |
