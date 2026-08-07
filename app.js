@@ -4,6 +4,25 @@ document.addEventListener('DOMContentLoaded', () => {
   let leafletMap = null;
   let leafletMarker = null;
   let isMapFullscreen = false;
+
+  // LIFF Configuration & State
+  const LIFF_ID = '2000158432-95uKB5EW'; // Replace with actual LINE LIFF ID
+  let lineProfile = null;
+
+  async function initLiff() {
+    if (typeof liff === 'undefined') return;
+    try {
+      await liff.init({ liffId: LIFF_ID });
+      if (liff.isLoggedIn()) {
+        lineProfile = await liff.getProfile();
+        console.log('LIFF initialized & logged in:', lineProfile);
+      } else {
+        liff.login();
+      }
+    } catch (err) {
+      console.warn('LIFF initialization warning/error:', err);
+    }
+  }
   
   // Bangkok 50 Districts & 180 Subdistricts Dataset
   const bkkSubdistrictList = [
@@ -658,6 +677,16 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (currentStep < TOTAL_STEPS) {
       currentStep++;
     } else {
+      // Critical Step Check: Check LIFF authentication before submitting
+      if (typeof liff !== 'undefined' && liff.init) {
+        if (!liff.isLoggedIn()) {
+          const confirmLogin = confirm('ระบบจำเป็นต้องยืนยันตัวตนด้วย LINE ก่อนส่งเรื่องคำร้อง กรุณากด "ตกลง" เพื่อเข้าสู่ระบบ LINE');
+          if (confirmLogin) {
+            liff.login();
+          }
+          return;
+        }
+      }
       submitPayload();
       return;
     }
@@ -880,7 +909,12 @@ document.addEventListener('DOMContentLoaded', () => {
         fullname: formData.caregiver_name || '',
         phone: formData.caregiver_phone || ''
       },
-      attachments_count: formData.attachments.length
+      attachments_count: formData.attachments.length,
+      line_profile: lineProfile ? {
+        user_id: lineProfile.userId,
+        display_name: lineProfile.displayName,
+        picture_url: lineProfile.pictureUrl || ''
+      } : null
     };
 
     payloadJsonDisplay.textContent = JSON.stringify(payload, null, 2);
@@ -908,4 +942,5 @@ document.addEventListener('DOMContentLoaded', () => {
   restoreDraft();
   updateStepUI();
   updateCardSelectedStates();
+  initLiff();
 });
