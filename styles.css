@@ -289,9 +289,8 @@ body {
 
 /* Keyboard Focus Outline for Accessibility (WCAG 2.4.7) */
 .option-card:focus-within, .checkbox-card:focus-within {
-  outline: 3px solid var(--primary-green);
-  border-color: var(--primary-green);
-  background: #f0fdf4;
+  border-color: var(--secondary-teal);
+  box-shadow: 0 0 0 3px rgba(22, 160, 133, 0.2);
 }
 
 .card-content {
@@ -326,17 +325,17 @@ body {
 
 .option-card:hover, .checkbox-card:hover {
   border-color: var(--secondary-teal);
-  background: #f0fdf4;
+  background: #f8fafc;
 }
 
-/* Selected State Styles */
+/* Selected State Styles (High Priority) */
 .option-card.selected,
 .checkbox-card.selected,
 .option-card:has(input:checked),
 .checkbox-card:has(input:checked) {
-  border-color: var(--primary-green);
-  background: #e8f5e9;
-  box-shadow: 0 4px 14px rgba(13, 92, 58, 0.15);
+  border-color: var(--primary-green) !important;
+  background: #e8f5e9 !important;
+  box-shadow: 0 4px 14px rgba(13, 92, 58, 0.15) !important;
 }
 
 .option-card.selected .label-text,
