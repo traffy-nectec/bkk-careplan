@@ -3,7 +3,9 @@
 ระบบเว็บฟอร์มยื่นเรื่องขอรับการสนับสนุนผ้าอ้อมผู้ใหญ่และแผ่นรองซับการขับถ่าย สำหรับประชาชนและผู้ดูแลในพื้นที่กรุงเทพมหานคร โดยเชื่อมต่อข้อมูลเข้ากับระบบ **Traffy Fondue** และศูนย์บริการสาธารณสุข (ศบส.) กรุงเทพมหานคร
 
 🌐 **ทดลองใช้งานระบบ (Live Demo):** [https://traffy-nectec.github.io/bkk-careplan/](https://traffy-nectec.github.io/bkk-careplan/)  
-📚 **คู่มือการสั่งงาน AI (Prompt Engineering Guide):** [docs/ai_prompting_guide.md](docs/ai_prompting_guide.md)
+📲 **LINE LIFF App URL:** [https://liff.line.me/2000158432-95uKB5EW](https://liff.line.me/2000158432-95uKB5EW)  
+⚙️ **Cloud Run Gateway API:** `https://liff-form-gateway-884122932397.asia-southeast1.run.app/`  
+📋 **เอกสารส่งมอบงานระบบ (Handoff Document):** [HANDOFF.md](HANDOFF.md) | 📚 **คู่มือ AI:** [docs/ai_prompting_guide.md](docs/ai_prompting_guide.md)
 
 ---
 
@@ -216,6 +218,7 @@ bkk-careplan/
 │   └── references/             # เอกสารอ้างอิงนโยบายและระเบียบ กทม./สปสช.
 ├── okf/
 │   └── module_bkk_careplan.md  # OKF Technical Specification & Schema Definition
+├── HANDOFF.md                  # เอกสารสรุปการส่งมอบงานระบบ (Handoff Document)
 ├── README.md                   # คู่มือและคำอธิบายโครงการ
 └── .gitignore
 ```

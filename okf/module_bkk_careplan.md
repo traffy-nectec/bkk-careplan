@@ -132,11 +132,14 @@ erDiagram
 
 ---
 
-## 🔌 JSON Output Payload Schema (`POST /api/careplan/diaper-requests`)
+## 🔌 JSON Output Payload Schema (`POST https://liff-form-gateway-884122932397.asia-southeast1.run.app/`)
 
 ```json
 {
   "request_timestamp": "2026-08-07T10:15:00.000Z",
+  "form_id": "bkk_careplan_diaper_v1",
+  "form_name": "แบบแจ้งความประสงค์ขอรับผ้าอ้อมผู้ใหญ่",
+  "liff_id": "2000158432-95uKB5EW",
   "source": "bkk_careplan_traffy_fondue_webview",
   "org_id": "BKK.HEALTH_CENTER.01",
   "applicant_type": "caregiver",
@@ -167,7 +170,21 @@ erDiagram
     "fullname": "นางสาวสมหญิง ใจดี (บุตรสาว)",
     "phone": "0898765432"
   },
-  "attachments_count": 1,
+  "attachments_count": 2,
+  "images": {
+    "medical_certs": [
+      {
+        "filename": "medical_cert_01.jpg",
+        "base64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
+      }
+    ],
+    "attachments": [
+      {
+        "filename": "patient_photo_01.jpg",
+        "base64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
+      }
+    ]
+  },
   "line_profile": {
     "user_id": "U1234567890abcdef1234567890abcdef",
     "display_name": "Somchai LINE",

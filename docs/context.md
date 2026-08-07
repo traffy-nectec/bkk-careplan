@@ -13,18 +13,20 @@
 sequenceDiagram
     autonumber
     actor User as ประชาชน / ผู้ดูแล
-    participant Webview as BKK Careplan Webview
-    participant API as Traffy Fondue Engine
-    participant Staff as พยาบาลวิชาชีพ ศบส.
+    participant Webview as BKK Careplan Webview (LIFF)
+    participant Gateway as Golang Gateway (Cloud Run)
+    participant PubSub as Google Cloud Pub/Sub
+    participant Staff as พยาบาลวิชาชีพ ศบส. 69 แห่ง
 
-    User->>Webview: 1. กรอกข้อมูลและปักหมุด GPS พิกัดที่พักอาศัย (Step 6)
-    Webview-->>User: 2. Reverse Geocoding เติม แขวง/เขต ให้อัตโนมัติ (Step 7)
+    User->>Webview: 1. เปิดผ่าน LINE LIFF (2000158432-95uKB5EW)
+    Webview->>Webview: 2. Auto GPS Fetching & Reverse Geocoding เติมที่อยู่ (Step 6-7)
     User->>Webview: 3. กรอกข้อมูล 10 ข้อ และกดส่งเรื่อง (Step 11)
-    Webview->>API: 4. ส่ง JSON Payload เข้าระบบ Traffy Fondue
-    API->>Staff: 5. กระจาย Ticket คำร้องไปยัง ศบส. ที่รับผิดชอบ
-    Staff->>User: 6. โทรนัดหมายและลงพื้นที่เยี่ยมบ้าน (Stage 2)
-    Staff->>Staff: 7. ประเมิน ADL, บัตรคนพิการ, สิทธิหลัก & ทำแผน Care Plan
-    Staff->>User: 8. อนุมัติสิทธิและส่งมอบผ้าอ้อมผู้ใหญ่ประจำเดือน
+    Webview->>Gateway: 4. POST https://liff-form-gateway-884122932397.asia-southeast1.run.app/
+    Gateway->>PubSub: 5. Publish Message (line_2019_to_fondue)
+    Gateway-->>Webview: 6. ตอบกลับ HTTP 200 OK
+    Webview-->>User: 7. ขึ้นป๊อปอัป "✅ ยื่นเรื่องเรียบร้อยแล้ว" ➔ liff.closeWindow()
+    PubSub->>Staff: 8. กระจาย Ticket คำร้องไปยัง ศบส. ที่รับผิดชอบ
+    Staff->>User: 9. โทรนัดหมายและลงพื้นที่เยี่ยมบ้าน (Stage 2)
 ```
 
 ---
