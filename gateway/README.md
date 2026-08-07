@@ -4,6 +4,18 @@
 
 ---
 
+## 📋 Checklist สรุปสิ่งที่ Middleware ต้องทำ (Middleware Requirements Checklist)
+
+- [x] **1. รองรับ HTTP Options (CORS Preflight):** ตั้งค่า Headers `Access-Control-Allow-Origin: *`, `Access-Control-Allow-Methods: GET, POST, OPTIONS` เพื่อให้ยิงผ่าน `fetch()` จาก GitHub Pages และ LINE LIFF ได้
+- [x] **2. รับและแกะ JSON Payload:** ตรวจสอบฟิลด์สำคัญ `form_id`, `org_id`, `liff_id`, `source`, `patient_info`, `contact_info`
+- [x] **3. จัดการรูปถ่ายแบบ Base64 (Image Processing):** รับอาเรย์รูปภาพ `images.medical_certs` และ `images.attachments` จาก Payload (บีบอัดมาจากฝั่ง Frontend แล้ว) เพื่อส่งต่อเข้า Pub/Sub หรือ Decode อัปโหลดลง Cloud Storage
+- [x] **4. แนบ Metadata Attributes ให้ Pub/Sub Message:** ใส่ `form_id`, `org_id`, `liff_id`, `source`, `timestamp` เข้าใน Attributes ของ Message เพื่อให้ Worker ดึงไปสวิตช์ประมวลผลได้ถูกต้อง
+- [x] **5. Publish เข้า Google Cloud Pub/Sub:** ยิงข้อความเข้า Topic `line_2019_to_fondue` บน GCP Project `traffy-cloud`
+- [x] **6. คืนค่า JSON Response ชัดเจน:** คืนค่า `HTTP 200 OK` พร้อม `success: true` และ `message_id` ให้ฝั่ง LIFF แสดงป๊อปอัปสำเร็จ
+- [x] **7. มี Endpoint เช็กสุขภาพระบบ (Health Check):** มีพาร์ท `GET /health` สำหรับตรวจสอบสถานะคอนเทนเนอร์บน Cloud Run
+
+---
+
 ## 🏗️ คุณสมบัติหลัก (Key Features)
 
 1. **Multi-Form Gateway Routing:** รองรับการรับข้อมูลจากหลากหลายแบบฟอร์ม (`form_id`, `org_id`, `liff_id`)

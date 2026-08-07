@@ -229,6 +229,14 @@ bkk-careplan/
 
 ระบบส่งออกข้อมูลการยื่นเรื่องในรูปแบบ **JSON Payload** ที่รองรับการเชื่อมต่อ API กับ Middleware Backend ก่อนยิงเข้า Google Cloud Pub/Sub (`traffy-cloud` / `line_2019_to_fondue`) ต่อไป โดยมีการระบุตัวแปร `org_id` สำหรับระบุรหัสหน่วยงานปลายทางไว้ล่วงหน้า
 
+### 📋 Checklist สิ่งที่ Middleware Backend ต้องทำ (Middleware Requirements):
+- [x] **CORS Support:** รองรับ `Access-Control-Allow-Origin: *` สำหรับเรียกผ่าน `fetch()` บน LIFF / GitHub Pages
+- [x] **Multi-Form Routing:** อ่านตัวแปร `form_id` และ `liff_id` ใน Payload เพื่อแยกแยะแบบฟอร์ม
+- [x] **Metadata Attributes:** แนบ `form_id`, `org_id`, `liff_id`, `source`, `timestamp` ใส่ลงใน Pub/Sub Message Attributes
+- [x] **Base64 Image Decoding / Forwarding:** จัดการรูปถ่าย `images.medical_certs` และ `images.attachments` (ย่อขนาดมาแล้วจาก Frontend)
+- [x] **GCP Pub/Sub Integration:** Publish ข้อความเข้า Topic `line_2019_to_fondue` บน Project `traffy-cloud`
+- [x] **Clean JSON Response:** ตอบกลับ `HTTP 200 OK` พร้อม `success: true` และ `message_id` ให้ฝั่ง LIFF แสดงป๊อปอัปสำเร็จ
+
 ---
 
 ## 🔌 ตัวอย่าง JSON Payload สำหรับ Middleware Developer
