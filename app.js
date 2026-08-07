@@ -984,6 +984,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalTitle) modalTitle.textContent = '⏳ กำลังส่งเรื่องขอรับผ้าอ้อมผู้ใหญ่...';
     if (modalDesc) modalDesc.textContent = 'กรุณารอสักครู่ ระบบกำลังส่งข้อมูลไปยังศูนย์บริการสาธารณสุข กรุงเทพมหานคร';
 
+    // Send immediate LINE chat message indicating submission in progress
+    if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient() && liff.isApiAvailable('sendMessages')) {
+      liff.sendMessages([
+        {
+          type: 'text',
+          text: '⏳ กำลังส่งเรื่องขอรับสิทธิผ้าอ้อมผู้ใหญ่เข้าสู่ระบบ...'
+        }
+      ]).catch(err => console.log('liff.sendMessages start error:', err));
+    }
+
     // Send payload to Gateway API
     if (GATEWAY_API_URL && !GATEWAY_API_URL.includes('xxxx')) {
       btnNext.disabled = true;
