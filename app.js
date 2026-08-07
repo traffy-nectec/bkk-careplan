@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // LIFF Configuration & State
   const LIFF_ID = '2000158432-95uKB5EW'; // Replace with actual LINE LIFF ID
+  const GATEWAY_API_URL = window.GATEWAY_API_URL || 'https://liff-form-gateway-xxxx-as.a.run.app'; // Replace with actual Cloud Run URL
   let lineProfile = null;
 
   async function initLiff() {
@@ -977,8 +978,30 @@ document.addEventListener('DOMContentLoaded', () => {
     payloadJsonDisplay.textContent = JSON.stringify(payload, null, 2);
     payloadModal.classList.add('active');
 
-    // Clear local storage draft after successful submit
-    localStorage.removeItem('bkk_careplan_draft');
+    // Real API Submission to Cloud Run / Middleware Gateway
+    if (GATEWAY_API_URL && !GATEWAY_API_URL.includes('xxxx')) {
+      btnNext.disabled = true;
+      btnNext.textContent = '⏳ กำลังส่งข้อมูลคำร้อง...';
+      fetch(GATEWAY_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        btnNext.textContent = '✓ ส่งข้อมูลเรียบร้อย!';
+        localStorage.removeItem('bkk_careplan_draft');
+      })
+      .catch(err => {
+        console.error('Failed to submit payload to gateway:', err);
+        btnNext.disabled = false;
+        btnNext.textContent = 'ยืนยันและส่งเรื่อง 🚀';
+        alert('เกิดข้อผิดพลาดในการส่งข้อมูลไปยังเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง');
+      });
+    } else {
+      // Clear local storage draft after successful submit
+      localStorage.removeItem('bkk_careplan_draft');
+    }
   }
 
   // Copy JSON Payload Handler

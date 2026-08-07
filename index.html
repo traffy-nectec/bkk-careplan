@@ -335,8 +335,8 @@
       </div>
       <pre class="payload-json" id="payloadJsonDisplay"></pre>
 
-      <button type="button" class="btn-primary btn-full" onclick="location.reload();">
-        เสร็จสิ้น / เริ่มยื่นเรื่องใหม่
+      <button type="button" class="btn-primary btn-full" id="btnCloseLiff" onclick="if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) { liff.closeWindow(); } else { location.reload(); }">
+        เสร็จสิ้น / ปิดหน้าต่าง
       </button>
     </div>
   </div>
