@@ -255,37 +255,62 @@ body {
   position: relative;
   display: flex;
   align-items: center;
-  background: #f8fafc;
+  justify-content: space-between;
+  background: #ffffff;
   border: 2px solid #cbd5e1;
   border-radius: var(--radius-md);
-  padding: 16px;
+  padding: 16px 18px;
   cursor: pointer;
   transition: all 0.2s ease;
-  min-height: 48px; /* Touch target minimum size */
+  min-height: 56px; /* Touch target minimum size */
+  user-select: none;
+}
+
+/* Visual Checkbox & Radio Indicators */
+.checkbox-card::after, .option-card::after {
+  content: '';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  margin-left: 12px;
+  border: 2px solid #94a3b8;
+  border-radius: 6px;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.option-card::after {
+  border-radius: 50%;
 }
 
 /* Keyboard Focus Outline for Accessibility (WCAG 2.4.7) */
 .option-card:focus-within, .checkbox-card:focus-within {
   outline: 3px solid var(--primary-green);
   border-color: var(--primary-green);
-  background: #e8f5e9;
+  background: #f0fdf4;
 }
 
 .card-content {
   display: flex;
   align-items: center;
   gap: 14px;
-  width: 100%;
+  width: calc(100% - 38px);
 }
 
 .icon {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
+  flex-shrink: 0;
 }
 
 .label-text {
-  font-size: calc(0.94rem * var(--base-font-scale));
+  font-size: calc(0.95rem * var(--base-font-scale));
   font-weight: 500;
   color: var(--text-main);
+  line-height: 1.4;
 }
 
 .size-title {
@@ -304,16 +329,45 @@ body {
   background: #f0fdf4;
 }
 
-.option-card:has(input:checked), .checkbox-card:has(input:checked) {
+/* Selected State Styles */
+.option-card.selected,
+.checkbox-card.selected,
+.option-card:has(input:checked),
+.checkbox-card:has(input:checked) {
   border-color: var(--primary-green);
   background: #e8f5e9;
-  box-shadow: 0 4px 12px rgba(13, 92, 58, 0.12);
+  box-shadow: 0 4px 14px rgba(13, 92, 58, 0.15);
 }
 
+.option-card.selected .label-text,
+.checkbox-card.selected .label-text,
 .option-card:has(input:checked) .label-text, 
 .checkbox-card:has(input:checked) .label-text {
   color: var(--primary-green);
-  font-weight: 600;
+  font-weight: 700;
+}
+
+/* Checked Indicator Symbols */
+.checkbox-card.selected::after,
+.checkbox-card:has(input:checked)::after {
+  content: '✓';
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 1;
+  background: var(--primary-green);
+  border-color: var(--primary-green);
+}
+
+.option-card.selected::after,
+.option-card:has(input:checked)::after {
+  content: '✓';
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 1;
+  background: var(--primary-green);
+  border-color: var(--primary-green);
 }
 
 /* Custom Text Inputs, Textarea & BKK Autocomplete */

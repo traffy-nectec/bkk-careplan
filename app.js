@@ -290,6 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderMedCertPreviews();
     renderFilePreviews();
+    updateCardSelectedStates();
   }
 
   // Thai Citizen ID Mask Formatting
@@ -611,14 +612,27 @@ document.addEventListener('DOMContentLoaded', () => {
     saveDraft();
   }
 
-  // Real-time input listeners to enable/disable Next button
+  function updateCardSelectedStates() {
+    document.querySelectorAll('.checkbox-card, .option-card').forEach(card => {
+      const input = card.querySelector('input');
+      if (input && input.checked) {
+        card.classList.add('selected');
+      } else {
+        card.classList.remove('selected');
+      }
+    });
+  }
+
+  // Real-time input listeners to enable/disable Next button & update selection UI
   document.querySelectorAll('input, textarea').forEach(el => {
     el.addEventListener('input', () => {
       syncCurrentStepData();
+      updateCardSelectedStates();
       checkCurrentStepValidity();
     });
     el.addEventListener('change', () => {
       syncCurrentStepData();
+      updateCardSelectedStates();
       checkCurrentStepValidity();
     });
   });
@@ -876,4 +890,5 @@ document.addEventListener('DOMContentLoaded', () => {
   // Init
   restoreDraft();
   updateStepUI();
+  updateCardSelectedStates();
 });
