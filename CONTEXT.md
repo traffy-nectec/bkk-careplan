@@ -4,8 +4,9 @@
 โปรเจกต์ `bkk-careplan` มีวัตถุประสงค์เพื่อให้บริการเว็บฟอร์มแจ้งความประสงค์ขอรับผ้าอ้อมผู้ใหญ่ แผ่นรองซับการขับถ่าย และแผ่นเสริมซึมซับ สำหรับประชาชนในกรุงเทพมหานคร เชื่อมโยงกระบวนการยื่นคำร้องผ่าน Traffy Fondue เข้ากับแบบฟอร์มประเมินทางการแพทย์ (แบบ Diapers 01-2 และ Diapers 02 MINI Careplan)
 
 ## Key Features & Architecture
-1. **One-Question-Per-Screen (Conversational Wizard UI)**:
+1. **One-Question-Per-Screen & Auto GPS Fetching (Conversational Wizard UI)**:
    - ออกแบบแบบ Mobile-First เพื่ออำนวยความสะดวกให้ผู้สูงอายุหรือผู้ดูแลกรอกผ่านสมาร์ทโฟน (10 ข้อคำถาม / 11 ขั้นตอน)
+   - ทันทีที่เข้าสู่ข้อ 6 ระบบจะเรียกสิทธิ์และดึงตำแหน่ง GPS ปัจจุบันมาปักหมุดบนแผนที่และทำ Reverse Geocoding ให้อัตโนมัติ
    - แต่ละหน้าจอถามเพียง 1 ประเด็น ช่วยลด Cognitive Load และลดอัตราการละทิ้งฟอร์มกลางคราว (Drop-off Rate)
 2. **Draft Auto-save Mechanism**:
    - ใช้งาน `localStorage` บันทึก State ของฟอร์มทุกครั้งที่มีการเปลี่ยนข้อ

@@ -123,7 +123,7 @@ erDiagram
 | 3 | `patient_id_card` | เลขบัตรประชาชน 13 หลัก | Tel Input | Required | Auto-format `X-XXXX-XXXXX-XX-X` + Checksum Validation |
 | 4 | `health_condition` | ภาวะความจำเป็น | Checkbox Card | Required | เลือก "ผู้ป่วยติดเตียง" และ/หรือ "กลั้นไม่ได้" |
 | 5 | `medical_cert` | รูปถ่ายใบรับรองแพทย์ | File Upload | Conditional | **Conditional Step:** ปรากฏเฉพาะเมื่อ `has_incontinence == true` |
-| 6 | `location_coords` | พิกัดสถานที่พักอาศัย | Leaflet Map | Required | **Location-First:** ปักหมุด GPS ยิง Reverse Geocoding ส่งค่าไป Step 7 |
+| 6 | `location_coords` | พิกัดสถานที่พักอาศัย | Leaflet Map | Required | **Auto GPS Fetching & Location-First:** ดึงพิกัดตำแหน่งปัจจุบันให้อัตโนมัติ ปักหมุด GPS ยิง Reverse Geocoding ส่งค่าไป Step 7 |
 | 7 | `patient_address` | ที่อยู่ กทม. + จุดสังเกต | Autocomplete & Text | Required | **BKK Address Autocomplete** (แขวง/เขต/รหัสไปรษณีย์) + ช่องจุดสังเกต |
 | 8 | `contact_phone` | เบอร์โทรศัพท์ติดต่อนัดหมาย | Tel Input | Required | ตัวเลข 9-10 หลัก |
 | 9 | `caregiver_info` | ข้อมูลญาติ/ผู้ดูแล | Text & Tel Input | Conditional | Required หาก `applicant_type == 'caregiver'` / Optional หากยื่นเอง |
