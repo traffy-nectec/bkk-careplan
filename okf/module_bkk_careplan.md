@@ -136,8 +136,9 @@ erDiagram
 
 ```json
 {
-  "request_timestamp": "2026-08-07T09:15:00+07:00",
+  "request_timestamp": "2026-08-07T10:15:00.000Z",
   "source": "bkk_careplan_traffy_fondue_webview",
+  "org_id": "BKK.HEALTH_CENTER.01",
   "applicant_type": "caregiver",
   "patient_info": {
     "fullname": "นายสมชาย ใจดี",
@@ -157,7 +158,8 @@ erDiagram
     }
   },
   "medical_conditions": {
-    "is_bedridden": true,
+    "condition": "incontinence",
+    "is_bedridden": false,
     "has_incontinence": true,
     "medical_cert_count": 1
   },
@@ -165,6 +167,11 @@ erDiagram
     "fullname": "นางสาวสมหญิง ใจดี (บุตรสาว)",
     "phone": "0898765432"
   },
-  "attachments_count": 1
+  "attachments_count": 1,
+  "line_profile": {
+    "user_id": "U1234567890abcdef1234567890abcdef",
+    "display_name": "Somchai LINE",
+    "picture_url": "https://profile.line-scdn.net/sample_picture_hash"
+  }
 }
 ```

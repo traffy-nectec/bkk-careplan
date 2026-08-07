@@ -881,6 +881,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const payload = {
       request_timestamp: new Date().toISOString(),
       source: "bkk_careplan_traffy_fondue_webview",
+      org_id: formData.org_id || "",
       applicant_type: formData.applicant_type,
       patient_info: {
         fullname: formData.patient_name,

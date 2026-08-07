@@ -217,6 +217,79 @@ bkk-careplan/
 
 ---
 
-## 🤝 การเชื่อมต่อระบบ (Integration & Payload)
+## 🤝 การเชื่อมต่อระบบและการส่งต่อข้อมูล (Integration & Middleware Contract)
 
-ระบบส่งออกข้อมูลการยื่นเรื่องในรูปแบบ **JSON Payload** ที่รองรับการเชื่อมต่อ API กับ Traffy Fondue และระบบบริหารจัดการของกรุงเทพมหานคร (BKK Careplan Engine)
+ระบบส่งออกข้อมูลการยื่นเรื่องในรูปแบบ **JSON Payload** ที่รองรับการเชื่อมต่อ API กับ Middleware Backend ก่อนยิงเข้า Google Cloud Pub/Sub (`traffy-cloud` / `line_2019_to_fondue`) ต่อไป โดยมีการระบุตัวแปร `org_id` สำหรับระบุรหัสหน่วยงานปลายทางไว้ล่วงหน้า
+
+---
+
+## 🔌 ตัวอย่าง JSON Payload สำหรับ Middleware Developer
+
+```json
+{
+  "request_timestamp": "2026-08-07T10:15:00.000Z",
+  "source": "bkk_careplan_traffy_fondue_webview",
+  "org_id": "BKK.HEALTH_CENTER.01",
+  "applicant_type": "caregiver",
+  "patient_info": {
+    "fullname": "นายสมชาย ใจดี",
+    "id_card": "1100200345670"
+  },
+  "contact_info": {
+    "phone": "0812345678",
+    "district": "หลักสี่",
+    "subdistrict": "ทุ่งสองห้อง",
+    "zipcode": "10210",
+    "address_detail": "99/1 ซอยวิภาวดี 16 ถนนวิภาวดีรังสิต อาคาร A ชั้น 2",
+    "landmark": "ตรงข้ามวัดบางนาใน",
+    "full_address": "99/1 ซอยวิภาวดี 16 ถนนวิภาวดีรังสิต อาคาร A ชั้น 2 (จุดสังเกต: ตรงข้ามวัดบางนาใน) แขวงทุ่งสองห้อง เขตหลักสี่ กรุงเทพมหานคร 10210",
+    "coordinates": {
+      "latitude": 13.8821,
+      "longitude": 100.5632
+    }
+  },
+  "medical_conditions": {
+    "condition": "incontinence",
+    "is_bedridden": false,
+    "has_incontinence": true,
+    "medical_cert_count": 1
+  },
+  "caregiver_info": {
+    "fullname": "นางสาวสมหญิง ใจดี (บุตรสาว)",
+    "phone": "0898765432"
+  },
+  "attachments_count": 2,
+  "line_profile": {
+    "user_id": "U1234567890abcdef1234567890abcdef",
+    "display_name": "Somchai LINE",
+    "picture_url": "https://profile.line-scdn.net/sample_picture_hash"
+  }
+}
+```
+
+### 📝 คำอธิบายฟิลด์ใน JSON Payload (Data Field Definitions)
+
+| ฟิลด์ (Field) | ประเภท (Type) | คำอธิบาย (Description) |
+| :--- | :---: | :--- |
+| `request_timestamp` | String (ISO8601) | วันเวลาที่ยื่นคำร้องแบบ UTC |
+| `source` | String | ระบบต้นทางของคำร้อง |
+| `org_id` | String / Array | รหัสหน่วยงานปลายทาง หรือ รหัส ศบส. ที่รับผิดชอบ |
+| `applicant_type` | String | สถานะผู้ยื่นเรื่อง (`"patient"` = ผู้ป่วยยื่นเอง, `"caregiver"` = ญาติยื่นแทน) |
+| `patient_info.fullname` | String | ชื่อ-นามสกุล ของผู้ป่วย |
+| `patient_info.id_card` | String | เลขบัตรประจำตัวประชาชน 13 หลัก (เฉพาะตัวเลข) |
+| `contact_info.phone` | String | เบอร์โทรศัพท์สำหรับติดต่อนัดหมาย |
+| `contact_info.district` | String | ชื่อเขตในกรุงเทพมหานคร |
+| `contact_info.subdistrict` | String | ชื่อแขวงในกรุงเทพมหานคร |
+| `contact_info.zipcode` | String | รหัสไปรษณีย์ |
+| `contact_info.address_detail` | String | บ้านเลขที่ ซอย ถนน อาคาร |
+| `contact_info.landmark` | String | จุดสังเกตใกล้บ้าน (ถ้ามี) |
+| `contact_info.full_address` | String | ที่อยู่ฉบับเต็มประกอบสำเร็จ |
+| `contact_info.coordinates` | Object | พิกัดละติจูดและลองจิจูดจากแผนที่ GPS |
+| `medical_conditions.condition` | String | สภาวะหลักของผู้ป่วย (`"bedridden"` = ติดเตียง, `"incontinence"` = กลั้นไม่ได้) |
+| `medical_conditions.is_bedridden` | Boolean | เป็นผู้ป่วยติดเตียงหรือไม่ |
+| `medical_conditions.has_incontinence` | Boolean | มีภาวะกลั้นปัสสาวะ/อุจจาระไม่ได้หรือไม่ |
+| `medical_conditions.medical_cert_count` | Number | จำนวนไฟล์ใบรับรองแพทย์ที่แนบมา |
+| `caregiver_info.fullname` | String | ชื่อ-นามสกุล ผู้ดูแล/ญาติผู้ติดต่อ |
+| `caregiver_info.phone` | String | เบอร์โทรศัพท์ของผู้ดูแล/ญาติ |
+| `attachments_count` | Number | จำนวนรูปถ่ายผู้ป่วย/สถานที่แนบประกอบ |
+| `line_profile` | Object / null | ข้อมูลโปรไฟล์ LINE LIFF (`user_id`, `display_name`, `picture_url`) |
