@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -7,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+
   <!-- LINE Front-end Framework (LIFF) SDK -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
@@ -17,6 +18,7 @@
 
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <!-- ARIA Live Region for Screen Reader Announcements (WCAG 4.1.3) -->
   <div id="ariaLiveRegion" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
@@ -28,12 +30,15 @@
         <div class="bkk-badge">BKK Careplan</div>
         <span class="tf-badge">Traffy Fondue</span>
       </div>
-      
+
       <!-- Accessibility Font Controls (WCAG 1.4.4) -->
       <div class="font-size-toggle" role="group" aria-label="เครื่องมือปรับขนาดตัวอักษร">
-        <button type="button" class="btn-font-size active" data-size="normal" aria-label="ขนาดอักษรปกติ" title="ขนาดอักษรปกติ">A</button>
-        <button type="button" class="btn-font-size" data-size="large" aria-label="ขยายตัวอักษร" title="ขยายตัวอักษร">A+</button>
-        <button type="button" class="btn-font-size" data-size="xlarge" aria-label="ตัวอักษรใหญ่พิเศษ" title="ตัวอักษรใหญ่พิเศษ">A++</button>
+        <button type="button" class="btn-font-size active" data-size="normal" aria-label="ขนาดอักษรปกติ"
+          title="ขนาดอักษรปกติ">A</button>
+        <button type="button" class="btn-font-size" data-size="large" aria-label="ขยายตัวอักษร"
+          title="ขยายตัวอักษร">A+</button>
+        <button type="button" class="btn-font-size" data-size="xlarge" aria-label="ตัวอักษรใหญ่พิเศษ"
+          title="ตัวอักษรใหญ่พิเศษ">A++</button>
       </div>
     </div>
     <!-- Progress Bar -->
@@ -45,7 +50,7 @@
   <!-- Main Multi-step Form App -->
   <main class="app-container" role="main">
     <form id="diaperForm" onsubmit="return false;">
-      
+
       <!-- PHASE 1: Applicant & Patient Identity -->
 
       <!-- STEP 1: Applicant Type -->
@@ -88,7 +93,8 @@
         </div>
         <div class="input-group">
           <label for="patient_name" class="visually-hidden">ชื่อ - นามสกุล ผู้ป่วย</label>
-          <input type="text" id="patient_name" class="custom-input" placeholder="ตัวอย่าง: นายสมชาย ใจดี" autocomplete="name">
+          <input type="text" id="patient_name" class="custom-input" placeholder="ตัวอย่าง: นายสมชาย ใจดี"
+            autocomplete="name">
         </div>
       </section>
 
@@ -104,10 +110,12 @@
         </div>
         <div class="input-group">
           <label for="patient_id" class="visually-hidden">เลขบัตรประชาชน 13 หลัก</label>
-          <input type="tel" id="patient_id" class="custom-input" placeholder="ตัวอย่าง: 1-2345-67890-12-3" maxlength="17" inputmode="numeric">
+          <input type="tel" id="patient_id" class="custom-input" placeholder="ตัวอย่าง: 1-2345-67890-12-3"
+            maxlength="17" inputmode="numeric">
           <span class="field-hint" id="idValidationMsg" role="status">ป้อนตัวเลขให้ครบ 13 หลัก</span>
           <div class="privacy-note">
-            <span aria-hidden="true">🔒</span> ข้อมูลนี้ใช้เพื่อตรวจสอบสิทธิระบบหลักประกันสุขภาพแห่งชาติเท่านั้น (ไม่เผยแพร่ต่อสาธารณะ)
+            <span aria-hidden="true">🔒</span> ข้อมูลนี้ใช้เพื่อตรวจสอบสิทธิระบบหลักประกันสุขภาพแห่งชาติเท่านั้น
+            (ไม่เผยแพร่ต่อสาธารณะ)
           </div>
         </div>
       </section>
@@ -153,7 +161,8 @@
           <p class="question-desc">ใบรับรองแพทย์จากสถานพยาบาลจะช่วยเร่งการอนุมัติโควตาผ้าอ้อมให้รวดเร็วยิ่งขึ้น</p>
         </div>
         <div class="upload-box">
-          <input type="file" id="medicalCertUpload" class="file-input" accept="image/jpeg,image/png,image/webp,image/heic,image/*" multiple aria-label="แนบรูปถ่ายใบรับรองแพทย์">
+          <input type="file" id="medicalCertUpload" class="file-input"
+            accept="image/jpeg,image/png,image/webp,image/heic,image/*" multiple aria-label="แนบรูปถ่ายใบรับรองแพทย์">
           <label for="medicalCertUpload" class="upload-label">
             <div class="upload-icon" aria-hidden="true">🏥</div>
             <div>กดที่นี่เพื่อถ่ายภาพหรือเลือกไฟล์ใบรับรองแพทย์</div>
@@ -178,10 +187,11 @@
         <div class="map-wrapper">
           <div class="map-toolbar">
             <label for="mapSearchInput" class="visually-hidden">ค้นหาตำแหน่งบนแผนที่</label>
-            <input type="text" id="mapSearchInput" class="custom-input map-search-input" placeholder="🔍 ค้นหาชื่อถนน หรือ สถานที่สำคัญใกล้เคียง">
+            <input type="text" id="mapSearchInput" class="custom-input map-search-input"
+              placeholder="🔍 ค้นหาชื่อถนน หรือ สถานที่สำคัญใกล้เคียง">
             <button type="button" id="btnSearchMap" class="btn-map-action">ค้นหา</button>
           </div>
-          
+
           <div class="map-action-row">
             <button type="button" class="btn-location" id="btnGetLocation">
               🎯 ดึงตำแหน่ง GPS ปัจจุบัน
@@ -197,7 +207,8 @@
           </button>
 
           <div id="map" class="leaflet-map-container" role="region" aria-label="แผนที่สำหรับปักหมุดพิกัดพักอาศัย"></div>
-          <div class="coords-display" id="coordsDisplay" aria-live="polite">ยังไม่ได้เลือกตำแหน่ง (ลากหมุดบนแผนที่)</div>
+          <div class="coords-display" id="coordsDisplay" aria-live="polite">ยังไม่ได้เลือกตำแหน่ง (ลากหมุดบนแผนที่)
+          </div>
         </div>
       </section>
 
@@ -219,17 +230,21 @@
 
           <label for="bkkAddressSearch" class="form-label">ค้นหา แขวง / เขต ในกรุงเทพมหานคร</label>
           <div class="autocomplete-wrapper">
-            <input type="text" id="bkkAddressSearch" class="custom-input" placeholder="พิมพ์ชื่อแขวง หรือ เขต (เช่น ทุ่งสองห้อง หรือ หลักสี่)" autocomplete="off">
+            <input type="text" id="bkkAddressSearch" class="custom-input"
+              placeholder="พิมพ์ชื่อแขวง หรือ เขต (เช่น ทุ่งสองห้อง หรือ หลักสี่)" autocomplete="off">
             <div id="bkkAddressSuggestions" class="suggestions-dropdown" style="display: none;" role="listbox"></div>
           </div>
           <div id="selectedAddressBadge" class="selected-address-tag" style="display: none;" role="status"></div>
 
           <label for="patient_address_detail" class="form-label mt-12">บ้านเลขที่ / ซอย / ถนน / อาคาร</label>
-          <textarea id="patient_address_detail" class="custom-textarea" rows="2" placeholder="ตัวอย่าง: 99/1 ซอยวิภาวดี 16 ถนนวิภาวดีรังสิต อาคาร A ชั้น 2"></textarea>
+          <textarea id="patient_address_detail" class="custom-textarea" rows="2"
+            placeholder="ตัวอย่าง: 99/1 ซอยวิภาวดี 16 ถนนวิภาวดีรังสิต อาคาร A ชั้น 2"></textarea>
 
           <!-- Landmark Option (Not Required) -->
-          <label for="patient_address_landmark" class="form-label mt-12">จุดสังเกตใกล้บ้าน <span class="label-sub">(ไม่บังคับกรอก)</span></label>
-          <input type="text" id="patient_address_landmark" class="custom-input" placeholder="ตัวอย่าง: ตรงข้ามวัดบางนาใน / ปากซอยมีร้านเซเว่น / ข้างร้านขายของชำป้าเจ้น">
+          <label for="patient_address_landmark" class="form-label mt-12">จุดสังเกตใกล้บ้าน <span
+              class="label-sub">(ไม่บังคับกรอก)</span></label>
+          <input type="text" id="patient_address_landmark" class="custom-input"
+            placeholder="ตัวอย่าง: ตรงข้ามวัดบางนาใน / ปากซอยมีร้านเซเว่น / ข้างร้านขายของชำป้าเจ้น">
           <span class="field-hint">ช่วยให้เจ้าหน้าที่พยาบาลเดินทางไปเยี่ยมบ้านและส่งมอบผ้าอ้อมได้รวดเร็วขึ้น</span>
         </div>
       </section>
@@ -248,7 +263,8 @@
         </div>
         <div class="input-group">
           <label for="contact_phone" class="visually-hidden">เบอร์โทรศัพท์ติดต่อนัดหมาย</label>
-          <input type="tel" id="contact_phone" class="custom-input" placeholder="ตัวอย่าง: 0812345678" maxlength="10" inputmode="tel">
+          <input type="tel" id="contact_phone" class="custom-input" placeholder="ตัวอย่าง: 0812345678" maxlength="10"
+            inputmode="tel">
         </div>
       </section>
 
@@ -260,14 +276,17 @@
             <span class="badge-required" id="caregiverBadge">จำเป็นสำหรับผู้ดูแล / ไม่บังคับหากยื่นเอง</span>
           </div>
           <h2 id="step9_title">ข้อมูลญาติ / ผู้ดูแลผู้ป่วยสำหรับติดต่อประสานงาน</h2>
-          <p class="question-desc" id="caregiverDesc">หากญาติหรือผู้ดูแลกรอกแทนผู้ป่วย จำเป็นต้องระบุชื่อและเบอร์โทรศัพท์ผู้ดูแล</p>
+          <p class="question-desc" id="caregiverDesc">หากญาติหรือผู้ดูแลกรอกแทนผู้ป่วย
+            จำเป็นต้องระบุชื่อและเบอร์โทรศัพท์ผู้ดูแล</p>
         </div>
         <div class="input-group">
           <label for="caregiver_name" class="form-label">ชื่อ - นามสกุล ผู้ดูแล</label>
-          <input type="text" id="caregiver_name" class="custom-input mb-12" placeholder="ตัวอย่าง: นางสาวสมหญิง ใจดี (บุตรสาว)">
-          
+          <input type="text" id="caregiver_name" class="custom-input mb-12"
+            placeholder="ตัวอย่าง: นางสาวสมหญิง ใจดี (บุตรสาว)">
+
           <label for="caregiver_phone" class="form-label">เบอร์โทรศัพท์ผู้ดูแล</label>
-          <input type="tel" id="caregiver_phone" class="custom-input" placeholder="ตัวอย่าง: 0898765432" maxlength="10" inputmode="tel">
+          <input type="tel" id="caregiver_phone" class="custom-input" placeholder="ตัวอย่าง: 0898765432" maxlength="10"
+            inputmode="tel">
         </div>
       </section>
 
@@ -282,7 +301,9 @@
           <p class="question-desc">ช่วยเพิ่มความเร็วในการพิจารณาอนุมัติของศูนย์บริการสาธารณสุข</p>
         </div>
         <div class="upload-box">
-          <input type="file" id="fileUpload" class="file-input" accept="image/jpeg,image/png,image/webp,image/heic,image/*" multiple aria-label="แนบรูปถ่ายผู้ป่วย หรือ สถานที่พักอาศัย">
+          <input type="file" id="fileUpload" class="file-input"
+            accept="image/jpeg,image/png,image/webp,image/heic,image/*" multiple
+            aria-label="แนบรูปถ่ายผู้ป่วย หรือ สถานที่พักอาศัย">
           <label for="fileUpload" class="upload-label">
             <div class="upload-icon" aria-hidden="true">📷</div>
             <div>กดที่นี่เพื่อเลือกหรือถ่ายรูปผู้ป่วย / สถานที่พักอาศัย</div>
@@ -327,15 +348,17 @@
     <div class="modal-card">
       <div class="modal-icon" aria-hidden="true">✅</div>
       <h3 id="modalTitle">ยื่นเรื่องเรียบร้อยแล้ว</h3>
-      <p>ระบบบันทึกข้อมูลคำร้องเข้าสู่ระบบเรียบร้อยแล้ว เมื่อระบบประมวลผลเสร็จสิ้น ท่านจะได้รับใบรวบรวมสรุปข้อมูลผ่านทางแชต LINE นี้ และเจ้าหนาที่จะแจ้งความคืบหน้าการดำเนินงานให้ทราบเป็นระยะ</p>
-      
+      <p>ระบบบันทึกข้อมูลคำร้องเข้าสู่ระบบเรียบร้อยแล้ว เมื่อระบบประมวลผลเสร็จสิ้น
+        ท่านจะได้รับใบรวบรวมสรุปข้อมูลผ่านทางแชต LINE นี้ และเจ้าหน้าที่จะแจ้งความคืบหน้าการดำเนินงานให้ทราบเป็นระยะ</p>
+
       <div class="payload-preview-header">
         <span>JSON Payload Output:</span>
         <button type="button" class="btn-copy" id="btnCopyPayload">ก๊อปปี้ JSON</button>
       </div>
       <pre class="payload-json" id="payloadJsonDisplay"></pre>
 
-      <button type="button" class="btn-primary btn-full" id="btnCloseLiff" onclick="if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) { liff.closeWindow(); } else { location.reload(); }">
+      <button type="button" class="btn-primary btn-full" id="btnCloseLiff"
+        onclick="if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) { liff.closeWindow(); } else { location.reload(); }">
         เสร็จสิ้น / ปิดหน้าต่าง
       </button>
     </div>
@@ -343,4 +366,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>

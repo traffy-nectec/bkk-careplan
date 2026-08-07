@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn('LIFF initialization warning/error:', err);
     }
   }
-  
+
   // Bangkok 50 Districts & 180 Subdistricts Dataset
   const bkkSubdistrictList = [
     { subdistrict: "ทุ่งสองห้อง", district: "หลักสี่", zipcode: "10210" },
@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderSuggestions(topSubdistricts, '💡 แขวง/เขตนียอดนิยม กรุงเทพมหานคร');
         return;
       }
-      const matches = bkkSubdistrictList.filter(item => 
+      const matches = bkkSubdistrictList.filter(item =>
         item.subdistrict.includes(q) || item.district.includes(q) || item.zipcode.includes(q)
       ).slice(0, 10);
       renderSuggestions(matches);
@@ -291,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formData.patient_name) document.getElementById('patient_name').value = formData.patient_name;
     if (formData.patient_id) document.getElementById('patient_id').value = formatThaiIDString(formData.patient_id);
     if (formData.contact_phone) document.getElementById('contact_phone').value = formData.contact_phone;
-    
+
     if (formData.subdistrict && formData.district && bkkAddressSearch) {
       bkkAddressSearch.value = `แขวง${formData.subdistrict} เขต${formData.district} ${formData.zipcode || ''}`;
       selectedAddressBadge.innerHTML = `✅ เลือกแล้ว: <b>แขวง${formData.subdistrict} เขต${formData.district} ${formData.zipcode || ''}</b>`;
@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(data => {
         if (data && data.address) {
           const rawAddr = JSON.stringify(data.address);
-          const matched = bkkSubdistrictList.find(item => 
+          const matched = bkkSubdistrictList.find(item =>
             rawAddr.includes(item.subdistrict) || rawAddr.includes(item.district)
           );
           if (matched) {
@@ -750,7 +750,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Jump to specific step from Review edit buttons
-  window.jumpToStep = function(stepNum) {
+  window.jumpToStep = function (stepNum) {
     currentStep = stepNum;
     updateStepUI();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -993,21 +993,21 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       })
-      .then(res => res.json())
-      .then(data => {
-        btnNext.textContent = '✓ ส่งข้อมูลเรียบร้อย!';
-        if (modalTitle) modalTitle.textContent = '✅ ยื่นเรื่องเรียบร้อยแล้ว';
-        if (modalDesc) modalDesc.textContent = 'ระบบบันทึกข้อมูลคำร้องเข้าสู่ระบบเรียบร้อยแล้ว เมื่อระบบประมวลผลเสร็จสิ้น ท่านจะได้รับใบรวบรวมสรุปข้อมูลผ่านทางแชต LINE นี้ และเจ้าหน้าที่จะแจ้งความคืบหน้าการดำเนินงานให้ทราบเป็นระยะ';
+        .then(res => res.json())
+        .then(data => {
+          btnNext.textContent = '✓ ส่งข้อมูลเรียบร้อย!';
+          if (modalTitle) modalTitle.textContent = '✅ ยื่นเรื่องเรียบร้อยแล้ว';
+          if (modalDesc) modalDesc.textContent = 'ระบบบันทึกข้อมูลคำร้องเข้าสู่ระบบเรียบร้อยแล้ว เมื่อระบบประมวลผลเสร็จสิ้น ท่านจะได้รับใบรวบรวมสรุปข้อมูลผ่านทางแชต LINE นี้ และเจ้าหน้าที่จะแจ้งความคืบหน้าการดำเนินงานให้ทราบเป็นระยะ';
 
-        localStorage.removeItem('bkk_careplan_draft');
-      })
-      .catch(err => {
-        console.error('Failed to submit payload to gateway:', err);
-        btnNext.disabled = false;
-        btnNext.textContent = 'ยืนยันและส่งเรื่อง 🚀';
-        if (modalTitle) modalTitle.textContent = '❌ เกิดข้อผิดพลาดในการส่งข้อมูล';
-        if (modalDesc) modalDesc.textContent = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่อีกครั้ง';
-      });
+          localStorage.removeItem('bkk_careplan_draft');
+        })
+        .catch(err => {
+          console.error('Failed to submit payload to gateway:', err);
+          btnNext.disabled = false;
+          btnNext.textContent = 'ยืนยันและส่งเรื่อง 🚀';
+          if (modalTitle) modalTitle.textContent = '❌ เกิดข้อผิดพลาดในการส่งข้อมูล';
+          if (modalDesc) modalDesc.textContent = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่อีกครั้ง';
+        });
     } else {
       if (modalTitle) modalTitle.textContent = '✅ ยื่นเรื่องเรียบร้อยแล้ว';
       if (modalDesc) modalDesc.textContent = 'ระบบบันทึกข้อมูลคำร้องเข้าสู่ระบบเรียบร้อยแล้ว เมื่อระบบประมวลผลเสร็จสิ้น ท่านจะได้รับใบรวบรวมสรุปข้อมูลผ่านทางแชต LINE นี้ (โหมดจำลองระบบทดสอบ)';
