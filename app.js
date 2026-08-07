@@ -978,7 +978,13 @@ document.addEventListener('DOMContentLoaded', () => {
     payloadJsonDisplay.textContent = JSON.stringify(payload, null, 2);
     payloadModal.classList.add('active');
 
-    // Real API Submission to Cloud Run / Middleware Gateway
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.querySelector('#payloadModal p');
+
+    if (modalTitle) modalTitle.textContent = '⏳ กำลังส่งเรื่องขอรับผ้าอ้อมผู้ใหญ่...';
+    if (modalDesc) modalDesc.textContent = 'กรุณารอสักครู่ ระบบกำลังส่งข้อมูลไปยังศูนย์บริการสาธารณสุข กรุงเทพมหานคร';
+
+    // Send payload to Gateway API
     if (GATEWAY_API_URL && !GATEWAY_API_URL.includes('xxxx')) {
       btnNext.disabled = true;
       btnNext.textContent = '⏳ กำลังส่งข้อมูลคำร้อง...';
@@ -990,16 +996,31 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(res => res.json())
       .then(data => {
         btnNext.textContent = '✓ ส่งข้อมูลเรียบร้อย!';
+        if (modalTitle) modalTitle.textContent = '✅ ส่งเรื่องขอรับผ้าอ้อมผู้ใหญ่เรียบร้อยแล้ว';
+        if (modalDesc) modalDesc.textContent = 'ระบบบันทึกข้อมูลเรียบร้อยแล้ว เจ้าหน้าที่ศูนย์บริการสาธารณสุขจะติดต่อนัดหมายเยี่ยมบ้านตามเบอร์โทรศัพท์ที่ระบุ';
+
+        // Send text message into LINE chat if LIFF API is available
+        if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient() && liff.isApiAvailable('sendMessages')) {
+          liff.sendMessages([
+            {
+              type: 'text',
+              text: `📌 แจ้งความประสงค์ขอรับผ้าอ้อมผู้ใหญ่เรียบร้อยแล้ว\n\nชื่อผู้ป่วย: ${formData.patient_name}\nที่อยู่: ${formData.patient_address}\nสถานะ: ส่งเรื่องไปยังศูนย์บริการสาธารณสุขเรียบร้อยแล้ว`
+            }
+          ]).catch(err => console.log('liff.sendMessages skipped/error:', err));
+        }
+
         localStorage.removeItem('bkk_careplan_draft');
       })
       .catch(err => {
         console.error('Failed to submit payload to gateway:', err);
         btnNext.disabled = false;
         btnNext.textContent = 'ยืนยันและส่งเรื่อง 🚀';
-        alert('เกิดข้อผิดพลาดในการส่งข้อมูลไปยังเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง');
+        if (modalTitle) modalTitle.textContent = '❌ เกิดข้อผิดพลาดในการส่งข้อมูล';
+        if (modalDesc) modalDesc.textContent = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่อีกครั้ง';
       });
     } else {
-      // Clear local storage draft after successful submit
+      if (modalTitle) modalTitle.textContent = '✅ ส่งเรื่องขอรับผ้าอ้อมผู้ใหญ่เรียบร้อยแล้ว';
+      if (modalDesc) modalDesc.textContent = 'ระบบบันทึกข้อมูลเรียบร้อยแล้ว (โหมดจำลองระบบทดสอบ)';
       localStorage.removeItem('bkk_careplan_draft');
     }
   }
