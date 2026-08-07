@@ -259,6 +259,20 @@ bkk-careplan/
     "phone": "0898765432"
   },
   "attachments_count": 2,
+  "images": {
+    "medical_certs": [
+      {
+        "filename": "medical_cert_01.jpg",
+        "base64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
+      }
+    ],
+    "attachments": [
+      {
+        "filename": "patient_photo_01.jpg",
+        "base64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
+      }
+    ]
+  },
   "line_profile": {
     "user_id": "U1234567890abcdef1234567890abcdef",
     "display_name": "Somchai LINE",
@@ -292,4 +306,17 @@ bkk-careplan/
 | `caregiver_info.fullname` | String | ชื่อ-นามสกุล ผู้ดูแล/ญาติผู้ติดต่อ |
 | `caregiver_info.phone` | String | เบอร์โทรศัพท์ของผู้ดูแล/ญาติ |
 | `attachments_count` | Number | จำนวนรูปถ่ายผู้ป่วย/สถานที่แนบประกอบ |
+| `images.medical_certs` | Array | อาเรย์ของรูปถ่ายใบรับรองแพทย์ (`filename`, `base64` Data URL) |
+| `images.attachments` | Array | อาเรย์ของรูปถ่ายสถานที่/ผู้ป่วย (`filename`, `base64` Data URL) |
 | `line_profile` | Object / null | ข้อมูลโปรไฟล์ LINE LIFF (`user_id`, `display_name`, `picture_url`) |
+
+---
+
+## 🖼️ การส่งไฟล์รูปภาพไปยัง Middleware (Image Transfer Mechanism)
+
+ในฝั่ง Frontend เมื่อประชาชนถ่ายภาพหรือเลือกไฟล์รูปภาพ (ใบรับรองแพทย์ หรือ รูปถ่ายสถานที่) ระบบจะแปลงเป็น **Base64 Data URL** ให้อัตโนมัติและบรรจุอยู่ในวัตถุ `images` ของ JSON Payload:
+
+### ขั้นตอนการประมวลผลฝั่ง Middleware Backend:
+1. **Decode Base64 Data:** Middleware รับ JSON Payload แล้วดึงข้อมูลสตริง `base64` จาก `images.medical_certs` และ `images.attachments` มาทำการ Decode กลับเป็นไฟล์ภาพ Binary (`.jpg` / `.png`)
+2. **Upload to Cloud Storage:** นำไฟล์ภาพไปอัปโหลดลง Google Cloud Storage (GCS Bucket) หรือ Object Storage ของระบบ
+3. **Attach URLs to Pub/Sub Message:** เมื่อได้ Public/Signed URL ของรูปภาพแล้ว ให้นำ URL ดังกล่าวใส่ในพารามิเตอร์รูปภาพ (`$parameter['list-report-img']` หรือ `$parameter['photo']`) ก่อนทำการ Publish ไปยัง Pub/Sub ท็อปปิก `line_2019_to_fondue` / `topic-ai-image-verify` ต่อไป

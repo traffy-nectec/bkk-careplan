@@ -911,6 +911,16 @@ document.addEventListener('DOMContentLoaded', () => {
         phone: formData.caregiver_phone || ''
       },
       attachments_count: formData.attachments.length,
+      images: {
+        medical_certs: formData.medical_certs.map(item => ({
+          filename: item.name,
+          base64: item.url
+        })),
+        attachments: formData.attachments.map(item => ({
+          filename: item.name,
+          base64: item.url
+        }))
+      },
       line_profile: lineProfile ? {
         user_id: lineProfile.userId,
         display_name: lineProfile.displayName,
