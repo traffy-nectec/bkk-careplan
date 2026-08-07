@@ -128,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     caregiver_phone: '',
     attachments: []
   };
+  window.formData = formData;
 
   // DOM Elements
   const stepCards = document.querySelectorAll('.step-card');
@@ -441,31 +442,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Geolocation Handler
-  if (btnGetLocation) {
-    btnGetLocation.addEventListener('click', () => {
-      if ('geolocation' in navigator) {
-        btnGetLocation.textContent = '⏳ กำลังหาตำแหน่ง...';
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            const lat = pos.coords.latitude;
-            const lng = pos.coords.longitude;
-            setCoordsAndReverseGeocode(lat, lng);
-            if (leafletMap && leafletMarker) {
-              leafletMap.setView([lat, lng], 16);
-              leafletMarker.setLatLng([lat, lng]);
-            }
-            btnGetLocation.innerHTML = '🎯 ดึงตำแหน่ง GPS ปัจจุบัน';
-          },
-          (err) => {
-            alert('ไม่สามารถดึงพิกัดได้ กรุณาอนุญาตตำแหน่ง หรือค้นหา/ลากหมุดบนแผนที่');
-            btnGetLocation.innerHTML = '🎯 ดึงตำแหน่ง GPS ปัจจุบัน';
+  // Geolocation Handler & Auto Fetching
+  function fetchCurrentLocation(isManual = false) {
+    if ('geolocation' in navigator) {
+      if (btnGetLocation) btnGetLocation.textContent = '⏳ กำลังดึงตำแหน่ง GPS...';
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          setCoordsAndReverseGeocode(lat, lng);
+          if (leafletMap && leafletMarker) {
+            leafletMap.setView([lat, lng], 16);
+            leafletMarker.setLatLng([lat, lng]);
           }
-        );
-      } else {
-        alert('อุปกรณ์นี้ไม่รองรับ Geolocation กรุณาลากหมุดบนแผนที่');
-      }
-    });
+          if (btnGetLocation) btnGetLocation.innerHTML = '🎯 ดึงตำแหน่ง GPS ปัจจุบัน';
+        },
+        (err) => {
+          if (isManual) {
+            alert('ไม่สามารถดึงพิกัดได้ กรุณาอนุญาตตำแหน่ง หรือค้นหา/ลากหมุดบนแผนที่');
+          } else {
+            console.log('Auto geolocation skipped or denied:', err);
+          }
+          if (btnGetLocation) btnGetLocation.innerHTML = '🎯 ดึงตำแหน่ง GPS ปัจจุบัน';
+        },
+        { enableHighAccuracy: true, timeout: 7000 }
+      );
+    } else if (isManual) {
+      alert('อุปกรณ์นี้ไม่รองรับ Geolocation กรุณาลากหมุดบนแผนที่');
+    }
+  }
+
+  if (btnGetLocation) {
+    btnGetLocation.addEventListener('click', () => fetchCurrentLocation(true));
   }
 
   // Medical Certificate Upload Handler
@@ -697,9 +705,14 @@ document.addEventListener('DOMContentLoaded', () => {
       announceToScreenReader(`ขั้นตอนที่ ${currentStep} จาก ${TOTAL_STEPS}: ${titleEl.textContent}`);
     }
 
-    // Initialize Map if on Step 6
+    // Initialize Map & Auto-fetch Location if on Step 6
     if (currentStep === 6) {
-      setTimeout(initLeafletMap, 150);
+      setTimeout(() => {
+        initLeafletMap();
+        if (formData.latitude === null && formData.longitude === null) {
+          fetchCurrentLocation(false);
+        }
+      }, 150);
     }
 
     // Update Progress Bar
