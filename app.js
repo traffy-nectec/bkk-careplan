@@ -498,19 +498,61 @@ document.addEventListener('DOMContentLoaded', () => {
     btnGetLocation.addEventListener('click', () => fetchCurrentLocation(true));
   }
 
+  // Image Compression & Resizing Utility using HTML5 Canvas
+  function compressImage(file, maxDimension = 1280, quality = 0.75) {
+    return new Promise((resolve, reject) => {
+      if (!file.type.startsWith('image/')) {
+        return reject(new Error('กรุณาเลือกเฉพาะไฟล์รูปภาพเท่านั้น (เช่น JPG, PNG, WEBP)'));
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxDimension || height > maxDimension) {
+            if (width > height) {
+              height = Math.round((height * maxDimension) / width);
+              width = maxDimension;
+            } else {
+              width = Math.round((width * maxDimension) / height);
+              height = maxDimension;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+          resolve({ name: file.name, url: compressedDataUrl });
+        };
+        img.onerror = () => reject(new Error('ไม่สามารถประมวลผลไฟล์รูปภาพได้'));
+        img.src = e.target.result;
+      };
+      reader.onerror = () => reject(new Error('เกิดข้อผิดพลาดในการอ่านไฟล์'));
+      reader.readAsDataURL(file);
+    });
+  }
+
   // Medical Certificate Upload Handler
   if (medicalCertUpload) {
-    medicalCertUpload.addEventListener('change', (e) => {
+    medicalCertUpload.addEventListener('change', async (e) => {
       const files = Array.from(e.target.files);
-      files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          formData.medical_certs.push({ name: file.name, url: event.target.result });
+      for (const file of files) {
+        try {
+          const compressed = await compressImage(file);
+          formData.medical_certs.push(compressed);
           renderMedCertPreviews();
           saveDraft();
-        };
-        reader.readAsDataURL(file);
-      });
+        } catch (err) {
+          alert(err.message);
+        }
+      }
     });
   }
 
@@ -527,17 +569,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // File Upload Preview Handler
   if (fileUpload) {
-    fileUpload.addEventListener('change', (e) => {
+    fileUpload.addEventListener('change', async (e) => {
       const files = Array.from(e.target.files);
-      files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          formData.attachments.push({ name: file.name, url: event.target.result });
+      for (const file of files) {
+        try {
+          const compressed = await compressImage(file);
+          formData.attachments.push(compressed);
           renderFilePreviews();
           saveDraft();
-        };
-        reader.readAsDataURL(file);
-      });
+        } catch (err) {
+          alert(err.message);
+        }
+      }
     });
   }
 
