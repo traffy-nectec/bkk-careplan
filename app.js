@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applicant_type: '',
     patient_name: '',
     patient_id: '',
-    health_conditions: [],
+    health_condition: '',
     medical_certs: [],
     latitude: null,
     longitude: null,
@@ -280,11 +280,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formData.patient_address_detail && patientAddressDetail) patientAddressDetail.value = formData.patient_address_detail;
     if (formData.patient_address_landmark && patientAddressLandmark) patientAddressLandmark.value = formData.patient_address_landmark;
 
-    if (formData.health_conditions && formData.health_conditions.length) {
-      formData.health_conditions.forEach(val => {
-        const cb = document.querySelector(`input[name="health_condition"][value="${val}"]`);
-        if (cb) cb.checked = true;
-      });
+    if (formData.health_condition) {
+      const radio = document.querySelector(`input[name="health_condition"][value="${formData.health_condition}"]`);
+      if (radio) radio.checked = true;
+    } else if (formData.health_conditions && formData.health_conditions.length) {
+      const val = formData.health_conditions[0];
+      formData.health_condition = val;
+      const radio = document.querySelector(`input[name="health_condition"][value="${val}"]`);
+      if (radio) radio.checked = true;
     }
     if (formData.caregiver_name) document.getElementById('caregiver_name').value = formData.caregiver_name;
     if (formData.caregiver_phone) document.getElementById('caregiver_phone').value = formData.caregiver_phone;
@@ -554,8 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
         idValidationMsg.classList.remove('error');
       }
     } else if (currentStep === 4) {
-      const cbs = document.querySelectorAll('input[name="health_condition"]:checked');
-      isValid = cbs.length > 0;
+      isValid = !!document.querySelector('input[name="health_condition"]:checked');
     } else if (currentStep === 5) {
       isValid = true; // Optional step (Medical Cert)
     } else if (currentStep === 6) {
@@ -606,7 +608,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (currentStep === 3) {
       formData.patient_id = patientIdInput.value.replace(/\D/g, '');
     } else if (currentStep === 4) {
-      formData.health_conditions = Array.from(document.querySelectorAll('input[name="health_condition"]:checked')).map(cb => cb.value);
+      const sel = document.querySelector('input[name="health_condition"]:checked');
+      if (sel) formData.health_condition = sel.value;
     } else if (currentStep === 7) {
       if (patientAddressDetail) formData.patient_address_detail = patientAddressDetail.value.trim();
       if (patientAddressLandmark) formData.patient_address_landmark = patientAddressLandmark.value.trim();
@@ -650,7 +653,7 @@ document.addEventListener('DOMContentLoaded', () => {
     syncCurrentStepData();
     if (!checkCurrentStepValidity()) return;
 
-    if (currentStep === 4 && !formData.health_conditions.includes('incontinence')) {
+    if (currentStep === 4 && formData.health_condition !== 'incontinence') {
       currentStep = 6; // Skip Medical Cert step if not incontinence
     } else if (currentStep < TOTAL_STEPS) {
       currentStep++;
@@ -664,7 +667,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Go to Previous Step (With Conditional Skip for Medical Cert)
   function goPrevStep() {
-    if (currentStep === 6 && !formData.health_conditions.includes('incontinence')) {
+    if (currentStep === 6 && formData.health_condition !== 'incontinence') {
       currentStep = 4; // Skip Medical Cert step backwards if not incontinence
     } else if (currentStep > 1) {
       currentStep--;
@@ -747,7 +750,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Render UX-Optimized Categorized Review Cards (Step 11)
   function renderUXReviewSummary() {
     const isPatientApplicant = formData.applicant_type === 'patient';
-    const condLabels = formData.health_conditions.map(c => c === 'bedridden' ? 'ผู้ป่วยติดเตียง' : 'กลั้นขับถ่ายไม่ได้').join(', ');
+    const condLabel = formData.health_condition === 'bedridden' ? 'ผู้ป่วยติดเตียง / ไม่สามารถช่วยเหลือตัวเองได้' : (formData.health_condition === 'incontinence' ? 'มีปัญหาภาวะกลั้นปัสสาวะหรืออุจจาระไม่ได้' : '-');
     const hasCaregiverInfo = !!formData.caregiver_name;
 
     reviewSummaryGrid.innerHTML = `
@@ -779,9 +782,9 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="review-data-row">
           <span class="review-label">สภาวะสุขภาพ:</span>
-          <span class="review-value">${condLabels || '-'}</span>
+          <span class="review-value">${condLabel}</span>
         </div>
-        ${formData.health_conditions.includes('incontinence') ? `
+        ${formData.health_condition === 'incontinence' ? `
         <div class="review-data-row">
           <span class="review-label">รูปถ่ายใบรับรองแพทย์:</span>
           <span class="review-value">${formData.medical_certs.length > 0 ? `${formData.medical_certs.length} ไฟล์` : 'ไม่ได้แนบ'}</span>
@@ -868,8 +871,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       },
       medical_conditions: {
-        is_bedridden: formData.health_conditions.includes('bedridden'),
-        has_incontinence: formData.health_conditions.includes('incontinence'),
+        condition: formData.health_condition,
+        is_bedridden: formData.health_condition === 'bedridden',
+        has_incontinence: formData.health_condition === 'incontinence',
         medical_cert_count: formData.medical_certs.length
       },
       caregiver_info: {

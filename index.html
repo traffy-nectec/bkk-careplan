@@ -119,18 +119,18 @@
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
           <h2 id="step4_title">ผู้ป่วยมีภาวะใดที่ทำให้จำเป็นต้องใช้ผ้าอ้อมผู้ใหญ่</h2>
-          <p class="question-desc">เลือกสภาวะของผู้ป่วย (เลือกได้มากกว่า 1 ข้อ)</p>
+          <p class="question-desc">เลือกสภาวะหลักของผู้ป่วย (เลือก 1 ข้อ)</p>
         </div>
-        <div class="option-grid" role="group" aria-labelledby="step4_title">
-          <label class="checkbox-card">
-            <input type="checkbox" name="health_condition" value="bedridden" class="visually-hidden">
+        <div class="option-grid" role="radiogroup" aria-labelledby="step4_title">
+          <label class="option-card">
+            <input type="radio" name="health_condition" value="bedridden" class="visually-hidden">
             <div class="card-content">
               <div class="icon" aria-hidden="true">🛏️</div>
               <div class="label-text">เป็นผู้ป่วยติดเตียง / ไม่สามารถช่วยเหลือตัวเองได้</div>
             </div>
           </label>
-          <label class="checkbox-card">
-            <input type="checkbox" name="health_condition" value="incontinence" class="visually-hidden">
+          <label class="option-card">
+            <input type="radio" name="health_condition" value="incontinence" class="visually-hidden">
             <div class="card-content">
               <div class="icon" aria-hidden="true">💧</div>
               <div class="label-text">มีปัญหาภาวะกลั้นปัสสาวะหรืออุจจาระไม่ได้</div>

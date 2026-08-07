@@ -121,7 +121,7 @@ erDiagram
 | 1 | `applicant_type` | สถานะผู้กรอกข้อมูล | Radio Card | Required | เลือก "ผู้ป่วย" หรือ "ญาติ/ผู้ดูแล" |
 | 2 | `patient_fullname` | ชื่อ-นามสกุล ผู้ป่วย | Text Input | Required | ชื่อและนามสกุลจริงตามบัตรประชาชน (ย้ายต่อท้ายข้อ 1) |
 | 3 | `patient_id_card` | เลขบัตรประชาชน 13 หลัก | Tel Input | Required | Auto-format `X-XXXX-XXXXX-XX-X` + Checksum Validation |
-| 4 | `health_condition` | ภาวะความจำเป็น | Checkbox Card | Required | เลือก "ผู้ป่วยติดเตียง" และ/หรือ "กลั้นไม่ได้" |
+| 4 | `health_condition` | ภาวะความจำเป็น | Radio Card | Required | เลือก "ผู้ป่วยติดเตียง" หรือ "กลั้นไม่ได้" (Single Select เลือก 1 ข้อ) |
 | 5 | `medical_cert` | รูปถ่ายใบรับรองแพทย์ | File Upload | Conditional | **Conditional Step:** ปรากฏเฉพาะเมื่อ `has_incontinence == true` |
 | 6 | `location_coords` | พิกัดสถานที่พักอาศัย | Leaflet Map | Required | **Auto GPS Fetching & Location-First:** ดึงพิกัดตำแหน่งปัจจุบันให้อัตโนมัติ ปักหมุด GPS ยิง Reverse Geocoding ส่งค่าไป Step 7 |
 | 7 | `patient_address` | ที่อยู่ กทม. + จุดสังเกต | Autocomplete & Text | Required | **BKK Address Autocomplete** (แขวง/เขต/รหัสไปรษณีย์) + ช่องจุดสังเกต |
