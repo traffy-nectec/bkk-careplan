@@ -43,13 +43,13 @@
   <main class="app-container" role="main">
     <form id="diaperForm" onsubmit="return false;">
       
-      <!-- PHASE 1: Context & Needs -->
+      <!-- PHASE 1: Applicant & Patient Identity -->
 
       <!-- STEP 1: Applicant Type -->
       <section class="step-card active" data-step="1" aria-labelledby="step1_title">
         <div class="step-header">
           <div class="header-top">
-            <span class="question-number">คำถามที่ 1 / 12</span>
+            <span class="question-number">คำถามที่ 1 / 10</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
           <h2 id="step1_title">ท่านกำลังกรอกข้อมูลในฐานะใด?</h2>
@@ -73,17 +73,55 @@
         </div>
       </section>
 
-      <!-- STEP 2: Health Condition -->
+      <!-- STEP 2: Patient Full Name -->
       <section class="step-card" data-step="2" aria-labelledby="step2_title">
         <div class="step-header">
           <div class="header-top">
-            <span class="question-number">คำถามที่ 2 / 12</span>
+            <span class="question-number">คำถามที่ 2 / 10</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
-          <h2 id="step2_title">สภาวะความเดือดร้อน / ความต้องการผ้าอ้อมผู้ใหญ่</h2>
+          <h2 id="step2_title">ชื่อ - นามสกุล ของผู้ป่วยผู้ขอรับสิทธิ</h2>
+          <p class="question-desc">กรุณากรอกชื่อและนามสกุลจริงตามบัตรประชาชนของผู้ป่วย</p>
+        </div>
+        <div class="input-group">
+          <label for="patient_name" class="visually-hidden">ชื่อ - นามสกุล ผู้ป่วย</label>
+          <input type="text" id="patient_name" class="custom-input" placeholder="ตัวอย่าง: นายสมชาย ใจดี" autocomplete="name">
+        </div>
+      </section>
+
+      <!-- STEP 3: Patient National ID -->
+      <section class="step-card" data-step="3" aria-labelledby="step3_title">
+        <div class="step-header">
+          <div class="header-top">
+            <span class="question-number">คำถามที่ 3 / 10</span>
+            <span class="badge-required">จำเป็นต้องระบุ</span>
+          </div>
+          <h2 id="step3_title">เลขบัตรประจำตัวประชาชน 13 หลัก ของผู้ป่วย</h2>
+          <p class="question-desc">ระบบจะใส่ขีดให้อัตโนมัติ เพื่อใช้ตรวจสอบสิทธิหลักประกันสุขภาพ (สปสช.)</p>
+        </div>
+        <div class="input-group">
+          <label for="patient_id" class="visually-hidden">เลขบัตรประชาชน 13 หลัก</label>
+          <input type="tel" id="patient_id" class="custom-input" placeholder="ตัวอย่าง: 1-2345-67890-12-3" maxlength="17" inputmode="numeric">
+          <span class="field-hint" id="idValidationMsg" role="status">ป้อนตัวเลขให้ครบ 13 หลัก</span>
+          <div class="privacy-note">
+            <span aria-hidden="true">🔒</span> ข้อมูลนี้ใช้เพื่อตรวจสอบสิทธิระบบหลักประกันสุขภาพแห่งชาติเท่านั้น (ไม่เผยแพร่ต่อสาธารณะ)
+          </div>
+        </div>
+      </section>
+
+      <!-- PHASE 2: Health Needs & Medical Evidence -->
+
+      <!-- STEP 4: Health Condition -->
+      <section class="step-card" data-step="4" aria-labelledby="step4_title">
+        <div class="step-header">
+          <div class="header-top">
+            <span class="question-number">คำถามที่ 4 / 10</span>
+            <span class="badge-required">จำเป็นต้องระบุ</span>
+          </div>
+          <h2 id="step4_title">ผู้ป่วยมีภาวะใดที่ทำให้จำเป็นต้องใช้ผ้าอ้อมผู้ใหญ่</h2>
           <p class="question-desc">เลือกสภาวะของผู้ป่วย (เลือกได้มากกว่า 1 ข้อ)</p>
         </div>
-        <div class="option-grid" role="group" aria-labelledby="step2_title">
+        <div class="option-grid" role="group" aria-labelledby="step4_title">
           <label class="checkbox-card">
             <input type="checkbox" name="health_condition" value="bedridden" class="visually-hidden">
             <div class="card-content">
@@ -101,65 +139,37 @@
         </div>
       </section>
 
-      <!-- STEP 3: Preferred Diaper Size -->
-      <section class="step-card" data-step="3" aria-labelledby="step3_title">
+      <!-- STEP 5: Medical Certificate Upload (Conditional Step for Incontinence) -->
+      <section class="step-card" data-step="5" aria-labelledby="step5_title">
         <div class="step-header">
           <div class="header-top">
-            <span class="question-number">คำถามที่ 3 / 12</span>
+            <span class="question-number">คำถามที่ 5 / 10</span>
             <span class="badge-optional">แนะนำให้ระบุ</span>
           </div>
-          <h2 id="step3_title">ขนาดผ้าอ้อมผู้ใหญ่ที่ต้องการ (ถ้าทราบ)</h2>
-          <p class="question-desc">เลือกตามขนาดรอบเอวจริงของผู้ป่วย</p>
+          <h2 id="step5_title">แนบรูปถ่ายใบรับรองแพทย์ (กรณีมีภาวะกลั้นปัสสาวะ/อุจจาระไม่ได้)</h2>
+          <p class="question-desc">ใบรับรองแพทย์จากสถานพยาบาลจะช่วยเร่งการอนุมัติโควตาผ้าอ้อมให้รวดเร็วยิ่งขึ้น</p>
         </div>
-        <div class="option-grid size-grid" role="radiogroup" aria-labelledby="step3_title">
-          <label class="option-card">
-            <input type="radio" name="diaper_size" value="S" class="visually-hidden">
-            <div class="card-content">
-              <div class="size-title">Size S</div>
-              <div class="size-desc">รอบเอว 24 - 35 นิ้ว</div>
-            </div>
+        <div class="upload-box">
+          <input type="file" id="medicalCertUpload" class="file-input" accept="image/*" multiple aria-label="แนบรูปถ่ายใบรับรองแพทย์">
+          <label for="medicalCertUpload" class="upload-label">
+            <div class="upload-icon" aria-hidden="true">🏥</div>
+            <div>กดที่นี่เพื่อถ่ายภาพหรือเลือกไฟล์ใบรับรองแพทย์</div>
+            <span class="upload-sub">รองรับไฟล์รูปภาพ JPG, PNG</span>
           </label>
-          <label class="option-card">
-            <input type="radio" name="diaper_size" value="M" class="visually-hidden">
-            <div class="card-content">
-              <div class="size-title">Size M</div>
-              <div class="size-desc">รอบเอว 32 - 44 นิ้ว</div>
-            </div>
-          </label>
-          <label class="option-card">
-            <input type="radio" name="diaper_size" value="L" class="visually-hidden">
-            <div class="card-content">
-              <div class="size-title">Size L</div>
-              <div class="size-desc">รอบเอว 40 - 55 นิ้ว</div>
-            </div>
-          </label>
-          <label class="option-card">
-            <input type="radio" name="diaper_size" value="XL" class="visually-hidden">
-            <div class="card-content">
-              <div class="size-title">Size XL</div>
-              <div class="size-desc">รอบเอว 50 - 62 นิ้ว</div>
-            </div>
-          </label>
-          <label class="option-card">
-            <input type="radio" name="diaper_size" value="unknown" class="visually-hidden">
-            <div class="card-content">
-              <div class="size-title">ไม่แน่ใจ</div>
-              <div class="size-desc">ให้เจ้าหน้าที่ประเมินเมื่อเยี่ยมบ้าน</div>
-            </div>
-          </label>
+          <div class="file-preview-list" id="medCertPreviewList"></div>
         </div>
       </section>
 
-      <!-- PHASE 2: Location-First & Smart Auto-Fill -->
+      <!-- PHASE 3: Location-First & Smart Auto-Fill -->
 
-      <!-- STEP 4: Interactive Leaflet Map & Reverse Geocoding -->
-      <section class="step-card" data-step="4" aria-labelledby="step4_title">
+      <!-- STEP 6: Interactive Leaflet Map & Reverse Geocoding -->
+      <section class="step-card" data-step="6" aria-labelledby="step6_title">
         <div class="step-header">
           <div class="header-top">
-            <span class="question-number">คำถามที่ 4 / 12</span>
+            <span class="question-number">คำถามที่ 6 / 10</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
-          <h2 id="step4_title">พิกัดสถานที่พักอาศัย (ปักหมุดบนแผนที่)</h2>
+          <h2 id="step6_title">พิกัดสถานที่พักอาศัย (ปักหมุดบนแผนที่)</h2>
           <p class="question-desc">กดปุ่มดึงตำแหน่ง GPS หรือพิมพ์ค้นหา หรือลากหมุดบนแผนที่</p>
         </div>
         <div class="map-wrapper">
@@ -188,14 +198,14 @@
         </div>
       </section>
 
-      <!-- STEP 5: BKK Address Autocomplete + Landmark Option -->
-      <section class="step-card" data-step="5" aria-labelledby="step5_title">
+      <!-- STEP 7: BKK Address Autocomplete + Landmark Option -->
+      <section class="step-card" data-step="7" aria-labelledby="step7_title">
         <div class="step-header">
           <div class="header-top">
-            <span class="question-number">คำถามที่ 5 / 12</span>
+            <span class="question-number">คำถามที่ 7 / 10</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
-          <h2 id="step5_title">ที่อยู่ปัจจุบันของผู้ป่วยในพื้นที่กรุงเทพมหานคร</h2>
+          <h2 id="step7_title">ที่อยู่ปัจจุบันของผู้ป่วยในพื้นที่กรุงเทพมหานคร</h2>
           <p class="question-desc">พิมพ์ค้นหา แขวง/เขต หรือตรวจสอบข้อมูลที่เติมให้อัตโนมัติจากแผนที่</p>
         </div>
         <div class="input-group">
@@ -221,94 +231,16 @@
         </div>
       </section>
 
-      <!-- PHASE 3: Identity & Coverage -->
+      <!-- PHASE 4: Contact, Caregiver & Evidence -->
 
-      <!-- STEP 6: Patient Full Name -->
-      <section class="step-card" data-step="6" aria-labelledby="step6_title">
-        <div class="step-header">
-          <div class="header-top">
-            <span class="question-number">คำถามที่ 6 / 12</span>
-            <span class="badge-required">จำเป็นต้องระบุ</span>
-          </div>
-          <h2 id="step6_title">ชื่อ - นามสกุล ของผู้ป่วยผู้ขอรับสิทธิ</h2>
-          <p class="question-desc">กรุณากรอกชื่อและนามสกุลจริงตามบัตรประชาชนของผู้ป่วย</p>
-        </div>
-        <div class="input-group">
-          <label for="patient_name" class="visually-hidden">ชื่อ - นามสกุล ผู้ป่วย</label>
-          <input type="text" id="patient_name" class="custom-input" placeholder="ตัวอย่าง: นายสมชาย ใจดี" autocomplete="name">
-        </div>
-      </section>
-
-      <!-- STEP 7: Patient National ID -->
-      <section class="step-card" data-step="7" aria-labelledby="step7_title">
-        <div class="step-header">
-          <div class="header-top">
-            <span class="question-number">คำถามที่ 7 / 12</span>
-            <span class="badge-required">จำเป็นต้องระบุ</span>
-          </div>
-          <h2 id="step7_title">เลขบัตรประจำตัวประชาชน 13 หลัก ของผู้ป่วย</h2>
-          <p class="question-desc">ระบบจะใส่ขีดให้อัตโนมัติ เพื่อใช้ตรวจสอบสิทธิหลักประกันสุขภาพ (สปสช.)</p>
-        </div>
-        <div class="input-group">
-          <label for="patient_id" class="visually-hidden">เลขบัตรประชาชน 13 หลัก</label>
-          <input type="tel" id="patient_id" class="custom-input" placeholder="ตัวอย่าง: 1-2345-67890-12-3" maxlength="17" inputmode="numeric">
-          <span class="field-hint" id="idValidationMsg" role="status">ป้อนตัวเลขให้ครบ 13 หลัก</span>
-          <div class="privacy-note">
-            <span aria-hidden="true">🔒</span> ข้อมูลนี้ใช้เพื่อตรวจสอบสิทธิระบบหลักประกันสุขภาพแห่งชาติเท่านั้น (ไม่เผยแพร่ต่อสาธารณะ)
-          </div>
-        </div>
-      </section>
-
-      <!-- STEP 8: Health Coverage -->
+      <!-- STEP 8: Phone Number -->
       <section class="step-card" data-step="8" aria-labelledby="step8_title">
         <div class="step-header">
           <div class="header-top">
-            <span class="question-number">คำถามที่ 8 / 12</span>
+            <span class="question-number">คำถามที่ 8 / 10</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
-          <h2 id="step8_title">สิทธิการรักษาพยาบาลหลักของผู้ป่วย</h2>
-          <p class="question-desc">เลือกสิทธิประโยชน์หลักที่คุณใช้อยู่ในปัจจุบัน</p>
-        </div>
-        <div class="option-grid" role="radiogroup" aria-labelledby="step8_title">
-          <label class="option-card">
-            <input type="radio" name="health_coverage" value="บัตรทอง" class="visually-hidden">
-            <div class="card-content">
-              <div class="icon" aria-hidden="true">💳</div>
-              <div class="label-text">หลักประกันสุขภาพแห่งชาติ (บัตรทอง 30 บาท)</div>
-            </div>
-          </label>
-          <label class="option-card">
-            <input type="radio" name="health_coverage" value="ประกันสังคม" class="visually-hidden">
-            <div class="card-content">
-              <div class="icon" aria-hidden="true">🏥</div>
-              <div class="label-text">ประกันสังคม</div>
-            </div>
-          </label>
-          <label class="option-card">
-            <input type="radio" name="health_coverage" value="ข้าราชการ" class="visually-hidden">
-            <div class="card-content">
-              <div class="icon" aria-hidden="true">🏛️</div>
-              <div class="label-text">สิทธิข้าราชการ / รัฐวิสาหกิจ</div>
-            </div>
-          </label>
-          <label class="option-card">
-            <input type="radio" name="health_coverage" value="อื่นๆ" class="visually-hidden">
-            <div class="card-content">
-              <div class="icon" aria-hidden="true">📋</div>
-              <div class="label-text">อื่นๆ / ชำระเงินเอง</div>
-            </div>
-          </label>
-        </div>
-      </section>
-
-      <!-- STEP 9: Phone Number -->
-      <section class="step-card" data-step="9" aria-labelledby="step9_title">
-        <div class="step-header">
-          <div class="header-top">
-            <span class="question-number">คำถามที่ 9 / 12</span>
-            <span class="badge-required">จำเป็นต้องระบุ</span>
-          </div>
-          <h2 id="step9_title">เบอร์โทรศัพท์ที่สะดวกให้เจ้าหน้าที่ติดต่อนัดหมาย</h2>
+          <h2 id="step8_title">เบอร์โทรศัพท์ที่สะดวกให้เจ้าหน้าที่ติดต่อนัดหมาย</h2>
           <p class="question-desc">เจ้าหน้าที่ศูนย์บริการสาธารณสุขจะโทรนัดหมายประเมินล่วงหน้า</p>
         </div>
         <div class="input-group">
@@ -317,45 +249,15 @@
         </div>
       </section>
 
-      <!-- PHASE 4: Caregiver & Evidence -->
-
-      <!-- STEP 10: Can Self Care Check? -->
-      <section class="step-card" data-step="10" aria-labelledby="step10_title">
+      <!-- STEP 9: Caregiver Details -->
+      <section class="step-card" data-step="9" aria-labelledby="step9_title">
         <div class="step-header">
           <div class="header-top">
-            <span class="question-number">คำถามที่ 10 / 12</span>
-            <span class="badge-required">จำเป็นต้องระบุ</span>
+            <span class="question-number">คำถามที่ 9 / 10</span>
+            <span class="badge-required" id="caregiverBadge">จำเป็นสำหรับผู้ดูแล / ไม่บังคับหากยื่นเอง</span>
           </div>
-          <h2 id="step10_title">ผู้ป่วยสามารถดูแลตัวเองในการรับมอบและติดต่อประสานงานได้หรือไม่?</h2>
-          <p class="question-desc">หากดูแลตัวเองได้ ระบบจะข้ามการขอข้อมูลผู้ดูแลให้อัตโนมัติ</p>
-        </div>
-        <div class="option-grid" role="radiogroup" aria-labelledby="step10_title">
-          <label class="option-card">
-            <input type="radio" name="self_care_status" value="self" class="visually-hidden">
-            <div class="card-content">
-              <div class="icon" aria-hidden="true">✅</div>
-              <div class="label-text">ดูแลตัวเองได้ (ไม่ต้องกรอกข้อมูลผู้ดูแล)</div>
-            </div>
-          </label>
-          <label class="option-card">
-            <input type="radio" name="self_care_status" value="need_caregiver" class="visually-hidden">
-            <div class="card-content">
-              <div class="icon" aria-hidden="true">🤝</div>
-              <div class="label-text">ต้องมีญาติ / ผู้ดูแลช่วยเหลือในการประสานงาน</div>
-            </div>
-          </label>
-        </div>
-      </section>
-
-      <!-- STEP 11: Caregiver Details (Shown only if need_caregiver) -->
-      <section class="step-card" data-step="11" aria-labelledby="step11_title">
-        <div class="step-header">
-          <div class="header-top">
-            <span class="question-number">คำถามที่ 11 / 12</span>
-            <span class="badge-required">จำเป็นต้องระบุ</span>
-          </div>
-          <h2 id="step11_title">ข้อมูลญาติ / ผู้ดูแลผู้ป่วยสำหรับติดต่อประสานงาน</h2>
-          <p class="question-desc">ระบุชื่อและเบอร์โทรศัพท์ของผู้ดูแลหลัก</p>
+          <h2 id="step9_title">ข้อมูลญาติ / ผู้ดูแลผู้ป่วยสำหรับติดต่อประสานงาน</h2>
+          <p class="question-desc" id="caregiverDesc">หากญาติหรือผู้ดูแลกรอกแทนผู้ป่วย จำเป็นต้องระบุชื่อและเบอร์โทรศัพท์ผู้ดูแล</p>
         </div>
         <div class="input-group">
           <label for="caregiver_name" class="form-label">ชื่อ - นามสกุล ผู้ดูแล</label>
@@ -366,21 +268,21 @@
         </div>
       </section>
 
-      <!-- STEP 12: Attachments -->
-      <section class="step-card" data-step="12" aria-labelledby="step12_title">
+      <!-- STEP 10: General Attachments -->
+      <section class="step-card" data-step="10" aria-labelledby="step10_title">
         <div class="step-header">
           <div class="header-top">
-            <span class="question-number">คำถามที่ 12 / 12</span>
+            <span class="question-number">คำถามที่ 10 / 10</span>
             <span class="badge-optional">แนะนำให้ระบุ</span>
           </div>
-          <h2 id="step12_title">แนบรูปถ่ายผู้ป่วย / สถานที่พักอาศัย / ใบรับรองแพทย์ (ถ้ามี)</h2>
+          <h2 id="step10_title">แนบรูปถ่ายผู้ป่วย / สถานที่พักอาศัย (ถ้ามี)</h2>
           <p class="question-desc">ช่วยเพิ่มความเร็วในการพิจารณาอนุมัติของศูนย์บริการสาธารณสุข</p>
         </div>
         <div class="upload-box">
-          <input type="file" id="fileUpload" class="file-input" accept="image/*" multiple aria-label="แนบรูปถ่ายประกอบ">
+          <input type="file" id="fileUpload" class="file-input" accept="image/*" multiple aria-label="แนบรูปถ่ายผู้ป่วย หรือ สถานที่พักอาศัย">
           <label for="fileUpload" class="upload-label">
             <div class="upload-icon" aria-hidden="true">📷</div>
-            <div>กดที่นี่เพื่อเลือกหรือถ่ายรูปภาพ</div>
+            <div>กดที่นี่เพื่อเลือกหรือถ่ายรูปผู้ป่วย / สถานที่พักอาศัย</div>
             <span class="upload-sub">รองรับไฟล์รูปภาพ JPG, PNG</span>
           </label>
           <div class="file-preview-list" id="filePreviewList"></div>
@@ -389,14 +291,14 @@
 
       <!-- PHASE 5: Review & Submit -->
 
-      <!-- STEP 13: Final Review UX Structured -->
-      <section class="step-card" data-step="13" aria-labelledby="step13_title">
+      <!-- STEP 11: Final Review -->
+      <section class="step-card" data-step="11" aria-labelledby="step11_title">
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">ขั้นตอนสุดท้าย</span>
             <span class="badge-review">ตรวจสอบข้อมูล</span>
           </div>
-          <h2 id="step13_title">สรุปข้อมูลการยื่นขอรับสิทธิผ้าอ้อมผู้ใหญ่</h2>
+          <h2 id="step11_title">สรุปข้อมูลการยื่นขอรับสิทธิผ้าอ้อมผู้ใหญ่</h2>
           <p class="question-desc">ตรวจสอบความถูกต้องก่อนกดส่งเรื่องไปยังศูนย์บริการสาธารณสุข</p>
         </div>
         <div class="review-grid" id="reviewSummaryGrid">

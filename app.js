@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const TOTAL_STEPS = 13;
+  const TOTAL_STEPS = 11;
   let currentStep = 1;
   let leafletMap = null;
   let leafletMarker = null;
@@ -102,66 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
     { subdistrict: "สวนจิตรลดา", district: "ดุสิต", zipcode: "10300" },
     { subdistrict: "สี่แยกมหานาค", district: "ดุสิต", zipcode: "10300" },
     { subdistrict: "ถนนนครไชยศรี", district: "ดุสิต", zipcode: "10300" },
-    { subdistrict: "ป้อมปราบ", district: "ป้อมปราบศัตรูพ่าย", zipcode: "10100" },
-    { subdistrict: "วัดเทพศิรินทร์", district: "ป้อมปราบศัตรูพ่าย", zipcode: "10100" },
-    { subdistrict: "คลองมหานาค", district: "ป้อมปราบศัตรูพ่าย", zipcode: "10100" },
-    { subdistrict: "บ้านบาตร", district: "ป้อมปราบศัตรูพ่าย", zipcode: "10100" },
-    { subdistrict: "วัดโสมนัส", district: "ป้อมปราบศัตรูพ่าย", zipcode: "10100" },
-    { subdistrict: "วัดกัลยาณ์", district: "ธนบุรี", zipcode: "10600" },
-    { subdistrict: "หิรัญรูจี", district: "ธนบุรี", zipcode: "10600" },
-    { subdistrict: "บางยี่เรือ", district: "ธนบุรี", zipcode: "10600" },
-    { subdistrict: "บุคคโล", district: "ธนบุรี", zipcode: "10600" },
-    { subdistrict: "ตลาดพลู", district: "ธนบุรี", zipcode: "10600" },
-    { subdistrict: "ดาวคะนอง", district: "ธนบุรี", zipcode: "10600" },
-    { subdistrict: "สำเหร่", district: "ธนบุรี", zipcode: "10600" },
-    { subdistrict: "วัดอรุณ", district: "บางกอกใหญ่", zipcode: "10600" },
-    { subdistrict: "วัดท่าพระ", district: "บางกอกใหญ่", zipcode: "10600" },
-    { subdistrict: "สมเด็จเจ้าพระยา", district: "คลองสาน", zipcode: "10600" },
-    { subdistrict: "คลองสาน", district: "คลองสาน", zipcode: "10600" },
-    { subdistrict: "บางลำภูล่าง", district: "คลองสาน", zipcode: "10600" },
-    { subdistrict: "คลองต้นไทร", district: "คลองสาน", zipcode: "10600" },
-    { subdistrict: "คลองชักพระ", district: "ตลิ่งชัน", zipcode: "10170" },
-    { subdistrict: "ตลิ่งชัน", district: "ตลิ่งชัน", zipcode: "10170" },
-    { subdistrict: "ฉิมพลี", district: "ตลิ่งชัน", zipcode: "10170" },
-    { subdistrict: "บางพรม", district: "ตลิ่งชัน", zipcode: "10170" },
-    { subdistrict: "บางระมาด", district: "ตลิ่งชัน", zipcode: "10170" },
-    { subdistrict: "บางเชือกหนัง", district: "ตลิ่งชัน", zipcode: "10170" },
-    { subdistrict: "ศิริราช", district: "บางกอกน้อย", zipcode: "10700" },
-    { subdistrict: "บ้านช่างหล่อ", district: "บางกอกน้อย", zipcode: "10700" },
-    { subdistrict: "บางขุนนนท์", district: "บางกอกน้อย", zipcode: "10700" },
-    { subdistrict: "บางขุนศรี", district: "บางกอกน้อย", zipcode: "10700" },
-    { subdistrict: "อรุณอมรินทร์", district: "บางกอกน้อย", zipcode: "10700" },
-    { subdistrict: "ท่าข้าม", district: "บางขุนเทียน", zipcode: "10150" },
-    { subdistrict: "แสมดำ", district: "บางขุนเทียน", zipcode: "10150" },
-    { subdistrict: "บางหว้า", district: "ภาษีเจริญ", zipcode: "10160" },
-    { subdistrict: "บางด้วน", district: "ภาษีเจริญ", zipcode: "10160" },
-    { subdistrict: "บางจาก", district: "ภาษีเจริญ", zipcode: "10160" },
-    { subdistrict: "บางแวก", district: "ภาษีเจริญ", zipcode: "10160" },
-    { subdistrict: "คลองขวาง", district: "ภาษีเจริญ", zipcode: "10160" },
-    { subdistrict: "ปากคลองภาษีเจริญ", district: "ภาษีเจริญ", zipcode: "10160" },
-    { subdistrict: "หนองแขม", district: "หนองแขม", zipcode: "10160" },
-    { subdistrict: "หนองค้างพลู", district: "หนองแขม", zipcode: "10160" },
-    { subdistrict: "ราษฎร์บูรณะ", district: "ราษฎร์บูรณะ", zipcode: "10140" },
-    { subdistrict: "บางปะกอก", district: "ราษฎร์บูรณะ", zipcode: "10140" },
-    { subdistrict: "บางพลัด", district: "บางพลัด", zipcode: "10700" },
-    { subdistrict: "บางอ้อ", district: "บางพลัด", zipcode: "10700" },
-    { subdistrict: "บางบำหรุ", district: "บางพลัด", zipcode: "10700" },
-    { subdistrict: "บางยี่ขัน", district: "บางพลัด", zipcode: "10700" },
+    { subdistrict: "บางแค", district: "บางแค", zipcode: "10160" },
     { subdistrict: "ทุ่งมหาเมฆ", district: "สาทร", zipcode: "10120" },
     { subdistrict: "ยานนาวา", district: "สาทร", zipcode: "10120" },
-    { subdistrict: "ทุ่งวัดดอน", district: "สาทร", zipcode: "10120" },
-    { subdistrict: "บางแค", district: "บางแค", zipcode: "10160" },
-    { subdistrict: "บางแคเหนือ", district: "บางแค", zipcode: "10160" },
-    { subdistrict: "บางไผ่", district: "บางแค", zipcode: "10160" },
-    { subdistrict: "หลักสอง", district: "บางแค", zipcode: "10160" },
-    { subdistrict: "ทวีวัฒนา", district: "ทวีวัฒนา", zipcode: "10170" },
-    { subdistrict: "ศาลาธรรมสพน์", district: "ทวีวัฒนา", zipcode: "10170" },
-    { subdistrict: "บางมด", district: "ทุ่งครุ", zipcode: "10140" },
-    { subdistrict: "ทุ่งครุ", district: "ทุ่งครุ", zipcode: "10140" },
-    { subdistrict: "บางบอนเหนือ", district: "บางบอน", zipcode: "10150" },
-    { subdistrict: "บางบอนใต้", district: "บางบอน", zipcode: "10150" },
-    { subdistrict: "คลองบางพราน", district: "บางบอน", zipcode: "10150" },
-    { subdistrict: "คลองบางบอน", district: "บางบอน", zipcode: "10150" }
+    { subdistrict: "ทุ่งวัดดอน", district: "สาทร", zipcode: "10120" }
   ];
 
   // State Object
@@ -169,19 +113,17 @@ document.addEventListener('DOMContentLoaded', () => {
     applicant_type: '',
     patient_name: '',
     patient_id: '',
-    health_coverage: '',
-    contact_phone: '',
+    health_conditions: [],
+    medical_certs: [],
+    latitude: null,
+    longitude: null,
     district: '',
     subdistrict: '',
     zipcode: '',
     patient_address_detail: '',
     patient_address_landmark: '',
     patient_address: '',
-    latitude: null,
-    longitude: null,
-    health_conditions: [],
-    diaper_size: '',
-    self_care_status: '',
+    contact_phone: '',
     caregiver_name: '',
     caregiver_phone: '',
     attachments: []
@@ -203,6 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const geocodeNotification = document.getElementById('geocodeNotification');
   const patientAddressDetail = document.getElementById('patient_address_detail');
   const patientAddressLandmark = document.getElementById('patient_address_landmark');
+  const medicalCertUpload = document.getElementById('medicalCertUpload');
+  const medCertPreviewList = document.getElementById('medCertPreviewList');
   const fileUpload = document.getElementById('fileUpload');
   const filePreviewList = document.getElementById('filePreviewList');
   const reviewSummaryGrid = document.getElementById('reviewSummaryGrid');
@@ -211,6 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnCopyPayload = document.getElementById('btnCopyPayload');
   const patientIdInput = document.getElementById('patient_id');
   const idValidationMsg = document.getElementById('idValidationMsg');
+  const caregiverBadge = document.getElementById('caregiverBadge');
+  const caregiverDesc = document.getElementById('caregiverDesc');
 
   // Accessibility Font Size Toggle
   document.querySelectorAll('.btn-font-size').forEach(btn => {
@@ -222,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // BKK Address Autocomplete Engine (Focus & Click Suggestions Support)
+  // BKK Address Autocomplete Engine
   if (bkkAddressSearch) {
     function renderSuggestions(matches, headerTitle = '') {
       if (matches.length > 0) {
@@ -246,31 +192,23 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Show initial top recommendations on click / focus before typing
     bkkAddressSearch.addEventListener('focus', () => {
       if (!bkkAddressSearch.value.trim()) {
-        renderSuggestions(bkkSubdistrictList.slice(0, 8), '💡 ตัวเลือกแขวง/เขตยอดนิยมใน กทม.:');
-      }
-    });
-
-    bkkAddressSearch.addEventListener('click', () => {
-      if (!bkkAddressSearch.value.trim()) {
-        renderSuggestions(bkkSubdistrictList.slice(0, 8), '💡 ตัวเลือกแขวง/เขตยอดนิยมใน กทม.:');
+        const topSubdistricts = bkkSubdistrictList.slice(0, 8);
+        renderSuggestions(topSubdistricts, '💡 แขวง/เขตนียอดนิยม กรุงเทพมหานคร');
       }
     });
 
     bkkAddressSearch.addEventListener('input', (e) => {
-      const q = e.target.value.trim().toLowerCase();
+      const q = e.target.value.trim();
       if (!q) {
-        renderSuggestions(bkkSubdistrictList.slice(0, 8), '💡 ตัวเลือกแขวง/เขตยอดนิยมใน กทม.:');
+        const topSubdistricts = bkkSubdistrictList.slice(0, 8);
+        renderSuggestions(topSubdistricts, '💡 แขวง/เขตนียอดนิยม กรุงเทพมหานคร');
         return;
       }
       const matches = bkkSubdistrictList.filter(item => 
-        item.subdistrict.toLowerCase().includes(q) || 
-        item.district.toLowerCase().includes(q) ||
-        item.zipcode.includes(q)
-      ).slice(0, 8);
-
+        item.subdistrict.includes(q) || item.district.includes(q) || item.zipcode.includes(q)
+      ).slice(0, 10);
       renderSuggestions(matches);
     });
 
@@ -279,21 +217,6 @@ document.addEventListener('DOMContentLoaded', () => {
         bkkAddressSuggestions.style.display = 'none';
       }
     });
-
-    patientAddressDetail.addEventListener('input', () => {
-      formData.patient_address_detail = patientAddressDetail.value.trim();
-      updateFullAddressText();
-      checkCurrentStepValidity();
-      saveDraft();
-    });
-
-    if (patientAddressLandmark) {
-      patientAddressLandmark.addEventListener('input', () => {
-        formData.patient_address_landmark = patientAddressLandmark.value.trim();
-        updateFullAddressText();
-        saveDraft();
-      });
-    }
   }
 
   function selectBkkAddress(item) {
@@ -308,6 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
     checkCurrentStepValidity();
     saveDraft();
   }
+  window.selectBkkAddress = selectBkkAddress;
 
   function updateFullAddressText() {
     const detail = formData.patient_address_detail || '';
@@ -345,10 +269,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (formData.patient_name) document.getElementById('patient_name').value = formData.patient_name;
     if (formData.patient_id) document.getElementById('patient_id').value = formatThaiIDString(formData.patient_id);
-    if (formData.health_coverage) {
-      const radio = document.querySelector(`input[name="health_coverage"][value="${formData.health_coverage}"]`);
-      if (radio) radio.checked = true;
-    }
     if (formData.contact_phone) document.getElementById('contact_phone').value = formData.contact_phone;
     
     if (formData.subdistrict && formData.district && bkkAddressSearch) {
@@ -356,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
       selectedAddressBadge.innerHTML = `✅ เลือกแล้ว: <b>แขวง${formData.subdistrict} เขต${formData.district} ${formData.zipcode || ''}</b>`;
       selectedAddressBadge.style.display = 'block';
     }
-    if (formData.patient_address_detail) patientAddressDetail.value = formData.patient_address_detail;
+    if (formData.patient_address_detail && patientAddressDetail) patientAddressDetail.value = formData.patient_address_detail;
     if (formData.patient_address_landmark && patientAddressLandmark) patientAddressLandmark.value = formData.patient_address_landmark;
 
     if (formData.health_conditions && formData.health_conditions.length) {
@@ -365,16 +285,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cb) cb.checked = true;
       });
     }
-    if (formData.diaper_size) {
-      const radio = document.querySelector(`input[name="diaper_size"][value="${formData.diaper_size}"]`);
-      if (radio) radio.checked = true;
-    }
-    if (formData.self_care_status) {
-      const radio = document.querySelector(`input[name="self_care_status"][value="${formData.self_care_status}"]`);
-      if (radio) radio.checked = true;
-    }
     if (formData.caregiver_name) document.getElementById('caregiver_name').value = formData.caregiver_name;
     if (formData.caregiver_phone) document.getElementById('caregiver_phone').value = formData.caregiver_phone;
+
+    renderMedCertPreviews();
+    renderFilePreviews();
   }
 
   // Thai Citizen ID Mask Formatting
@@ -450,7 +365,6 @@ document.addEventListener('DOMContentLoaded', () => {
     checkCurrentStepValidity();
     saveDraft();
 
-    // Reverse Geocoding to auto-fill BKK District/Subdistrict
     fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=th`)
       .then(res => res.json())
       .then(data => {
@@ -553,7 +467,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // File Upload Preview
+  // Medical Certificate Upload Handler
+  if (medicalCertUpload) {
+    medicalCertUpload.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files);
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          formData.medical_certs.push({ name: file.name, url: event.target.result });
+          renderMedCertPreviews();
+          saveDraft();
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  }
+
+  function renderMedCertPreviews() {
+    if (!medCertPreviewList) return;
+    medCertPreviewList.innerHTML = '';
+    formData.medical_certs.forEach(att => {
+      const img = document.createElement('img');
+      img.src = att.url;
+      img.className = 'file-thumb';
+      medCertPreviewList.appendChild(img);
+    });
+  }
+
+  // File Upload Preview Handler
   if (fileUpload) {
     fileUpload.addEventListener('change', (e) => {
       const files = Array.from(e.target.files);
@@ -570,6 +511,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderFilePreviews() {
+    if (!filePreviewList) return;
     filePreviewList.innerHTML = '';
     formData.attachments.forEach(att => {
       const img = document.createElement('img');
@@ -586,17 +528,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentStep === 1) {
       isValid = !!document.querySelector('input[name="applicant_type"]:checked');
     } else if (currentStep === 2) {
-      const cbs = document.querySelectorAll('input[name="health_condition"]:checked');
-      isValid = cbs.length > 0;
-    } else if (currentStep === 3) {
-      isValid = true; // Recommended step
-    } else if (currentStep === 4) {
-      isValid = formData.latitude !== null && formData.longitude !== null;
-    } else if (currentStep === 5) {
-      isValid = !!formData.district && !!formData.subdistrict && !!formData.patient_address_detail;
-    } else if (currentStep === 6) {
       isValid = document.getElementById('patient_name').value.trim().length > 0;
-    } else if (currentStep === 7) {
+    } else if (currentStep === 3) {
       const idDigits = formData.patient_id;
       isValid = validateThaiID(idDigits);
       if (idDigits.length === 13) {
@@ -611,20 +544,42 @@ document.addEventListener('DOMContentLoaded', () => {
         idValidationMsg.textContent = 'ป้อนตัวเลขให้ครบ 13 หลัก';
         idValidationMsg.classList.remove('error');
       }
+    } else if (currentStep === 4) {
+      const cbs = document.querySelectorAll('input[name="health_condition"]:checked');
+      isValid = cbs.length > 0;
+    } else if (currentStep === 5) {
+      isValid = true; // Optional step (Medical Cert)
+    } else if (currentStep === 6) {
+      isValid = formData.latitude !== null && formData.longitude !== null;
+    } else if (currentStep === 7) {
+      isValid = !!formData.district && !!formData.subdistrict && !!formData.patient_address_detail;
     } else if (currentStep === 8) {
-      isValid = !!document.querySelector('input[name="health_coverage"]:checked');
-    } else if (currentStep === 9) {
       const phone = document.getElementById('contact_phone').value.trim();
       isValid = phone.length >= 9;
+    } else if (currentStep === 9) {
+      const isCaregiverApplicant = formData.applicant_type === 'caregiver';
+      if (caregiverBadge && caregiverDesc) {
+        if (isCaregiverApplicant) {
+          caregiverBadge.textContent = 'จำเป็นต้องระบุ';
+          caregiverBadge.className = 'badge-required';
+          caregiverDesc.textContent = 'ญาติหรือผู้ดูแลกรอกแทนผู้ป่วย จำเป็นต้องระบุชื่อและเบอร์โทรศัพท์ผู้ดูแล';
+        } else {
+          caregiverBadge.textContent = 'ไม่บังคับกรอก';
+          caregiverBadge.className = 'badge-optional';
+          caregiverDesc.textContent = 'ผู้ป่วยยื่นขอรับด้วยตนเอง หากมีผู้ดูแลสามารถระบุเพิ่มเติมได้ (ไม่บังคับ)';
+        }
+      }
+
+      if (isCaregiverApplicant) {
+        const name = document.getElementById('caregiver_name').value.trim();
+        const phone = document.getElementById('caregiver_phone').value.trim();
+        isValid = name.length > 0 && phone.length >= 9;
+      } else {
+        isValid = true; // Optional for self patient applicants
+      }
     } else if (currentStep === 10) {
-      isValid = !!document.querySelector('input[name="self_care_status"]:checked');
+      isValid = true; // Optional step (General attachments)
     } else if (currentStep === 11) {
-      const name = document.getElementById('caregiver_name').value.trim();
-      const phone = document.getElementById('caregiver_phone').value.trim();
-      isValid = name.length > 0 && phone.length >= 9;
-    } else if (currentStep === 12) {
-      isValid = true; // Optional step
-    } else if (currentStep === 13) {
       isValid = true; // Review step
     }
 
@@ -638,25 +593,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const sel = document.querySelector('input[name="applicant_type"]:checked');
       if (sel) formData.applicant_type = sel.value;
     } else if (currentStep === 2) {
-      formData.health_conditions = Array.from(document.querySelectorAll('input[name="health_condition"]:checked')).map(cb => cb.value);
-    } else if (currentStep === 3) {
-      const sel = document.querySelector('input[name="diaper_size"]:checked');
-      if (sel) formData.diaper_size = sel.value;
-    } else if (currentStep === 5) {
-      updateFullAddressText();
-    } else if (currentStep === 6) {
       formData.patient_name = document.getElementById('patient_name').value.trim();
-    } else if (currentStep === 7) {
+    } else if (currentStep === 3) {
       formData.patient_id = patientIdInput.value.replace(/\D/g, '');
+    } else if (currentStep === 4) {
+      formData.health_conditions = Array.from(document.querySelectorAll('input[name="health_condition"]:checked')).map(cb => cb.value);
+    } else if (currentStep === 7) {
+      if (patientAddressDetail) formData.patient_address_detail = patientAddressDetail.value.trim();
+      if (patientAddressLandmark) formData.patient_address_landmark = patientAddressLandmark.value.trim();
+      updateFullAddressText();
     } else if (currentStep === 8) {
-      const sel = document.querySelector('input[name="health_coverage"]:checked');
-      if (sel) formData.health_coverage = sel.value;
-    } else if (currentStep === 9) {
       formData.contact_phone = document.getElementById('contact_phone').value.trim();
-    } else if (currentStep === 10) {
-      const sel = document.querySelector('input[name="self_care_status"]:checked');
-      if (sel) formData.self_care_status = sel.value;
-    } else if (currentStep === 11) {
+    } else if (currentStep === 9) {
       formData.caregiver_name = document.getElementById('caregiver_name').value.trim();
       formData.caregiver_phone = document.getElementById('caregiver_phone').value.trim();
     }
@@ -675,13 +623,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Advance to Next Step
+  // Advance to Next Step (With Conditional Skip for Medical Cert)
   function goNextStep() {
     syncCurrentStepData();
     if (!checkCurrentStepValidity()) return;
 
-    if (currentStep === 10 && formData.self_care_status === 'self') {
-      currentStep = 12;
+    if (currentStep === 4 && !formData.health_conditions.includes('incontinence')) {
+      currentStep = 6; // Skip Medical Cert step if not incontinence
     } else if (currentStep < TOTAL_STEPS) {
       currentStep++;
     } else {
@@ -692,10 +640,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Go to Previous Step
+  // Go to Previous Step (With Conditional Skip for Medical Cert)
   function goPrevStep() {
-    if (currentStep === 12 && formData.self_care_status === 'self') {
-      currentStep = 10;
+    if (currentStep === 6 && !formData.health_conditions.includes('incontinence')) {
+      currentStep = 4; // Skip Medical Cert step backwards if not incontinence
     } else if (currentStep > 1) {
       currentStep--;
     }
@@ -732,11 +680,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Screen Reader Step Announcement (WCAG 4.1.3)
     const titleEl = document.querySelector(`.step-card[data-step="${currentStep}"] h2`);
     if (titleEl) {
-      announceToScreenReader(`ขั้นตอนที่ ${currentStep} จาก 13: ${titleEl.textContent}`);
+      announceToScreenReader(`ขั้นตอนที่ ${currentStep} จาก ${TOTAL_STEPS}: ${titleEl.textContent}`);
     }
 
-    // Initialize Map if on Step 4
-    if (currentStep === 4) {
+    // Initialize Map if on Step 6
+    if (currentStep === 6) {
       setTimeout(initLeafletMap, 150);
     }
 
@@ -755,7 +703,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btnNext.textContent = 'ถัดไป →';
     }
 
-    // Auto-focus primary input field on step transition to trigger virtual keyboard / numpad
+    // Auto-focus primary input field on step transition
     setTimeout(() => {
       const activeCard = document.querySelector('.step-card.active');
       if (activeCard) {
@@ -769,38 +717,55 @@ document.addEventListener('DOMContentLoaded', () => {
     checkCurrentStepValidity();
   }
 
-  // Render UX-Optimized Categorized Review Cards (Step 13)
+  // Render UX-Optimized Categorized Review Cards (Step 11)
   function renderUXReviewSummary() {
-    const isPatient = formData.applicant_type === 'patient';
+    const isPatientApplicant = formData.applicant_type === 'patient';
     const condLabels = formData.health_conditions.map(c => c === 'bedridden' ? 'ผู้ป่วยติดเตียง' : 'กลั้นขับถ่ายไม่ได้').join(', ');
-    const isSelfCare = formData.self_care_status === 'self';
+    const hasCaregiverInfo = !!formData.caregiver_name;
 
     reviewSummaryGrid.innerHTML = `
-      <!-- Card 1: Medical & Eligibility -->
+      <!-- Card 1: Patient Identity -->
       <div class="review-section-card">
         <div class="review-card-header">
-          <div class="review-card-title">🩺 สิทธิและสภาวะความต้องการ</div>
-          <button type="button" class="review-edit-btn" onclick="jumpToStep(2)">แก้ไข</button>
+          <div class="review-card-title">👤 ข้อมูลผู้ขอรับสิทธิ</div>
+          <button type="button" class="review-edit-btn" onclick="jumpToStep(1)">แก้ไข</button>
+        </div>
+        <div class="review-data-row">
+          <span class="review-label">สถานะผู้กรอก:</span>
+          <span class="review-value">${isPatientApplicant ? 'ผู้ป่วยยื่นขอรับด้วยตนเอง' : 'ญาติ / ผู้ดูแลกรอกแทน'}</span>
+        </div>
+        <div class="review-data-row">
+          <span class="review-label">ชื่อผู้ป่วย:</span>
+          <span class="review-value">${formData.patient_name || '-'}</span>
+        </div>
+        <div class="review-data-row">
+          <span class="review-label">เลขบัตรประชาชน:</span>
+          <span class="review-value">${formatThaiIDString(formData.patient_id) || '-'}</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Medical Condition & Certs -->
+      <div class="review-section-card">
+        <div class="review-card-header">
+          <div class="review-card-title">🩺 สภาวะความต้องการผ้าอ้อม</div>
+          <button type="button" class="review-edit-btn" onclick="jumpToStep(4)">แก้ไข</button>
         </div>
         <div class="review-data-row">
           <span class="review-label">สภาวะสุขภาพ:</span>
           <span class="review-value">${condLabels || '-'}</span>
         </div>
+        ${formData.health_conditions.includes('incontinence') ? `
         <div class="review-data-row">
-          <span class="review-label">ไซส์ผ้าอ้อม:</span>
-          <span class="review-value">${formData.diaper_size || 'ไม่ระบุ'}</span>
-        </div>
-        <div class="review-data-row">
-          <span class="review-label">สิทธิการรักษาหลัก:</span>
-          <span class="review-value">${formData.health_coverage || '-'}</span>
-        </div>
+          <span class="review-label">รูปถ่ายใบรับรองแพทย์:</span>
+          <span class="review-value">${formData.medical_certs.length > 0 ? `${formData.medical_certs.length} ไฟล์` : 'ไม่ได้แนบ'}</span>
+        </div>` : ''}
       </div>
 
-      <!-- Card 2: Location & Address -->
+      <!-- Card 3: Location & Address -->
       <div class="review-section-card">
         <div class="review-card-header">
-          <div class="review-card-title">📍 ที่อยู่และพิกัดจัดส่ง (Auto-filled)</div>
-          <button type="button" class="review-edit-btn" onclick="jumpToStep(4)">แก้ไข</button>
+          <div class="review-card-title">📍 ที่อยู่และพิกัดจัดส่ง</div>
+          <button type="button" class="review-edit-btn" onclick="jumpToStep(6)">แก้ไข</button>
         </div>
         <div class="review-data-row">
           <span class="review-label">ที่อยู่ กทม.:</span>
@@ -817,40 +782,32 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
 
-      <!-- Card 3: Patient & Caregiver Info -->
+      <!-- Card 4: Contact & Caregiver Info -->
       <div class="review-section-card">
         <div class="review-card-header">
-          <div class="review-card-title">👤 ข้อมูลผู้ขอรับสิทธิและผู้ดูแล</div>
-          <button type="button" class="review-edit-btn" onclick="jumpToStep(6)">แก้ไข</button>
-        </div>
-        <div class="review-data-row">
-          <span class="review-label">ชื่อผู้ป่วย:</span>
-          <span class="review-value">${formData.patient_name || '-'}</span>
-        </div>
-        <div class="review-data-row">
-          <span class="review-label">เลขบัตรประชาชน:</span>
-          <span class="review-value">${formatThaiIDString(formData.patient_id) || '-'}</span>
+          <div class="review-card-title">📞 ข้อมูลติดต่อและผู้ดูแล</div>
+          <button type="button" class="review-edit-btn" onclick="jumpToStep(8)">แก้ไข</button>
         </div>
         <div class="review-data-row">
           <span class="review-label">เบอร์ติดต่อผู้ป่วย:</span>
           <span class="review-value">${formData.contact_phone || '-'}</span>
         </div>
+        ${hasCaregiverInfo ? `
         <div class="review-data-row">
-          <span class="review-label">การดูแลตัวเอง:</span>
-          <span class="review-value">${isSelfCare ? 'ดูแลตัวเองได้' : 'มีผู้ดูแลช่วยเหลือ'}</span>
-        </div>
-        ${!isSelfCare ? `
-        <div class="review-data-row">
-          <span class="review-label">ชื่อผู้ดูแล:</span>
+          <span class="review-label">ผู้ดูแลผู้ป่วย:</span>
           <span class="review-value">${formData.caregiver_name} (${formData.caregiver_phone})</span>
-        </div>` : ''}
+        </div>` : `
+        <div class="review-data-row">
+          <span class="review-label">ผู้ดูแลผู้ป่วย:</span>
+          <span class="review-value">ไม่มี (ยื่นขอรับด้วยตนเอง)</span>
+        </div>`}
       </div>
 
-      <!-- Card 4: Attachments -->
+      <!-- Card 5: General Attachments -->
       <div class="review-section-card">
         <div class="review-card-header">
-          <div class="review-card-title">📷 หลักฐานประกอบ</div>
-          <button type="button" class="review-edit-btn" onclick="jumpToStep(12)">แก้ไข</button>
+          <div class="review-card-title">📷 รูปถ่ายผู้ป่วย/สถานที่</div>
+          <button type="button" class="review-edit-btn" onclick="jumpToStep(10)">แก้ไข</button>
         </div>
         <div class="review-data-row">
           <span class="review-label">จำนวนรูปภาพแนบ:</span>
@@ -868,8 +825,7 @@ document.addEventListener('DOMContentLoaded', () => {
       applicant_type: formData.applicant_type,
       patient_info: {
         fullname: formData.patient_name,
-        id_card: formData.patient_id,
-        health_coverage: formData.health_coverage
+        id_card: formData.patient_id
       },
       contact_info: {
         phone: formData.contact_phone,
@@ -887,12 +843,11 @@ document.addEventListener('DOMContentLoaded', () => {
       medical_conditions: {
         is_bedridden: formData.health_conditions.includes('bedridden'),
         has_incontinence: formData.health_conditions.includes('incontinence'),
-        preferred_diaper_size: formData.diaper_size
+        medical_cert_count: formData.medical_certs.length
       },
       caregiver_info: {
-        is_self_care: formData.self_care_status === 'self',
-        fullname: formData.self_care_status === 'self' ? '' : formData.caregiver_name,
-        phone: formData.self_care_status === 'self' ? '' : formData.caregiver_phone
+        fullname: formData.caregiver_name || '',
+        phone: formData.caregiver_phone || ''
       },
       attachments_count: formData.attachments.length
     };
