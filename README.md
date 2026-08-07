@@ -204,6 +204,11 @@ bkk-careplan/
 ├── index.html                  # หน้าเว็บ HTML5 Web App (Responsive)
 ├── styles.css                  # Modern Responsive CSS System
 ├── app.js                      # Form Logic, Leaflet GPS & Autocomplete Engine
+├── gateway/                    # Golang Cloud Run Middleware Gateway Service
+│   ├── main.go                 # Go Web Server & Pub/Sub Publisher
+│   ├── go.mod                  # Go Module definition
+│   ├── Dockerfile              # Minimal Docker Build Image (<15MB)
+│   └── README.md               # คู่มือการรันและ Deploy ขึ้น Google Cloud Run
 ├── docs/
 │   ├── ai_prompting_guide.md   # คู่มือการสั่งงาน AI (Prompt Engineering Guide)
 │   ├── context.md              # บริบท ที่มาโครงการ นโยบาย สปสช./กทม. & 2-Stage Data Model
