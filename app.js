@@ -982,17 +982,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalDesc = document.querySelector('#payloadModal p');
 
     if (modalTitle) modalTitle.textContent = '⏳ กำลังส่งเรื่องขอรับผ้าอ้อมผู้ใหญ่...';
-    if (modalDesc) modalDesc.textContent = 'กรุณารอสักครู่ ระบบกำลังส่งข้อมูลไปยังศูนย์บริการสาธารณสุข กรุงเทพมหานคร';
-
-    // Send immediate LINE chat message indicating submission in progress
-    if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient() && liff.isApiAvailable('sendMessages')) {
-      liff.sendMessages([
-        {
-          type: 'text',
-          text: '⏳ กำลังส่งเรื่องขอรับสิทธิผ้าอ้อมผู้ใหญ่เข้าสู่ระบบ...'
-        }
-      ]).catch(err => console.log('liff.sendMessages start error:', err));
-    }
+    if (modalDesc) modalDesc.textContent = 'กรุณารอสักครู่ ระบบกำลังส่งข้อมูลคำร้องเข้าสู่ระบบศูนย์บริการสาธารณสุข กรุงเทพมหานคร';
 
     // Send payload to Gateway API
     if (GATEWAY_API_URL && !GATEWAY_API_URL.includes('xxxx')) {
@@ -1006,18 +996,8 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(res => res.json())
       .then(data => {
         btnNext.textContent = '✓ ส่งข้อมูลเรียบร้อย!';
-        if (modalTitle) modalTitle.textContent = '✅ ส่งเรื่องขอรับผ้าอ้อมผู้ใหญ่เรียบร้อยแล้ว';
-        if (modalDesc) modalDesc.textContent = 'ระบบบันทึกข้อมูลเรียบร้อยแล้ว เจ้าหน้าที่ศูนย์บริการสาธารณสุขจะติดต่อนัดหมายเยี่ยมบ้านตามเบอร์โทรศัพท์ที่ระบุ';
-
-        // Send text message into LINE chat if LIFF API is available
-        if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient() && liff.isApiAvailable('sendMessages')) {
-          liff.sendMessages([
-            {
-              type: 'text',
-              text: `📌 แจ้งความประสงค์ขอรับผ้าอ้อมผู้ใหญ่เรียบร้อยแล้ว\n\nชื่อผู้ป่วย: ${formData.patient_name}\nที่อยู่: ${formData.patient_address}\nสถานะ: ส่งเรื่องไปยังศูนย์บริการสาธารณสุขเรียบร้อยแล้ว`
-            }
-          ]).catch(err => console.log('liff.sendMessages skipped/error:', err));
-        }
+        if (modalTitle) modalTitle.textContent = '✅ ยื่นเรื่องขอรับผ้าอ้อมผู้ใหญ่เรียบร้อยแล้ว';
+        if (modalDesc) modalDesc.textContent = 'ระบบบันทึกข้อมูลคำร้องเข้าสู่ระบบเรียบร้อยแล้ว เมื่อระบบประมวลผลเสร็จสิ้น ท่านจะได้รับใบรวบรวมสรุปข้อมูลผ่านทางแชต LINE นี้ และเจ้าหน้าที่ศูนย์บริการสาธารณสุขจะแจ้งความคืบหน้าการดำเนินงานให้ทราบเป็นระยะ';
 
         localStorage.removeItem('bkk_careplan_draft');
       })
@@ -1029,8 +1009,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modalDesc) modalDesc.textContent = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่อีกครั้ง';
       });
     } else {
-      if (modalTitle) modalTitle.textContent = '✅ ส่งเรื่องขอรับผ้าอ้อมผู้ใหญ่เรียบร้อยแล้ว';
-      if (modalDesc) modalDesc.textContent = 'ระบบบันทึกข้อมูลเรียบร้อยแล้ว (โหมดจำลองระบบทดสอบ)';
+      if (modalTitle) modalTitle.textContent = '✅ ยื่นเรื่องขอรับผ้าอ้อมผู้ใหญ่เรียบร้อยแล้ว';
+      if (modalDesc) modalDesc.textContent = 'ระบบบันทึกข้อมูลคำร้องเข้าสู่ระบบเรียบร้อยแล้ว เมื่อระบบประมวลผลเสร็จสิ้น ท่านจะได้รับใบรวบรวมสรุปข้อมูลผ่านทางแชต LINE นี้ (โหมดจำลองระบบทดสอบ)';
       localStorage.removeItem('bkk_careplan_draft');
     }
   }
