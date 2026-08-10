@@ -100,6 +100,17 @@ body {
   white-space: nowrap;
 }
 
+.version-badge {
+  background: var(--light-bg);
+  color: var(--primary-green);
+  border: 1px solid rgba(22, 160, 133, 0.3);
+  font-size: calc(0.64rem * var(--base-font-scale));
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
 /* Font Size Toggle Buttons */
 .font-size-toggle {
   display: flex;

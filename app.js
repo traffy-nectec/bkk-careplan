@@ -1019,9 +1019,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Close LIFF Window Handler
   if (btnFinishLiff) {
     btnFinishLiff.addEventListener('click', () => {
-      if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) {
-        liff.closeWindow();
-      } else {
+      if (typeof liff !== 'undefined' && typeof liff.closeWindow === 'function') {
+        try {
+          liff.closeWindow();
+        } catch (e) {
+          console.warn('liff.closeWindow error:', e);
+        }
+      }
+      if (typeof liff === 'undefined' || !liff.isInClient || !liff.isInClient()) {
         alert('ยื่นเรื่องเรียบร้อยแล้ว ท่านสามารถปิดแท็บเบราว์เซอร์นี้ได้เลยครับ');
       }
     });
