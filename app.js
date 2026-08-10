@@ -1033,13 +1033,46 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnCloseLiff = document.getElementById('btnCloseLiff');
   if (btnCloseLiff) {
     btnCloseLiff.addEventListener('click', () => {
+      if (payloadModal) {
+        payloadModal.classList.remove('active');
+      }
+
       if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) {
-        liff.closeWindow();
+        try {
+          liff.closeWindow();
+        } catch (e) {
+          console.warn('Failed liff.closeWindow', e);
+        }
       } else {
-        window.close();
-        setTimeout(() => {
-          location.reload();
-        }, 300);
+        try {
+          window.close();
+        } catch (e) {}
+
+        // Reset form state to step 1 cleanly for web browser preview
+        currentStep = 1;
+        formData = {
+          applicant_type: '',
+          patient_name: '',
+          patient_id: '',
+          health_condition: '',
+          medical_certs: [],
+          latitude: null,
+          longitude: null,
+          district: '',
+          subdistrict: '',
+          zipcode: '',
+          patient_address_detail: '',
+          patient_address_landmark: '',
+          patient_address: '',
+          contact_phone: '',
+          caregiver_name: '',
+          caregiver_phone: '',
+          attachments: []
+        };
+        window.formData = formData;
+        updateStepUI();
+        updateCardSelectedStates();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
   }
