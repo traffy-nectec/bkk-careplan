@@ -975,7 +975,9 @@ document.addEventListener('DOMContentLoaded', () => {
       } : null
     };
 
-    payloadJsonDisplay.textContent = JSON.stringify(payload, null, 2);
+    if (payloadJsonDisplay) {
+      payloadJsonDisplay.textContent = JSON.stringify(payload, null, 2);
+    }
     payloadModal.classList.add('active');
 
     const modalTitle = document.getElementById('modalTitle');
@@ -1018,10 +1020,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Copy JSON Payload Handler
   if (btnCopyPayload) {
     btnCopyPayload.addEventListener('click', () => {
-      navigator.clipboard.writeText(payloadJsonDisplay.textContent).then(() => {
-        btnCopyPayload.textContent = '✓ คัดลอกเรียบร้อย!';
-        setTimeout(() => btnCopyPayload.textContent = 'ก๊อปปี้ JSON', 2000);
-      });
+      if (payloadJsonDisplay) {
+        navigator.clipboard.writeText(payloadJsonDisplay.textContent).then(() => {
+          btnCopyPayload.textContent = '✓ คัดลอกเรียบร้อย!';
+          setTimeout(() => btnCopyPayload.textContent = 'ก๊อปปี้ JSON', 2000);
+        });
+      }
     });
   }
 

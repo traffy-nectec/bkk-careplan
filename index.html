@@ -343,19 +343,13 @@
     </button>
   </footer>
 
-  <!-- Submission Success / Payload Modal -->
+  <!-- Submission Success Modal -->
   <div class="modal-backdrop" id="payloadModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-card">
       <div class="modal-icon" aria-hidden="true">✅</div>
       <h3 id="modalTitle">ยื่นเรื่องเรียบร้อยแล้ว</h3>
       <p>ระบบบันทึกข้อมูลคำร้องเข้าสู่ระบบเรียบร้อยแล้ว เมื่อระบบประมวลผลเสร็จสิ้น
         ท่านจะได้รับใบรวบรวมสรุปข้อมูลผ่านทางแชต LINE นี้ และเจ้าหน้าที่จะแจ้งความคืบหน้าการดำเนินงานให้ทราบเป็นระยะ</p>
-
-      <div class="payload-preview-header">
-        <span>JSON Payload Output:</span>
-        <button type="button" class="btn-copy" id="btnCopyPayload">ก๊อปปี้ JSON</button>
-      </div>
-      <pre class="payload-json" id="payloadJsonDisplay"></pre>
 
       <button type="button" class="btn-primary btn-full" id="btnCloseLiff"
         onclick="if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) { liff.closeWindow(); } else { location.reload(); }">

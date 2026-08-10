@@ -24,7 +24,7 @@ sequenceDiagram
     Webview->>Gateway: 4. POST https://liff-form-gateway-884122932397.asia-southeast1.run.app/
     Gateway->>PubSub: 5. Publish Message (line_2019_to_fondue)
     Gateway-->>Webview: 6. ตอบกลับ HTTP 200 OK
-    Webview-->>User: 7. ขึ้นป๊อปอัป "✅ ยื่นเรื่องเรียบร้อยแล้ว" ➔ liff.closeWindow()
+    Webview-->>User: 7. ขึ้นป๊อปอัป "✅ ยื่นเรื่องเรียบร้อยแล้ว" (ส่ง JSON ไปยัง Gateway แล้วซ่อน JSON จากหน้าจอผู้ใช้) ➔ liff.closeWindow()
     PubSub->>Staff: 8. กระจาย Ticket คำร้องไปยัง ศบส. ที่รับผิดชอบ
     Staff->>User: 9. โทรนัดหมายและลงพื้นที่เยี่ยมบ้าน (Stage 2)
 ```

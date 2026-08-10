@@ -241,7 +241,7 @@ bkk-careplan/
 - [x] **Metadata Attributes:** แนบ `form_id`, `org_id`, `liff_id`, `source`, `timestamp` ใส่ลงใน Pub/Sub Message Attributes
 - [x] **Base64 Image Decoding / Forwarding:** จัดการรูปถ่าย `images.medical_certs` และ `images.attachments` (ย่อขนาดมาแล้วจาก Frontend)
 - [x] **GCP Pub/Sub Integration:** Publish ข้อความเข้า Topic `line_2019_to_fondue` บน Project `traffy-cloud`
-- [x] **Clean JSON Response:** ตอบกลับ `HTTP 200 OK` พร้อม `success: true` และ `message_id` ให้ฝั่ง LIFF แสดงป๊อปอัปสำเร็จ
+- [x] **Clean JSON Response:** ตอบกลับ `HTTP 200 OK` พร้อม `success: true` และ `message_id` ให้ฝั่ง LIFF แสดงป๊อปอัปยื่นเรื่องสำเร็จ (โดยส่ง JSON เข้า Middleware และซ่อน raw JSON ออกจากหน้าจอผู้ใช้)
 
 ---
 
