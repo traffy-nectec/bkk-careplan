@@ -170,10 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const medCertPreviewList = document.getElementById('medCertPreviewList');
   const fileUpload = document.getElementById('fileUpload');
   const filePreviewList = document.getElementById('filePreviewList');
-  const reviewSummaryGrid = document.getElementById('reviewSummaryGrid');
-  const payloadModal = document.getElementById('payloadModal');
-  const payloadJsonDisplay = document.getElementById('payloadJsonDisplay');
-  const btnCopyPayload = document.getElementById('btnCopyPayload');
+  const actionFooter = document.getElementById('actionFooter');
+  const btnFinishLiff = document.getElementById('btnFinishLiff');
   const patientIdInput = document.getElementById('patient_id');
   const idValidationMsg = document.getElementById('idValidationMsg');
   const caregiverBadge = document.getElementById('caregiverBadge');
@@ -775,6 +773,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    if (currentStep === 12) {
+      if (actionFooter) actionFooter.style.display = 'none';
+      progressBar.style.width = '100%';
+      announceToScreenReader('ยื่นเรื่องเรียบร้อยแล้ว');
+      return;
+    } else {
+      if (actionFooter) actionFooter.style.display = 'flex';
+    }
+
     // Screen Reader Step Announcement (WCAG 4.1.3)
     const titleEl = document.querySelector(`.step-card[data-step="${currentStep}"] h2`);
     if (titleEl) {
@@ -975,21 +982,20 @@ document.addEventListener('DOMContentLoaded', () => {
       } : null
     };
 
-    if (payloadJsonDisplay) {
-      payloadJsonDisplay.textContent = JSON.stringify(payload, null, 2);
-    }
-    payloadModal.classList.add('active');
-
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDesc = document.querySelector('#payloadModal p');
-
-    if (modalTitle) modalTitle.textContent = '⏳ กำลังส่งเรื่องเข้าสู่ระบบ...';
-    if (modalDesc) modalDesc.textContent = 'กรุณารอสักครู่ ระบบกำลังส่งข้อมูลคำร้องเข้าสู่ระบบ';
-
     // Send payload to Gateway API
+    btnNext.disabled = true;
+    btnNext.textContent = '⏳ กำลังส่งข้อมูลคำร้อง...';
+
+    const handleSuccess = () => {
+      localStorage.removeItem('bkk_careplan_draft');
+      btnNext.disabled = false;
+      btnNext.textContent = 'ยืนยันและส่งเรื่อง 🚀';
+      currentStep = 12;
+      updateStepUI();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     if (GATEWAY_API_URL && !GATEWAY_API_URL.includes('xxxx')) {
-      btnNext.disabled = true;
-      btnNext.textContent = '⏳ กำลังส่งข้อมูลคำร้อง...';
       fetch(GATEWAY_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -997,46 +1003,22 @@ document.addEventListener('DOMContentLoaded', () => {
       })
         .then(res => res.json())
         .then(data => {
-          btnNext.textContent = '✓ ส่งข้อมูลเรียบร้อย!';
-          if (modalTitle) modalTitle.textContent = '✅ ยื่นเรื่องเรียบร้อยแล้ว';
-          if (modalDesc) modalDesc.textContent = 'ระบบบันทึกข้อมูลคำร้องเข้าสู่ระบบเรียบร้อยแล้ว เมื่อระบบประมวลผลเสร็จสิ้น ท่านจะได้รับใบรวบรวมสรุปข้อมูลผ่านทางแชต LINE นี้ และเจ้าหน้าที่จะแจ้งความคืบหน้าการดำเนินงานให้ทราบเป็นระยะ';
-
-          localStorage.removeItem('bkk_careplan_draft');
+          handleSuccess();
         })
         .catch(err => {
           console.error('Failed to submit payload to gateway:', err);
           btnNext.disabled = false;
           btnNext.textContent = 'ยืนยันและส่งเรื่อง 🚀';
-          if (modalTitle) modalTitle.textContent = '❌ เกิดข้อผิดพลาดในการส่งข้อมูล';
-          if (modalDesc) modalDesc.textContent = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่อีกครั้ง';
+          alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่อีกครั้ง');
         });
     } else {
-      if (modalTitle) modalTitle.textContent = '✅ ยื่นเรื่องเรียบร้อยแล้ว';
-      if (modalDesc) modalDesc.textContent = 'ระบบบันทึกข้อมูลคำร้องเข้าสู่ระบบเรียบร้อยแล้ว เมื่อระบบประมวลผลเสร็จสิ้น ท่านจะได้รับใบรวบรวมสรุปข้อมูลผ่านทางแชต LINE นี้ (โหมดจำลองระบบทดสอบ)';
-      localStorage.removeItem('bkk_careplan_draft');
+      handleSuccess();
     }
   }
 
-  // Copy JSON Payload Handler
-  if (btnCopyPayload) {
-    btnCopyPayload.addEventListener('click', () => {
-      if (payloadJsonDisplay) {
-        navigator.clipboard.writeText(payloadJsonDisplay.textContent).then(() => {
-          btnCopyPayload.textContent = '✓ คัดลอกเรียบร้อย!';
-          setTimeout(() => btnCopyPayload.textContent = 'ก๊อปปี้ JSON', 2000);
-        });
-      }
-    });
-  }
-
   // Close LIFF Window Handler
-  const btnCloseLiff = document.getElementById('btnCloseLiff');
-  if (btnCloseLiff) {
-    btnCloseLiff.addEventListener('click', () => {
-      if (payloadModal) {
-        payloadModal.classList.remove('active');
-      }
-
+  if (btnFinishLiff) {
+    btnFinishLiff.addEventListener('click', () => {
       if (typeof liff !== 'undefined' && typeof liff.closeWindow === 'function') {
         try {
           liff.closeWindow();

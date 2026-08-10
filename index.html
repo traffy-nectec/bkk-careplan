@@ -328,13 +328,45 @@
         <div class="review-grid" id="reviewSummaryGrid">
           <!-- Dynamically generated UX-optimized summary cards -->
         </div>
+      <!-- Step 12: Submission Success Page (Full Screen) -->
+      <section class="step-card success-card" data-step="12" aria-labelledby="step12_title">
+        <div class="success-content">
+          <div class="success-badge-icon" aria-hidden="true">✅</div>
+          <h2 id="step12_title" class="success-title">ยื่นเรื่องเรียบร้อยแล้ว</h2>
+          <p class="success-desc">
+            ระบบได้บันทึกข้อมูลคำร้องเข้าสู่ระบบเรียบร้อยแล้ว เมื่อระบบประมวลผลเสร็จสิ้น
+            ท่านจะได้รับใบรวบรวมสรุปข้อมูลผ่านทางแชต LINE นี้ และเจ้าหน้าที่จะแจ้งความคืบหน้าการดำเนินงานให้ทราบเป็นระยะ
+          </p>
+
+          <div class="success-summary-box">
+            <div class="success-info-row">
+              <span class="info-label">รายการ:</span>
+              <span class="info-val">ขอรับการสนับสนุนผ้าอ้อมผู้ใหญ่ กทม.</span>
+            </div>
+            <div class="success-info-row">
+              <span class="info-label">สถานะระบบ:</span>
+              <span class="info-val badge-success-status">บันทึกข้อมูลเข้าสู่ระบบเรียบร้อยแล้ว 🚀</span>
+            </div>
+            <div class="success-info-row">
+              <span class="info-label">การดำเนินการถัดไป:</span>
+              <span class="info-val">เจ้าหน้าที่ ศบส. จะติดต่อกลับเพื่อนัดหมายเยี่ยมบ้าน</span>
+            </div>
+          </div>
+
+          <div class="success-action-group">
+            <button type="button" class="btn-primary btn-full btn-lg" id="btnFinishLiff">
+              เสร็จสิ้น / ปิดหน้าต่าง
+            </button>
+            <p class="success-note-text">(หากหน้าต่างไม่ปิดให้อัตโนมัติ สามารถกดปิดแท็บหรือปุ่มกากบาทมุมบนได้เลย)</p>
+          </div>
+        </div>
       </section>
 
     </form>
   </main>
 
   <!-- Bottom Navigation Action Bar -->
-  <footer class="action-footer" role="contentinfo">
+  <footer class="action-footer" id="actionFooter" role="contentinfo">
     <button type="button" class="btn-secondary" id="btnPrev" style="display: none;" aria-label="ย้อนกลับไปข้อก่อนหน้า">
       ← ย้อนกลับ
     </button>
@@ -342,20 +374,6 @@
       ถัดไป →
     </button>
   </footer>
-
-  <!-- Submission Success Modal -->
-  <div class="modal-backdrop" id="payloadModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-card">
-      <div class="modal-icon" aria-hidden="true">✅</div>
-      <h3 id="modalTitle">ยื่นเรื่องเรียบร้อยแล้ว</h3>
-      <p>ระบบบันทึกข้อมูลคำร้องเข้าสู่ระบบเรียบร้อยแล้ว เมื่อระบบประมวลผลเสร็จสิ้น
-        ท่านจะได้รับใบรวบรวมสรุปข้อมูลผ่านทางแชต LINE นี้ และเจ้าหน้าที่จะแจ้งความคืบหน้าการดำเนินงานให้ทราบเป็นระยะ</p>
-
-      <button type="button" class="btn-primary btn-full" id="btnCloseLiff">
-        เสร็จสิ้น / ปิดหน้าต่าง
-      </button>
-    </div>
-  </div>
 
   <script src="app.js"></script>
 </body>

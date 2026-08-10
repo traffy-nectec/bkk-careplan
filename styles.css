@@ -875,3 +875,94 @@ body {
   white-space: pre-wrap;
   word-break: break-all;
 }
+
+/* Step 12 Full-screen Success Page */
+.success-card {
+  text-align: center;
+  padding: 32px 20px;
+}
+
+.success-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.success-badge-icon {
+  font-size: 3.6rem;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.success-title {
+  font-size: calc(1.5rem * var(--base-font-scale));
+  font-weight: 700;
+  color: var(--primary-green);
+}
+
+.success-desc {
+  font-size: calc(0.92rem * var(--base-font-scale));
+  color: var(--text-dark);
+  line-height: 1.6;
+  max-width: 480px;
+}
+
+.success-summary-box {
+  background: var(--light-bg);
+  border: 1px solid rgba(22, 160, 133, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.success-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: calc(0.85rem * var(--base-font-scale));
+  gap: 8px;
+}
+
+.info-label {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.info-val {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.badge-success-status {
+  background: var(--accent-light);
+  color: var(--primary-green);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.success-action-group {
+  width: 100%;
+  max-width: 480px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-lg {
+  padding: 14px 20px;
+  font-size: calc(1.05rem * var(--base-font-scale));
+  font-weight: 600;
+  border-radius: 12px;
+}
+
+.success-note-text {
+  font-size: calc(0.78rem * var(--base-font-scale));
+  color: var(--text-muted);
+}
