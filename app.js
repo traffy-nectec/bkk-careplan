@@ -986,7 +986,19 @@ document.addEventListener('DOMContentLoaded', () => {
     btnNext.disabled = true;
     btnNext.textContent = '⏳ กำลังส่งข้อมูลคำร้อง...';
 
-    const handleSuccess = () => {
+    const handleSuccess = (responseData = null) => {
+      console.log('✅ Submission Success! Gateway Response:', responseData);
+
+      // Send text message confirmation into LINE chat if available
+      if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient() && typeof liff.sendMessages === 'function') {
+        liff.sendMessages([
+          {
+            type: 'text',
+            text: `📌 ยื่นเรื่องขอรับสิทธิผ้าอ้อมผู้ใหญ่เรียบร้อยแล้ว\n\nชื่อผู้ป่วย: ${formData.patient_name}\nแขวง/เขต: แขวง${formData.subdistrict || '-'} เขต${formData.district || '-'}\nเบอร์ติดต่อ: ${formData.contact_phone || '-'}\nสถานะ: บันทึกข้อมูลเข้าสู่ระบบเรียบร้อยแล้ว 🚀`
+          }
+        ]).catch(err => console.warn('liff.sendMessages warning:', err));
+      }
+
       localStorage.removeItem('bkk_careplan_draft');
       btnNext.disabled = false;
       btnNext.textContent = 'ยืนยันและส่งเรื่อง 🚀';
@@ -996,23 +1008,27 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (GATEWAY_API_URL && !GATEWAY_API_URL.includes('xxxx')) {
+      console.log('🚀 Sending JSON payload to Gateway API:', GATEWAY_API_URL, payload);
       fetch(GATEWAY_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       })
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP Error status: ${res.status}`);
+          return res.json();
+        })
         .then(data => {
-          handleSuccess();
+          handleSuccess(data);
         })
         .catch(err => {
-          console.error('Failed to submit payload to gateway:', err);
+          console.error('❌ Failed to submit payload to gateway:', err);
           btnNext.disabled = false;
           btnNext.textContent = 'ยืนยันและส่งเรื่อง 🚀';
           alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่อีกครั้ง');
         });
     } else {
-      handleSuccess();
+      handleSuccess({ mock: true });
     }
   }
 
