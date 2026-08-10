@@ -1029,6 +1029,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Close LIFF Window Handler
+  const btnCloseLiff = document.getElementById('btnCloseLiff');
+  if (btnCloseLiff) {
+    btnCloseLiff.addEventListener('click', () => {
+      if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) {
+        liff.closeWindow();
+      } else {
+        window.close();
+        setTimeout(() => {
+          location.reload();
+        }, 300);
+      }
+    });
+  }
+
   // Navigation Button Handlers
   btnNext.addEventListener('click', () => goNextStep());
   btnPrev.addEventListener('click', () => goPrevStep());
