@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=1.2.11">
 </head>
 
 <body>
@@ -29,7 +29,7 @@
       <div class="logo-group" aria-label="โลโก้ BKK Careplan และ Traffy Fondue">
         <div class="bkk-badge">BKK Careplan</div>
         <span class="tf-badge">Traffy Fondue</span>
-        <span class="version-badge">v1.1.0</span>
+        <span class="version-badge">v1.2.11</span>
       </div>
 
       <!-- Accessibility Font Controls (WCAG 1.4.4) -->
@@ -43,14 +43,52 @@
       </div>
     </div>
     <!-- Progress Bar -->
-    <div class="progress-container" role="progressbar" id="progressBarContainer" aria-label="ความคืบหน้าฟอร์ม">
+    <div class="progress-container is-hidden" role="progressbar" id="progressBarContainer" aria-label="ความคืบหน้าฟอร์ม" hidden>
       <div class="progress-bar" id="progressBar"></div>
     </div>
   </header>
 
   <!-- Main Multi-step Form App -->
   <main class="app-container" role="main">
-    <form id="diaperForm" onsubmit="return false;">
+    <!-- Required service-area check before entering the form -->
+    <section class="location-gate-card is-hidden" id="locationGate" aria-label="ผลการตรวจสอบพื้นที่ให้บริการ" hidden>
+      <div class="location-gate-state is-hidden" id="locationOutsideState" aria-live="polite" hidden>
+        <div class="location-gate-icon" aria-hidden="true">📍</div>
+        <h1>ตำแหน่งปัจจุบันอยู่นอกกรุงเทพมหานคร</h1>
+        <p>บริการนี้สำหรับผู้ป่วยที่มีที่พักอาศัยในกรุงเทพมหานคร หากขณะนี้คุณอยู่นอกพื้นที่ แต่ผู้ป่วยพักอาศัยในกรุงเทพฯ สามารถดำเนินการต่อและระบุที่อยู่ผู้ป่วยในขั้นตอนถัดไปได้</p>
+        <div class="location-gate-actions">
+          <button type="button" class="btn-primary btn-full location-continue-button" id="btnContinueOutside">
+            <span class="location-continue-label">ยืนยันที่พักผู้ป่วยในกรุงเทพมหานคร</span>
+            <span class="location-continue-action">ดำเนินการต่อ</span>
+          </button>
+          <button type="button" class="btn-secondary btn-full btnCloseLiff">ปิดแบบฟอร์ม</button>
+        </div>
+      </div>
+
+      <div class="location-gate-state is-hidden" id="locationErrorState" aria-live="assertive" hidden>
+        <div class="location-gate-icon" aria-hidden="true">⚠️</div>
+        <h1>ไม่สามารถตรวจสอบตำแหน่งได้</h1>
+        <p id="locationErrorMessage">กรุณาอนุญาตการเข้าถึงตำแหน่ง แล้วลองตรวจสอบอีกครั้ง</p>
+        <div class="location-permission-help is-hidden" id="locationPermissionHelp" hidden>
+          <div id="locationPermissionRealHelp">
+            <strong id="locationPermissionHelpTitle">กรุณาลองตรวจสอบตำแหน่งอีกครั้ง</strong>
+            <p id="locationPermissionHelpPrimary">หากระบบถามขอใช้ตำแหน่ง ให้เลือก “อนุญาต” เพื่อดำเนินการต่อ</p>
+            <p id="locationPermissionHelpSecondary">หากยังไม่มีคำถาม กรุณาปิดแบบฟอร์มแล้วเปิดใหม่</p>
+          </div>
+          <div class="is-hidden" id="locationPermissionTestHelp" hidden>
+            <strong>ขณะนี้กำลังใช้โหมดทดสอบ</strong>
+            <p>โหมดนี้จำลองการปฏิเสธตำแหน่งและจะไม่เรียก permission จริง</p>
+            <p>กดปุ่มด้านล่างเพื่อออกจากโหมดทดสอบและเปิด flow จริง</p>
+          </div>
+        </div>
+        <div class="location-gate-actions">
+          <button type="button" class="btn-primary btn-full" id="btnRetryServiceLocation">ลองตรวจสอบอีกครั้ง</button>
+          <button type="button" class="btn-secondary btn-full btnCloseLiff" id="btnCloseLocationError">ปิดแบบฟอร์ม</button>
+        </div>
+      </div>
+    </section>
+
+    <form id="diaperForm" class="is-hidden" onsubmit="return false;" hidden>
 
       <!-- PHASE 1: Applicant & Patient Identity -->
 
@@ -156,10 +194,10 @@
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">คำถามที่ 5 / 10</span>
-            <span class="badge-optional">แนะนำให้ระบุ</span>
+            <span class="badge-required">จำเป็นต้องแนบ</span>
           </div>
           <h2 id="step5_title">แนบรูปถ่ายใบรับรองแพทย์ (กรณีมีภาวะกลั้นปัสสาวะ/อุจจาระไม่ได้)</h2>
-          <p class="question-desc">ใบรับรองแพทย์จากสถานพยาบาลจะช่วยเร่งการอนุมัติโควตาผ้าอ้อมให้รวดเร็วยิ่งขึ้น</p>
+          <p class="question-desc">กรุณาแนบใบรับรองแพทย์จากสถานพยาบาลอย่างน้อย 1 ไฟล์</p>
         </div>
         <div class="upload-box">
           <input type="file" id="medicalCertUpload" class="file-input"
@@ -341,6 +379,8 @@
             ท่านจะได้รับใบรวบรวมสรุปข้อมูลผ่านทางแชต LINE นี้ และเจ้าหน้าที่จะแจ้งความคืบหน้าการดำเนินงานให้ทราบเป็นระยะ
           </p>
 
+          <p class="success-warning">หากติดต่อผู้แจ้งไม่ได้ภายใน 3 วัน คำขออาจถูกยกเลิก</p>
+
           <div class="success-summary-box">
             <div class="success-info-row">
               <span class="info-label">รายการ:</span>
@@ -369,7 +409,7 @@
   </main>
 
   <!-- Bottom Navigation Action Bar -->
-  <footer class="action-footer" id="actionFooter" role="contentinfo">
+  <footer class="action-footer is-hidden" id="actionFooter" role="contentinfo" hidden>
     <button type="button" class="btn-secondary" id="btnPrev" style="display: none;" aria-label="ย้อนกลับไปข้อก่อนหน้า">
       ← ย้อนกลับ
     </button>
@@ -378,7 +418,7 @@
     </button>
   </footer>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=1.2.11"></script>
 </body>
 
 </html>

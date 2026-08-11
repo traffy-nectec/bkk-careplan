@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let leafletMap = null;
   let leafletMarker = null;
   let isMapFullscreen = false;
+  let hasPassedLocationGate = false;
 
   // LIFF Configuration & State
   const LIFF_ID = '2000158432-95uKB5EW'; // Actual LINE LIFF ID
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lineProfile = await liff.getProfile();
         console.log('LIFF initialized & logged in:', lineProfile);
       } else {
+        if (getLocationTestMode()) return;
         liff.login();
       }
     } catch (err) {
@@ -171,6 +173,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const fileUpload = document.getElementById('fileUpload');
   const filePreviewList = document.getElementById('filePreviewList');
   const actionFooter = document.getElementById('actionFooter');
+  const progressBarContainer = document.getElementById('progressBarContainer');
+  const diaperForm = document.getElementById('diaperForm');
+  const locationGate = document.getElementById('locationGate');
+  const locationOutsideState = document.getElementById('locationOutsideState');
+  const locationErrorState = document.getElementById('locationErrorState');
+  const locationErrorMessage = document.getElementById('locationErrorMessage');
+  const locationPermissionHelp = document.getElementById('locationPermissionHelp');
+  const locationPermissionRealHelp = document.getElementById('locationPermissionRealHelp');
+  const locationPermissionHelpTitle = document.getElementById('locationPermissionHelpTitle');
+  const locationPermissionHelpPrimary = document.getElementById('locationPermissionHelpPrimary');
+  const locationPermissionHelpSecondary = document.getElementById('locationPermissionHelpSecondary');
+  const locationPermissionTestHelp = document.getElementById('locationPermissionTestHelp');
+  const btnCloseLocationError = document.getElementById('btnCloseLocationError');
+  const btnRetryServiceLocation = document.getElementById('btnRetryServiceLocation');
+  const btnContinueOutside = document.getElementById('btnContinueOutside');
   const btnFinishLiff = document.getElementById('btnFinishLiff');
   const patientIdInput = document.getElementById('patient_id');
   const idValidationMsg = document.getElementById('idValidationMsg');
@@ -186,6 +203,237 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.setAttribute('data-font-size', size);
     });
   });
+
+  // Required current-location check before entering the form
+  function showLocationGateState(activeState) {
+    if (locationGate) {
+      locationGate.hidden = false;
+      locationGate.classList.remove('is-hidden');
+    }
+    [locationOutsideState, locationErrorState].forEach(state => {
+      if (state) {
+        const shouldHide = state !== activeState;
+        state.hidden = shouldHide;
+        state.classList.toggle('is-hidden', shouldHide);
+      }
+    });
+  }
+
+  function setLocationChecking(isChecking) {
+    if (btnRetryServiceLocation) {
+      btnRetryServiceLocation.disabled = isChecking;
+      btnRetryServiceLocation.textContent = isChecking
+        ? '⏳ กำลังตรวจสอบตำแหน่ง...'
+        : 'ลองตรวจสอบอีกครั้ง';
+    }
+  }
+
+  function isBangkokLocation(data) {
+    if (!data || !data.address) return false;
+    const address = data.address;
+    const isoCode = address['ISO3166-2-lvl4'] || address['ISO3166-2-lvl3'] || '';
+    if (isoCode.toUpperCase() === 'TH-10') return true;
+
+    const administrativeArea = [
+      address.city,
+      address.state,
+      address.province,
+      address.municipality,
+      address.county,
+      address.city_district
+    ].filter(Boolean).join(' ').toLowerCase();
+
+    return administrativeArea.includes('กรุงเทพมหานคร')
+      || administrativeArea.includes('กรุงเทพฯ')
+      || administrativeArea.includes('bangkok')
+      || administrativeArea.includes('krung thep maha nakhon');
+  }
+
+  function enterFormFlow() {
+    hasPassedLocationGate = true;
+    if (locationGate) {
+      locationGate.hidden = true;
+      locationGate.classList.add('is-hidden');
+    }
+    if (diaperForm) {
+      diaperForm.hidden = false;
+      diaperForm.classList.remove('is-hidden');
+    }
+    if (progressBarContainer) {
+      progressBarContainer.hidden = false;
+      progressBarContainer.classList.remove('is-hidden');
+    }
+    if (actionFooter) {
+      actionFooter.hidden = false;
+      actionFooter.classList.remove('is-hidden');
+    }
+    updateStepUI();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function isIOSDevice() {
+    if (typeof liff !== 'undefined' && typeof liff.getOS === 'function') {
+      try {
+        if (liff.getOS() === 'ios') return true;
+      } catch (err) {
+        console.warn('Unable to detect OS from LIFF:', err);
+      }
+    }
+
+    return /iPad|iPhone|iPod/.test(navigator.userAgent)
+      || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  }
+
+  function showLocationError(message, isPermissionDenied = false, isTestMode = false) {
+    const isIOSPermissionDenied = isPermissionDenied && !isTestMode && isIOSDevice();
+    setLocationChecking(false);
+    if (locationErrorMessage) {
+      locationErrorMessage.textContent = isIOSPermissionDenied
+        ? 'ไม่สามารถดำเนินการต่อได้ เนื่องจากไม่ได้รับอนุญาตให้ใช้ตำแหน่ง'
+        : message;
+    }
+    if (locationPermissionHelp) {
+      locationPermissionHelp.hidden = !isPermissionDenied;
+      locationPermissionHelp.classList.toggle('is-hidden', !isPermissionDenied);
+    }
+    if (locationPermissionRealHelp) {
+      locationPermissionRealHelp.hidden = isTestMode;
+      locationPermissionRealHelp.classList.toggle('is-hidden', isTestMode);
+    }
+    if (locationPermissionTestHelp) {
+      locationPermissionTestHelp.hidden = !isTestMode;
+      locationPermissionTestHelp.classList.toggle('is-hidden', !isTestMode);
+    }
+    if (isPermissionDenied && !isTestMode) {
+      if (locationPermissionHelpTitle) {
+        locationPermissionHelpTitle.textContent = isIOSPermissionDenied
+          ? 'ไม่สามารถขออนุญาตซ้ำจากหน้าฟอร์มนี้ได้'
+          : 'กรุณาลองตรวจสอบตำแหน่งอีกครั้ง';
+      }
+      if (locationPermissionHelpPrimary) {
+        locationPermissionHelpPrimary.textContent = isIOSPermissionDenied
+          ? 'ขณะนี้การขออนุญาตตำแหน่งอีกครั้งบน iPhone อาจไม่สามารถทำได้'
+          : 'หากระบบถามขอใช้ตำแหน่ง ให้เลือก “อนุญาต” เพื่อดำเนินการต่อ';
+      }
+      if (locationPermissionHelpSecondary) {
+        locationPermissionHelpSecondary.textContent = isIOSPermissionDenied
+          ? 'กรุณาลองเปิดแบบฟอร์มด้วยอุปกรณ์อื่น'
+          : 'หากยังไม่มีคำถาม กรุณาปิดแบบฟอร์มแล้วเปิดใหม่';
+      }
+    }
+    if (btnRetryServiceLocation) {
+      const shouldHideRetry = isTestMode || isIOSPermissionDenied;
+      btnRetryServiceLocation.hidden = shouldHideRetry;
+      btnRetryServiceLocation.classList.toggle('is-hidden', shouldHideRetry);
+      btnRetryServiceLocation.textContent = 'ลองตรวจสอบอีกครั้ง';
+    }
+    if (btnCloseLocationError) {
+      const shouldPromoteClose = isTestMode || isIOSPermissionDenied;
+      btnCloseLocationError.dataset.exitLocationTest = isTestMode ? 'true' : 'false';
+      btnCloseLocationError.textContent = isTestMode
+        ? 'ออกจากโหมดทดสอบและเปิด flow จริง'
+        : 'ปิดแบบฟอร์ม';
+      btnCloseLocationError.classList.toggle('btn-primary', shouldPromoteClose);
+      btnCloseLocationError.classList.toggle('btn-secondary', !shouldPromoteClose);
+    }
+    showLocationGateState(locationErrorState);
+    announceToScreenReader(message);
+  }
+
+  // Development-only location scenarios. Ignored on production hosts.
+  function getLocationTestMode() {
+    const hostname = window.location.hostname.toLowerCase();
+    const isTestHost = hostname === 'localhost'
+      || hostname === '127.0.0.1'
+      || hostname === '::1'
+      || hostname.endsWith('.ngrok-free.app')
+      || hostname.endsWith('.ngrok.io');
+
+    if (!isTestHost) return null;
+
+    const queryParams = new URLSearchParams(window.location.search);
+    let testMode = queryParams.get('test_location');
+
+    // LIFF may wrap query parameters from liff.line.me inside `liff.state`.
+    if (!testMode) {
+      const liffState = queryParams.get('liff.state') || '';
+      const stateQueryIndex = liffState.indexOf('?');
+      if (stateQueryIndex >= 0) {
+        const stateParams = new URLSearchParams(liffState.slice(stateQueryIndex + 1));
+        testMode = stateParams.get('test_location');
+      }
+    }
+    return ['bangkok', 'outside', 'denied'].includes(testMode) ? testMode : null;
+  }
+
+  function applyLocationTestMode() {
+    const testMode = getLocationTestMode();
+    if (testMode === 'bangkok') {
+      console.info('Location test mode: Bangkok');
+      enterFormFlow();
+      return true;
+    }
+    if (testMode === 'outside') {
+      console.info('Location test mode: outside Bangkok');
+      showLocationGateState(locationOutsideState);
+      announceToScreenReader('ตำแหน่งปัจจุบันอยู่นอกกรุงเทพมหานคร');
+      return true;
+    }
+    if (testMode === 'denied') {
+      console.info('Location test mode: permission denied');
+      showLocationError('โหมดทดสอบ: จำลองการไม่อนุญาตตำแหน่ง', true, true);
+      return true;
+    }
+
+    return false;
+  }
+
+  function verifyServiceLocation() {
+    if (!navigator.geolocation) {
+      showLocationError('อุปกรณ์นี้ไม่รองรับการตรวจสอบตำแหน่ง จึงไม่สามารถดำเนินการต่อได้');
+      return;
+    }
+
+    setLocationChecking(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1&accept-language=th,en`
+          );
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const locationData = await response.json();
+          setLocationChecking(false);
+
+          if (isBangkokLocation(locationData)) {
+            enterFormFlow();
+          } else {
+            showLocationGateState(locationOutsideState);
+            announceToScreenReader('ตำแหน่งปัจจุบันอยู่นอกกรุงเทพมหานคร');
+          }
+        } catch (err) {
+          console.warn('Service-area verification error:', err);
+          showLocationError('ระบบได้รับพิกัดแล้ว แต่ไม่สามารถตรวจสอบพื้นที่ได้ กรุณาลองอีกครั้ง');
+        }
+      },
+      (error) => {
+        const isPermissionDenied = error.code === 1;
+        const message = isPermissionDenied
+          ? 'คุณยังไม่ได้อนุญาตให้แบบฟอร์มนี้ใช้ตำแหน่ง'
+          : 'ไม่สามารถรับตำแหน่งปัจจุบันได้ กรุณาตรวจสอบสัญญาณ GPS แล้วลองอีกครั้ง';
+        showLocationError(message, isPermissionDenied);
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  }
+
+  if (btnRetryServiceLocation) {
+    btnRetryServiceLocation.addEventListener('click', () => {
+      if (!applyLocationTestMode()) verifyServiceLocation();
+    });
+  }
+  if (btnContinueOutside) btnContinueOutside.addEventListener('click', enterFormFlow);
 
   // BKK Address Autocomplete Engine
   if (bkkAddressSearch) {
@@ -548,6 +796,7 @@ document.addEventListener('DOMContentLoaded', () => {
           formData.medical_certs.push(compressed);
           renderMedCertPreviews();
           saveDraft();
+          checkCurrentStepValidity();
         } catch (err) {
           alert(err.message);
         }
@@ -620,7 +869,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (currentStep === 4) {
       isValid = !!document.querySelector('input[name="health_condition"]:checked');
     } else if (currentStep === 5) {
-      isValid = true; // Optional step (Medical Cert)
+      isValid = formData.medical_certs.length > 0;
     } else if (currentStep === 6) {
       isValid = formData.latitude !== null && formData.longitude !== null;
     } else if (currentStep === 7) {
@@ -630,11 +879,15 @@ document.addEventListener('DOMContentLoaded', () => {
       isValid = phone.length >= 9;
     } else if (currentStep === 9) {
       const isCaregiverApplicant = formData.applicant_type === 'caregiver';
+      const isBedriddenPatient = formData.health_condition === 'bedridden';
+      const requiresCaregiverInfo = isCaregiverApplicant || isBedriddenPatient;
       if (caregiverBadge && caregiverDesc) {
-        if (isCaregiverApplicant) {
+        if (requiresCaregiverInfo) {
           caregiverBadge.textContent = 'จำเป็นต้องระบุ';
           caregiverBadge.className = 'badge-required';
-          caregiverDesc.textContent = 'ญาติหรือผู้ดูแลกรอกแทนผู้ป่วย จำเป็นต้องระบุชื่อและเบอร์โทรศัพท์ผู้ดูแล';
+          caregiverDesc.textContent = isBedriddenPatient
+            ? 'ผู้ป่วยติดเตียงจำเป็นต้องระบุชื่อและเบอร์โทรศัพท์ญาติหรือผู้ดูแลสำหรับติดต่อประสานงาน'
+            : 'ญาติหรือผู้ดูแลกรอกแทนผู้ป่วย จำเป็นต้องระบุชื่อและเบอร์โทรศัพท์ผู้ดูแล';
         } else {
           caregiverBadge.textContent = 'ไม่บังคับกรอก';
           caregiverBadge.className = 'badge-optional';
@@ -642,7 +895,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      if (isCaregiverApplicant) {
+      if (requiresCaregiverInfo) {
         const name = document.getElementById('caregiver_name').value.trim();
         const phone = document.getElementById('caregiver_phone').value.trim();
         isValid = name.length > 0 && phone.length >= 9;
@@ -764,6 +1017,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Update UI Step Visibility & Progress
   function updateStepUI() {
+    if (!hasPassedLocationGate) {
+      if (diaperForm) {
+        diaperForm.hidden = true;
+        diaperForm.classList.add('is-hidden');
+      }
+      if (progressBarContainer) {
+        progressBarContainer.hidden = true;
+        progressBarContainer.classList.add('is-hidden');
+      }
+      if (actionFooter) {
+        actionFooter.hidden = true;
+        actionFooter.classList.add('is-hidden');
+      }
+      return;
+    }
+
     stepCards.forEach(card => {
       const step = parseInt(card.dataset.step);
       if (step === currentStep) {
@@ -929,6 +1198,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Submit Final Payload
   function submitPayload() {
+    if (formData.health_condition === 'incontinence' && formData.medical_certs.length === 0) {
+      alert('กรุณาแนบใบรับรองแพทย์อย่างน้อย 1 ไฟล์');
+      currentStep = 5;
+      updateStepUI();
+      return;
+    }
+
+    const requiresCaregiverInfo = formData.applicant_type === 'caregiver'
+      || formData.health_condition === 'bedridden';
+    if (requiresCaregiverInfo
+      && (!formData.caregiver_name || formData.caregiver_phone.length < 9)) {
+      alert('กรุณาระบุชื่อและเบอร์โทรศัพท์ญาติหรือผู้ดูแลผู้ป่วย');
+      currentStep = 9;
+      updateStepUI();
+      return;
+    }
+
     const payload = {
       request_timestamp: new Date().toISOString(),
       form_id: "bkk_careplan_diaper_v1",
@@ -1033,18 +1319,36 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Close LIFF Window Handler
+  function closeLiffWindow(fallbackMessage) {
+    const isInLiffClient = typeof liff !== 'undefined'
+      && typeof liff.isInClient === 'function'
+      && liff.isInClient();
+
+    if (isInLiffClient && typeof liff.closeWindow === 'function') {
+      try {
+        liff.closeWindow();
+        return;
+      } catch (e) {
+        console.warn('liff.closeWindow error:', e);
+      }
+    }
+
+    alert(fallbackMessage);
+  }
+
+  document.querySelectorAll('.btnCloseLiff').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.exitLocationTest === 'true') {
+        window.location.href = `https://liff.line.me/${LIFF_ID}`;
+        return;
+      }
+      closeLiffWindow('ไม่สามารถปิดหน้าต่างอัตโนมัติได้ กรุณาปิดแท็บหรือหน้าต่างนี้');
+    });
+  });
+
   if (btnFinishLiff) {
     btnFinishLiff.addEventListener('click', () => {
-      if (typeof liff !== 'undefined' && typeof liff.closeWindow === 'function') {
-        try {
-          liff.closeWindow();
-        } catch (e) {
-          console.warn('liff.closeWindow error:', e);
-        }
-      }
-      if (typeof liff === 'undefined' || !liff.isInClient || !liff.isInClient()) {
-        alert('ยื่นเรื่องเรียบร้อยแล้ว ท่านสามารถปิดแท็บเบราว์เซอร์นี้ได้เลยครับ');
-      }
+      closeLiffWindow('ยื่นเรื่องเรียบร้อยแล้ว ท่านสามารถปิดแท็บเบราว์เซอร์นี้ได้เลยครับ');
     });
   }
 
@@ -1056,5 +1360,11 @@ document.addEventListener('DOMContentLoaded', () => {
   restoreDraft();
   updateStepUI();
   updateCardSelectedStates();
-  initLiff();
+
+  async function initializeApp() {
+    await initLiff();
+    if (!applyLocationTestMode()) verifyServiceLocation();
+  }
+
+  initializeApp();
 });

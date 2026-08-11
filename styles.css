@@ -55,6 +55,10 @@ body {
   font-size: calc(16px * var(--base-font-scale));
 }
 
+.is-hidden {
+  display: none !important;
+}
+
 /* Header & Progress Bar (Centered Logo & No Wrap Fix) */
 .app-header {
   position: sticky;
@@ -170,6 +174,101 @@ body {
   width: 100%;
   margin: 0 auto;
   padding: 20px 16px;
+}
+
+/* Required location check before the form */
+.location-gate-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 32px 22px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(13, 92, 58, 0.06);
+  text-align: center;
+}
+
+.location-gate-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.location-gate-icon {
+  font-size: 3.4rem;
+  line-height: 1;
+}
+
+.location-gate-card h1 {
+  color: var(--primary-green);
+  font-size: calc(1.4rem * var(--base-font-scale));
+  line-height: 1.35;
+}
+
+.location-gate-card p {
+  color: var(--text-muted);
+  font-size: calc(0.92rem * var(--base-font-scale));
+  line-height: 1.65;
+  max-width: 480px;
+}
+
+.location-gate-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 480px;
+}
+
+.location-continue-button {
+  line-height: 1.35;
+  white-space: normal;
+}
+
+.location-continue-label,
+.location-continue-action {
+  display: block;
+}
+
+.location-continue-label {
+  font-size: calc(0.82rem * var(--base-font-scale));
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.location-continue-action {
+  margin-top: 3px;
+  font-size: calc(1rem * var(--base-font-scale));
+  font-weight: 700;
+}
+
+.location-privacy-note {
+  font-size: calc(0.78rem * var(--base-font-scale)) !important;
+}
+
+.location-permission-help {
+  width: 100%;
+  max-width: 480px;
+  padding: 14px;
+  border: 1px solid #f59e0b;
+  border-radius: 10px;
+  background: #fffbeb;
+  color: #78350f;
+  text-align: left;
+}
+
+.location-permission-help strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.location-permission-help p {
+  color: #78350f;
+  font-size: calc(0.82rem * var(--base-font-scale));
+  line-height: 1.55;
+}
+
+.location-permission-help p + p {
+  margin-top: 6px;
 }
 
 .step-card {
@@ -917,6 +1016,19 @@ body {
   color: var(--text-dark);
   line-height: 1.6;
   max-width: 480px;
+}
+
+.success-warning {
+  width: 100%;
+  max-width: 480px;
+  padding: 12px 14px;
+  border: 1px solid #f59e0b;
+  border-radius: 10px;
+  background: #fffbeb;
+  color: #92400e;
+  font-size: calc(0.88rem * var(--base-font-scale));
+  font-weight: 600;
+  line-height: 1.55;
 }
 
 .success-summary-box {
