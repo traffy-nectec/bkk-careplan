@@ -1018,6 +1018,22 @@ body {
   max-width: 480px;
 }
 
+.success-eligibility-notice {
+  width: 100%;
+  max-width: 480px;
+  padding: 12px 14px;
+  border: 1px solid rgba(22, 160, 133, 0.35);
+  border-radius: 10px;
+  background: #ecfdf5;
+  color: var(--primary-green);
+  font-size: calc(0.88rem * var(--base-font-scale));
+  line-height: 1.6;
+}
+
+.success-eligibility-notice strong {
+  font-weight: 700;
+}
+
 .success-warning {
   width: 100%;
   max-width: 480px;
