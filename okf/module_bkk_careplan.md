@@ -124,7 +124,7 @@ erDiagram
 | 4 | `health_condition` | ภาวะความจำเป็น | Radio Card | Required | เลือก "ผู้ป่วยติดเตียง" หรือ "กลั้นไม่ได้" (Single Select เลือก 1 ข้อ) |
 | 5 | `medical_cert` | รูปถ่ายใบรับรองแพทย์ | File Upload | Conditional | **Conditional Step:** ปรากฏเฉพาะเมื่อ `has_incontinence == true` |
 | 6 | `location_coords` | พิกัดสถานที่พักอาศัย | Leaflet Map | Required | **Auto GPS Fetching & Location-First:** ดึงพิกัดตำแหน่งปัจจุบันให้อัตโนมัติ ปักหมุด GPS ยิง Reverse Geocoding ส่งค่าไป Step 7 |
-| 7 | `patient_address` | ที่อยู่ กทม. + จุดสังเกต | Autocomplete & Text | Required | **BKK Address Autocomplete** (แขวง/เขต/รหัสไปรษณีย์) + ช่องจุดสังเกต |
+| 7 | `patient_address` | ที่อยู่ กทม. + จุดสังเกต | Autocomplete & Text | Required | **BKK Address Autocomplete** (ครบ 50 เขต 180 แขวง ซิงค์กับ `public.voice_subdistrictlist`) + ช่องจุดสังเกต |
 | 8 | `contact_phone` | เบอร์โทรศัพท์ติดต่อนัดหมาย | Tel Input | Required | ตัวเลข 9-10 หลัก |
 | 9 | `caregiver_info` | ข้อมูลญาติ/ผู้ดูแล | Text & Tel Input | Conditional | Required หาก `applicant_type == 'caregiver'` / Optional หากยื่นเอง |
 | 10 | `attachments` | รูปถ่ายแนบประกอบ | File Upload | Optional | อัปโหลดรูปภาพผู้ป่วย/สถานที่พักอาศัย |
