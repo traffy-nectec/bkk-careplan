@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let leafletMap = null;
   let leafletMarker = null;
   let isMapFullscreen = false;
-  let hasPassedLocationGate = false;
+  let hasPassedLocationGate = true;
 
   // LIFF Configuration & State
   const LIFF_ID = '2000158432-95uKB5EW'; // Actual LINE LIFF ID
@@ -285,51 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Required current-location check before entering the form
-  function showLocationGateState(activeState) {
-    if (locationGate) {
-      locationGate.hidden = false;
-      locationGate.classList.remove('is-hidden');
-    }
-    [locationOutsideState, locationErrorState].forEach(state => {
-      if (state) {
-        const shouldHide = state !== activeState;
-        state.hidden = shouldHide;
-        state.classList.toggle('is-hidden', shouldHide);
-      }
-    });
-  }
-
-  function setLocationChecking(isChecking) {
-    if (btnRetryServiceLocation) {
-      btnRetryServiceLocation.disabled = isChecking;
-      btnRetryServiceLocation.textContent = isChecking
-        ? '⏳ กำลังตรวจสอบตำแหน่ง...'
-        : 'ลองตรวจสอบอีกครั้ง';
-    }
-  }
-
-  function isBangkokLocation(data) {
-    if (!data || !data.address) return false;
-    const address = data.address;
-    const isoCode = address['ISO3166-2-lvl4'] || address['ISO3166-2-lvl3'] || '';
-    if (isoCode.toUpperCase() === 'TH-10') return true;
-
-    const administrativeArea = [
-      address.city,
-      address.state,
-      address.province,
-      address.municipality,
-      address.county,
-      address.city_district
-    ].filter(Boolean).join(' ').toLowerCase();
-
-    return administrativeArea.includes('กรุงเทพมหานคร')
-      || administrativeArea.includes('กรุงเทพฯ')
-      || administrativeArea.includes('bangkok')
-      || administrativeArea.includes('krung thep maha nakhon');
-  }
-
+  // Enter form directly (Form is shown immediately on launch)
   function enterFormFlow() {
     hasPassedLocationGate = true;
     if (locationGate) {
@@ -351,170 +307,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateStepUI();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
-  function isIOSDevice() {
-    if (typeof liff !== 'undefined' && typeof liff.getOS === 'function') {
-      try {
-        if (liff.getOS() === 'ios') return true;
-      } catch (err) {
-        console.warn('Unable to detect OS from LIFF:', err);
-      }
-    }
-
-    return /iPad|iPhone|iPod/.test(navigator.userAgent)
-      || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  }
-
-  function showLocationError(message, isPermissionDenied = false, isTestMode = false) {
-    const isIOSPermissionDenied = isPermissionDenied && !isTestMode && isIOSDevice();
-    setLocationChecking(false);
-    if (locationErrorMessage) {
-      locationErrorMessage.textContent = isIOSPermissionDenied
-        ? 'ไม่สามารถดำเนินการต่อได้ เนื่องจากไม่ได้รับอนุญาตให้ใช้ตำแหน่ง'
-        : message;
-    }
-    if (locationPermissionHelp) {
-      locationPermissionHelp.hidden = !isPermissionDenied;
-      locationPermissionHelp.classList.toggle('is-hidden', !isPermissionDenied);
-    }
-    if (locationPermissionRealHelp) {
-      locationPermissionRealHelp.hidden = isTestMode;
-      locationPermissionRealHelp.classList.toggle('is-hidden', isTestMode);
-    }
-    if (locationPermissionTestHelp) {
-      locationPermissionTestHelp.hidden = !isTestMode;
-      locationPermissionTestHelp.classList.toggle('is-hidden', !isTestMode);
-    }
-    if (isPermissionDenied && !isTestMode) {
-      if (locationPermissionHelpTitle) {
-        locationPermissionHelpTitle.textContent = isIOSPermissionDenied
-          ? 'ไม่สามารถขออนุญาตซ้ำจากหน้าฟอร์มนี้ได้'
-          : 'กรุณาลองตรวจสอบตำแหน่งอีกครั้ง';
-      }
-      if (locationPermissionHelpPrimary) {
-        locationPermissionHelpPrimary.textContent = isIOSPermissionDenied
-          ? 'ขณะนี้การขออนุญาตตำแหน่งอีกครั้งบน iPhone อาจไม่สามารถทำได้'
-          : 'หากระบบถามขอใช้ตำแหน่ง ให้เลือก “อนุญาต” เพื่อดำเนินการต่อ';
-      }
-      if (locationPermissionHelpSecondary) {
-        locationPermissionHelpSecondary.textContent = isIOSPermissionDenied
-          ? 'กรุณาลองเปิดแบบฟอร์มด้วยอุปกรณ์อื่น'
-          : 'หากยังไม่มีคำถาม กรุณาปิดแบบฟอร์มแล้วเปิดใหม่';
-      }
-    }
-    if (btnRetryServiceLocation) {
-      const shouldHideRetry = isTestMode || isIOSPermissionDenied;
-      btnRetryServiceLocation.hidden = shouldHideRetry;
-      btnRetryServiceLocation.classList.toggle('is-hidden', shouldHideRetry);
-      btnRetryServiceLocation.textContent = 'ลองตรวจสอบอีกครั้ง';
-    }
-    if (btnCloseLocationError) {
-      const shouldPromoteClose = isTestMode || isIOSPermissionDenied;
-      btnCloseLocationError.dataset.exitLocationTest = isTestMode ? 'true' : 'false';
-      btnCloseLocationError.textContent = isTestMode
-        ? 'ออกจากโหมดทดสอบและเปิด flow จริง'
-        : 'ปิดแบบฟอร์ม';
-      btnCloseLocationError.classList.toggle('btn-primary', shouldPromoteClose);
-      btnCloseLocationError.classList.toggle('btn-secondary', !shouldPromoteClose);
-    }
-    showLocationGateState(locationErrorState);
-    announceToScreenReader(message);
-  }
-
-  // Development-only location scenarios. Ignored on production hosts.
-  function getLocationTestMode() {
-    const hostname = window.location.hostname.toLowerCase();
-    const isTestHost = hostname === 'localhost'
-      || hostname === '127.0.0.1'
-      || hostname === '::1'
-      || hostname.endsWith('.ngrok-free.app')
-      || hostname.endsWith('.ngrok.io');
-
-    if (!isTestHost) return null;
-
-    const queryParams = new URLSearchParams(window.location.search);
-    let testMode = queryParams.get('test_location');
-
-    // LIFF may wrap query parameters from liff.line.me inside `liff.state`.
-    if (!testMode) {
-      const liffState = queryParams.get('liff.state') || '';
-      const stateQueryIndex = liffState.indexOf('?');
-      if (stateQueryIndex >= 0) {
-        const stateParams = new URLSearchParams(liffState.slice(stateQueryIndex + 1));
-        testMode = stateParams.get('test_location');
-      }
-    }
-    return ['bangkok', 'outside', 'denied'].includes(testMode) ? testMode : null;
-  }
-
-  function applyLocationTestMode() {
-    const testMode = getLocationTestMode();
-    if (testMode === 'bangkok') {
-      console.info('Location test mode: Bangkok');
-      enterFormFlow();
-      return true;
-    }
-    if (testMode === 'outside') {
-      console.info('Location test mode: outside Bangkok');
-      showLocationGateState(locationOutsideState);
-      announceToScreenReader('ตำแหน่งปัจจุบันอยู่นอกกรุงเทพมหานคร');
-      return true;
-    }
-    if (testMode === 'denied') {
-      console.info('Location test mode: permission denied');
-      showLocationError('โหมดทดสอบ: จำลองการไม่อนุญาตตำแหน่ง', true, true);
-      return true;
-    }
-
-    return false;
-  }
-
-  function verifyServiceLocation() {
-    if (!navigator.geolocation) {
-      showLocationError('อุปกรณ์นี้ไม่รองรับการตรวจสอบตำแหน่ง จึงไม่สามารถดำเนินการต่อได้');
-      return;
-    }
-
-    setLocationChecking(true);
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
-        try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1&accept-language=th,en`
-          );
-          if (!response.ok) throw new Error(`HTTP ${response.status}`);
-          const locationData = await response.json();
-          setLocationChecking(false);
-
-          if (isBangkokLocation(locationData)) {
-            enterFormFlow();
-          } else {
-            showLocationGateState(locationOutsideState);
-            announceToScreenReader('ตำแหน่งปัจจุบันอยู่นอกกรุงเทพมหานคร');
-          }
-        } catch (err) {
-          console.warn('Service-area verification error:', err);
-          showLocationError('ระบบได้รับพิกัดแล้ว แต่ไม่สามารถตรวจสอบพื้นที่ได้ กรุณาลองอีกครั้ง');
-        }
-      },
-      (error) => {
-        const isPermissionDenied = error.code === 1;
-        const message = isPermissionDenied
-          ? 'คุณยังไม่ได้อนุญาตให้แบบฟอร์มนี้ใช้ตำแหน่ง'
-          : 'ไม่สามารถรับตำแหน่งปัจจุบันได้ กรุณาตรวจสอบสัญญาณ GPS แล้วลองอีกครั้ง';
-        showLocationError(message, isPermissionDenied);
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
-  }
-
-  if (btnRetryServiceLocation) {
-    btnRetryServiceLocation.addEventListener('click', () => {
-      if (!applyLocationTestMode()) verifyServiceLocation();
-    });
-  }
-  if (btnContinueOutside) btnContinueOutside.addEventListener('click', enterFormFlow);
 
   // BKK Address Autocomplete Engine
   if (bkkAddressSearch) {
@@ -717,25 +509,28 @@ document.addEventListener('DOMContentLoaded', () => {
     checkCurrentStepValidity();
     saveDraft();
 
-    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=th`)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.address) {
-          const rawAddr = JSON.stringify(data.address);
-          const matched = bkkSubdistrictList.find(item =>
-            rawAddr.includes(item.subdistrict) || rawAddr.includes(item.district)
-          );
-          if (matched) {
-            selectBkkAddress(matched);
-            geocodeNotification.style.display = 'block';
+    // If subdistrict was not selected yet, populate from reverse geocoding
+    if (!formData.subdistrict) {
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=th`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.address) {
+            const rawAddr = JSON.stringify(data.address);
+            const matched = bkkSubdistrictList.find(item =>
+              rawAddr.includes(item.subdistrict) || rawAddr.includes(item.district)
+            );
+            if (matched && !formData.subdistrict) {
+              selectBkkAddress(matched);
+              if (geocodeNotification) geocodeNotification.style.display = 'block';
+            }
           }
-        }
-      })
-      .catch(err => console.log('Reverse geocode skip', err));
+        })
+        .catch(err => console.log('Reverse geocode skip', err));
+    }
   }
 
   function updateCoordsDisplay(lat, lng) {
-    coordsDisplay.textContent = `📍 พิกัด: Lat ${lat.toFixed(5)}, Lon ${lng.toFixed(5)}`;
+    coordsDisplay.textContent = `📍 พิกัดบ้านพักผู้ป่วย: Lat ${lat.toFixed(5)}, Lon ${lng.toFixed(5)}`;
     coordsDisplay.classList.add('active');
   }
 
@@ -805,20 +600,20 @@ document.addEventListener('DOMContentLoaded', () => {
             leafletMap.setView([lat, lng], 16);
             leafletMarker.setLatLng([lat, lng]);
           }
-          if (btnGetLocation) btnGetLocation.innerHTML = '🎯 ดึงตำแหน่ง GPS ปัจจุบัน';
+          if (btnGetLocation) btnGetLocation.innerHTML = '🎯 ดึงพิกัด GPS (กรณีอยู่ที่บ้านผู้ป่วย)';
         },
         (err) => {
           if (isManual) {
-            alert('ไม่สามารถดึงพิกัดได้ กรุณาอนุญาตตำแหน่ง หรือค้นหา/ลากหมุดบนแผนที่');
+            alert('ไม่สามารถดึงพิกัดได้ กรุณาอนุญาตตำแหน่ง หรือเลื่อนหมุดไปยังบ้านพักผู้ป่วย');
           } else {
             console.log('Auto geolocation skipped or denied:', err);
           }
-          if (btnGetLocation) btnGetLocation.innerHTML = '🎯 ดึงตำแหน่ง GPS ปัจจุบัน';
+          if (btnGetLocation) btnGetLocation.innerHTML = '🎯 ดึงพิกัด GPS (กรณีอยู่ที่บ้านผู้ป่วย)';
         },
         { enableHighAccuracy: true, timeout: 7000 }
       );
     } else if (isManual) {
-      alert('อุปกรณ์นี้ไม่รองรับ Geolocation กรุณาลากหมุดบนแผนที่');
+      alert('อุปกรณ์นี้ไม่รองรับ Geolocation กรุณาลากหมุดบนแผนที่ไปยังบ้านพักผู้ป่วย');
     }
   }
 
@@ -952,9 +747,9 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (currentStep === 5) {
       isValid = formData.medical_certs.length > 0;
     } else if (currentStep === 6) {
-      isValid = formData.latitude !== null && formData.longitude !== null;
-    } else if (currentStep === 7) {
       isValid = !!formData.district && !!formData.subdistrict && !!formData.patient_address_detail;
+    } else if (currentStep === 7) {
+      isValid = formData.latitude !== null && formData.longitude !== null;
     } else if (currentStep === 8) {
       const phone = document.getElementById('contact_phone').value.trim();
       isValid = phone.length >= 9;
@@ -1005,7 +800,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (currentStep === 4) {
       const sel = document.querySelector('input[name="health_condition"]:checked');
       if (sel) formData.health_condition = sel.value;
-    } else if (currentStep === 7) {
+    } else if (currentStep === 6) {
       if (patientAddressDetail) formData.patient_address_detail = patientAddressDetail.value.trim();
       if (patientAddressLandmark) formData.patient_address_landmark = patientAddressLandmark.value.trim();
       updateFullAddressText();
@@ -1049,7 +844,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!checkCurrentStepValidity()) return;
 
     if (currentStep === 4 && formData.health_condition !== 'incontinence') {
-      currentStep = 6; // Skip Medical Cert step if not incontinence
+      currentStep = 6; // Skip Medical Cert step if not incontinence -> go to Step 6 (Address)
     } else if (currentStep < TOTAL_STEPS) {
       currentStep++;
     } else {
@@ -1073,7 +868,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Go to Previous Step (With Conditional Skip for Medical Cert)
   function goPrevStep() {
     if (currentStep === 6 && formData.health_condition !== 'incontinence') {
-      currentStep = 4; // Skip Medical Cert step backwards if not incontinence
+      currentStep = 4; // Skip Medical Cert step backwards if not incontinence -> go back to Step 4
     } else if (currentStep > 1) {
       currentStep--;
     }
@@ -1138,12 +933,17 @@ document.addEventListener('DOMContentLoaded', () => {
       announceToScreenReader(`ขั้นตอนที่ ${currentStep} จาก ${TOTAL_STEPS}: ${titleEl.textContent}`);
     }
 
-    // Initialize Map & Auto-fetch Location if on Step 6
-    if (currentStep === 6) {
+    // Initialize Map on Step 7
+    if (currentStep === 7) {
       setTimeout(() => {
         initLeafletMap();
         if (formData.latitude === null && formData.longitude === null) {
-          fetchCurrentLocation(false);
+          const defaultLat = 13.7563;
+          const defaultLng = 100.5018;
+          formData.latitude = defaultLat;
+          formData.longitude = defaultLng;
+          updateCoordsDisplay(defaultLat, defaultLng);
+          checkCurrentStepValidity();
         }
       }, 150);
     }
@@ -1156,7 +956,9 @@ document.addEventListener('DOMContentLoaded', () => {
     btnPrev.style.display = currentStep === 1 ? 'none' : 'inline-block';
 
     // Next / Submit Button Text
-    if (currentStep === TOTAL_STEPS) {
+    if (currentStep === 1) {
+      btnNext.textContent = 'รับทราบและดำเนินการต่อ →';
+    } else if (currentStep === TOTAL_STEPS) {
       btnNext.textContent = 'ยืนยันและส่งเรื่อง 🚀';
       renderUXReviewSummary();
     } else {
@@ -1224,8 +1026,11 @@ document.addEventListener('DOMContentLoaded', () => {
       <!-- Card 3: Location & Address -->
       <div class="review-section-card">
         <div class="review-card-header">
-          <div class="review-card-title">📍 ที่อยู่และพิกัดจัดส่ง</div>
-          <button type="button" class="review-edit-btn" onclick="jumpToStep(6)">แก้ไข</button>
+          <div class="review-card-title">📍 ที่อยู่และพิกัดบ้านพักผู้ป่วย</div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="review-edit-btn" onclick="jumpToStep(6)">แก้ไขที่อยู่</button>
+            <button type="button" class="review-edit-btn" onclick="jumpToStep(7)">แก้ไขพิกัด</button>
+          </div>
         </div>
         <div class="review-data-row">
           <span class="review-label">ที่อยู่ กทม.:</span>
@@ -1237,7 +1042,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <span class="review-value">${formData.patient_address_landmark}</span>
         </div>` : ''}
         <div class="review-data-row">
-          <span class="review-label">พิกัด GPS:</span>
+          <span class="review-label">พิกัดบ้านพักผู้ป่วย:</span>
           <span class="review-value">${formData.latitude ? `Lat ${formData.latitude.toFixed(4)}, Lon ${formData.longitude.toFixed(4)}` : 'ไม่ได้ระบุ'}</span>
         </div>
       </div>
@@ -1444,7 +1249,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function initializeApp() {
     await initLiff();
-    if (!applyLocationTestMode()) verifyServiceLocation();
+    updateStepUI();
   }
 
   initializeApp();

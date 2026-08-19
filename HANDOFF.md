@@ -25,9 +25,10 @@
 
 ## ⚡ 3. สรุปเหตุการณ์หลักการทำงานของระบบ (Key Executive Trigger Events)
 
-* **เปิดฟอร์มผ่าน LINE (LIFF Launch Trigger):** ดึงชื่อและโปรไฟล์ LINE ของผู้ยื่นเรื่องมาเชื่อมโยงอัตโนมัติ
-* **เข้าสู่ข้อคำถามตำแหน่ง (Location Step Trigger):** ดึงพิกัด GPS ปัจจุบัน ปักหมุดแผนที่ และเติมชื่อ แขวง เขต รหัสไปรษณีย์ ให้อัตโนมัติ (รองรับครบถ้วนทั้ง 50 เขต 180 แขวง ตรงตามตาราง `public.voice_subdistrictlist`)
-* **เลือกสภาวะสุขภาพผู้ป่วย (Condition Selection Trigger):** หากเลือก "กลั้นไม่ได้" ระบบเปิดช่องแนบใบรับรองแพทย์ให้อัตโนมัติ หากเลือก "ติดเตียง" ระบบข้ามให้อัตโนมัติ
+* **เปิดฟอร์มผ่าน LINE (LIFF Launch Trigger):** เข้าสู่แบบฟอร์มทันที ดึงชื่อและโปรไฟล์ LINE ของผู้ยื่นเรื่องมาเชื่อมโยงอัตโนมัติ พร้อมแสดงแถบแจ้งเตือนขอบเขต กทม. ในข้อ 1
+* **เลือกที่อยู่ กทม. (Address Autocomplete Step 6):** ค้นหา แขวง และ เขต ในกรุงเทพฯ (รองรับครบถ้วนทั้ง 50 เขต 180 แขวง ตรงตามตาราง `public.voice_subdistrictlist`) พร้อมกรอกบ้านเลขที่ ซอย ถนน
+* **ระบุพิกัดบ้านพักผู้ป่วย (Patient Home Map Pin Step 7):** ปักหมุดพิกัดบ้านพักจริงของผู้ป่วยบนแผนที่ Leaflet พร้อมคำแนะนำ 3 ขั้นตอน ชี้แจงชัดเจนว่าไม่ใช่ตำแหน่งของโทรศัพท์มือถือที่กรอก
+* **เลือกสภาวะสุขภาพผู้ป่วย (Condition Selection Trigger):** หากเลือก "กลั้นไม่ได้" ระบบเปิดช่องแนบใบรับรองแพทย์ให้อัตโนมัติ หากเลือก "ติดเตียง" ระบบข้ามไปยังข้อ 6 (ที่อยู่) ให้อัตโนมัติ
 * **อัปโหลดรูปถ่าย (Image Compress Trigger):** คัดกรองเฉพาะไฟล์รูปภาพ พร้อมบีบอัดขนาดย่อลงอัตโนมัติ 95% (เหลือ ~150 KB) เพื่อการส่งผ่านมือถือที่รวดเร็ว
 * **กดส่งเรื่อง (Submission Trigger):** ล็อกปุ่มป้องกันกดซ้ำ แสดงป๊อปอัปโหลดดิ้ง และส่งข้อมูลเข้าสู่ระบบ Cloud Run Gateway / Google Cloud Pub/Sub
 * **ยื่นเรื่องสำเร็จ (Completion Trigger):** เปลี่ยนไปยังหน้าสำเร็จเต็มจอ (Step 12 Full-screen Success Page) แจ้งสรุปและคืบหน้าทางแชต LINE
@@ -46,17 +47,19 @@ sequenceDiagram
     participant PubSub as Google Cloud Pub/Sub (traffy-cloud)
     participant Fondue as Traffy Fondue Engine & ศบส. 69 แห่ง
 
-    User->>LIFF: 1. เปิดผ่าน LINE LIFF (2000158432-95uKB5EW)
+    User->>LIFF: 1. เปิดผ่าน LINE LIFF (2000158432-95uKB5EW) & รับทราบขอบเขต กทม. (Step 1)
     LIFF->>LIFF: 2. ดึงโปรไฟล์ LINE (user_id, display_name)
-    User->>LIFF: 3. ปักหมุด GPS & กรอกแบบฟอร์ม 10 ข้อคำถาม
-    LIFF->>LIFF: 4. ย่อขนาดรูปถ่ายแบบ Canvas (บีบอัดลง ~95%)
-    User->>LIFF: 5. กด "ยืนยันและส่งเรื่อง 🚀"
-    LIFF->>Gateway: 6. POST JSON Payload สื่อสารผ่าน HTTPS
-    Gateway->>PubSub: 7. Publish Message เข้าท็อปปิก line_2019_to_fondue
-    Gateway-->>LIFF: 8. ตอบกลับ HTTP 200 OK (message_id)
-    LIFF-->>User: 9. แสดงหน้าสำเร็จเต็มจอ "✅ ยื่นเรื่องเรียบร้อยแล้ว" (Step 12 Success Page)
-    User->>LIFF: 10. แตะปุ่ม "เสร็จสิ้น / ปิดหน้าต่าง" ➔ liff.closeWindow()
-    PubSub->>Fondue: 11. ประมวลผลสร้าง Ticket สรุปใบรวบรวมข้อมูลยิงเข้าแชต LINE
+    User->>LIFF: 3. พิมพ์ค้นหา แขวง/เขต และที่อยู่ กทม. (Step 6)
+    User->>LIFF: 4. ปักหมุดพิกัดบ้านพักผู้ป่วยบนแผนที่ Leaflet (Step 7)
+    User->>LIFF: 5. กรอกข้อมูลครบ 10 ข้อคำถาม
+    LIFF->>LIFF: 6. ย่อขนาดรูปถ่ายแบบ Canvas (บีบอัดลง ~95%)
+    User->>LIFF: 7. กด "ยืนยันและส่งเรื่อง 🚀"
+    LIFF->>Gateway: 8. POST JSON Payload สื่อสารผ่าน HTTPS
+    Gateway->>PubSub: 9. Publish Message เข้าท็อปปิก line_2019_to_fondue
+    Gateway-->>LIFF: 10. ตอบกลับ HTTP 200 OK (message_id)
+    LIFF-->>User: 11. แสดงหน้าสำเร็จเต็มจอ "✅ ยื่นเรื่องเรียบร้อยแล้ว" (Step 12 Success Page)
+    User->>LIFF: 12. แตะปุ่ม "เสร็จสิ้น / ปิดหน้าต่าง" ➔ liff.closeWindow()
+    PubSub->>Fondue: 13. ประมวลผลสร้าง Ticket สรุปใบรวบรวมข้อมูลยิงเข้าแชต LINE
 ```
 
 ---

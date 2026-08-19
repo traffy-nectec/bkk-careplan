@@ -271,6 +271,44 @@ body {
   margin-top: 6px;
 }
 
+/* Service Area Notice Banner on Step 1 */
+.service-notice-banner {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 1.5px solid rgba(13, 92, 58, 0.25);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(13, 92, 58, 0.06);
+}
+
+.service-notice-icon {
+  font-size: 1.6rem;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+.service-notice-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.service-notice-title {
+  color: var(--primary-green);
+  font-size: calc(0.95rem * var(--base-font-scale));
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.service-notice-desc {
+  color: #065f46;
+  font-size: calc(0.84rem * var(--base-font-scale));
+  line-height: 1.5;
+}
+
 .step-card {
   display: none;
   opacity: 0;
@@ -617,28 +655,77 @@ body {
 .map-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-.map-toolbar {
-  display: flex;
-  gap: 8px;
-}
-
-.map-search-input {
-  flex: 1;
-  font-size: calc(0.88rem * var(--base-font-scale));
-  padding: 10px 12px;
-}
-
-.btn-map-action {
-  background: var(--primary-green);
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
+/* Home Location Clarification Notice on Step 7 */
+.map-home-notice {
+  background: #fffbeb;
+  border: 1.5px solid #f59e0b;
   border-radius: var(--radius-md);
-  font-weight: 600;
-  cursor: pointer;
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.1);
+}
+
+.map-home-notice-icon {
+  font-size: 1.4rem;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+.map-home-notice-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: calc(0.84rem * var(--base-font-scale));
+  line-height: 1.45;
+  color: #78350f;
+}
+
+.map-home-notice-text strong {
+  color: #92400e;
+  font-size: calc(0.88rem * var(--base-font-scale));
+}
+
+/* Map Step-by-Step Usage Guide Card */
+.map-guide-card {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.map-guide-title {
+  font-size: calc(0.86rem * var(--base-font-scale));
+  font-weight: 700;
+  color: var(--primary-green);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.map-guide-list {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.map-guide-list li {
+  font-size: calc(0.82rem * var(--base-font-scale));
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.map-guide-list li strong {
+  color: var(--text-main);
 }
 
 .map-action-row {

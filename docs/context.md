@@ -19,14 +19,16 @@ sequenceDiagram
     participant Staff as พยาบาลวิชาชีพ ศบส. 69 แห่ง
 
     User->>Webview: 1. เปิดผ่าน LINE LIFF (2000158432-95uKB5EW)
-    Webview->>Webview: 2. Auto GPS Fetching & Reverse Geocoding เติมที่อยู่ (Step 6-7)
-    User->>Webview: 3. กรอกข้อมูล 10 ข้อ และกดส่งเรื่อง (Step 11)
-    Webview->>Gateway: 4. POST https://liff-form-gateway-884122932397.asia-southeast1.run.app/
-    Gateway->>PubSub: 5. Publish Message (line_2019_to_fondue)
-    Gateway-->>Webview: 6. ตอบกลับ HTTP 200 OK
-    Webview-->>User: 7. แสดงหน้าสำเร็จเต็มจอ "✅ ยื่นเรื่องเรียบร้อยแล้ว" (Step 12 Success Page) ➔ liff.closeWindow()
-    PubSub->>Staff: 8. กระจาย Ticket คำร้องไปยัง ศบส. ที่รับผิดชอบ
-    Staff->>User: 9. โทรนัดหมายและลงพื้นที่เยี่ยมบ้าน (Stage 2)
+    Webview->>Webview: 2. แสดงแจ้งเตือนเฉพาะ กทม. & รับทราบ (Step 1)
+    User->>Webview: 3. พิมพ์ค้นหา แขวง/เขต และที่อยู่ กทม. (Step 6)
+    User->>Webview: 4. ปักหมุดพิกัดบ้านพักผู้ป่วยบนแผนที่ (Step 7)
+    User->>Webview: 5. กรอกข้อมูลครบ 10 ข้อ และกดส่งเรื่อง (Step 11)
+    Webview->>Gateway: 6. POST https://liff-form-gateway-884122932397.asia-southeast1.run.app/
+    Gateway->>PubSub: 7. Publish Message (line_2019_to_fondue)
+    Gateway-->>Webview: 8. ตอบกลับ HTTP 200 OK
+    Webview-->>User: 9. แสดงหน้าสำเร็จเต็มจอ "✅ ยื่นเรื่องเรียบร้อยแล้ว" (Step 12 Success Page) ➔ liff.closeWindow()
+    PubSub->>Staff: 10. กระจาย Ticket คำร้องไปยัง ศบส. ที่รับผิดชอบ
+    Staff->>User: 11. โทรนัดหมายและลงพื้นที่เยี่ยมบ้าน (Stage 2)
 ```
 
 ---

@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <link rel="stylesheet" href="styles.css?v=1.2.12">
+  <link rel="stylesheet" href="styles.css?v=1.3.0">
 </head>
 
 <body>
@@ -29,7 +29,7 @@
       <div class="logo-group" aria-label="โลโก้ BKK Careplan และ Traffy Fondue">
         <div class="bkk-badge">BKK Careplan</div>
         <span class="tf-badge">Traffy Fondue</span>
-        <span class="version-badge">v1.2.12</span>
+        <span class="version-badge">v1.3.0</span>
       </div>
 
       <!-- Accessibility Font Controls (WCAG 1.4.4) -->
@@ -43,64 +43,34 @@
       </div>
     </div>
     <!-- Progress Bar -->
-    <div class="progress-container is-hidden" role="progressbar" id="progressBarContainer" aria-label="ความคืบหน้าฟอร์ม" hidden>
+    <div class="progress-container" role="progressbar" id="progressBarContainer" aria-label="ความคืบหน้าฟอร์ม">
       <div class="progress-bar" id="progressBar"></div>
     </div>
   </header>
 
   <!-- Main Multi-step Form App -->
   <main class="app-container" role="main">
-    <!-- Required service-area check before entering the form -->
-    <section class="location-gate-card is-hidden" id="locationGate" aria-label="ผลการตรวจสอบพื้นที่ให้บริการ" hidden>
-      <div class="location-gate-state is-hidden" id="locationOutsideState" aria-live="polite" hidden>
-        <div class="location-gate-icon" aria-hidden="true">📍</div>
-        <h1>ตำแหน่งปัจจุบันอยู่นอกกรุงเทพมหานคร</h1>
-        <p>บริการนี้สำหรับผู้ป่วยที่มีที่พักอาศัยในกรุงเทพมหานคร หากขณะนี้คุณอยู่นอกพื้นที่ แต่ผู้ป่วยพักอาศัยในกรุงเทพฯ สามารถดำเนินการต่อและระบุที่อยู่ผู้ป่วยในขั้นตอนถัดไปได้</p>
-        <div class="location-gate-actions">
-          <button type="button" class="btn-primary btn-full location-continue-button" id="btnContinueOutside">
-            <span class="location-continue-label">ยืนยันที่พักผู้ป่วยในกรุงเทพมหานคร</span>
-            <span class="location-continue-action">ดำเนินการต่อ</span>
-          </button>
-          <button type="button" class="btn-secondary btn-full btnCloseLiff">ปิดแบบฟอร์ม</button>
-        </div>
-      </div>
-
-      <div class="location-gate-state is-hidden" id="locationErrorState" aria-live="assertive" hidden>
-        <div class="location-gate-icon" aria-hidden="true">⚠️</div>
-        <h1>ไม่สามารถตรวจสอบตำแหน่งได้</h1>
-        <p id="locationErrorMessage">กรุณาอนุญาตการเข้าถึงตำแหน่ง แล้วลองตรวจสอบอีกครั้ง</p>
-        <div class="location-permission-help is-hidden" id="locationPermissionHelp" hidden>
-          <div id="locationPermissionRealHelp">
-            <strong id="locationPermissionHelpTitle">กรุณาลองตรวจสอบตำแหน่งอีกครั้ง</strong>
-            <p id="locationPermissionHelpPrimary">หากระบบถามขอใช้ตำแหน่ง ให้เลือก “อนุญาต” เพื่อดำเนินการต่อ</p>
-            <p id="locationPermissionHelpSecondary">หากยังไม่มีคำถาม กรุณาปิดแบบฟอร์มแล้วเปิดใหม่</p>
-          </div>
-          <div class="is-hidden" id="locationPermissionTestHelp" hidden>
-            <strong>ขณะนี้กำลังใช้โหมดทดสอบ</strong>
-            <p>โหมดนี้จำลองการปฏิเสธตำแหน่งและจะไม่เรียก permission จริง</p>
-            <p>กดปุ่มด้านล่างเพื่อออกจากโหมดทดสอบและเปิด flow จริง</p>
-          </div>
-        </div>
-        <div class="location-gate-actions">
-          <button type="button" class="btn-primary btn-full" id="btnRetryServiceLocation">ลองตรวจสอบอีกครั้ง</button>
-          <button type="button" class="btn-secondary btn-full btnCloseLiff" id="btnCloseLocationError">ปิดแบบฟอร์ม</button>
-        </div>
-      </div>
-    </section>
-
-    <form id="diaperForm" class="is-hidden" onsubmit="return false;" hidden>
+    <form id="diaperForm" onsubmit="return false;">
 
       <!-- PHASE 1: Applicant & Patient Identity -->
 
-      <!-- STEP 1: Applicant Type -->
+      <!-- STEP 1: Bangkok Scope & Applicant Type -->
       <section class="step-card active" data-step="1" aria-labelledby="step1_title">
+        <div class="service-notice-banner" role="note" aria-label="แจ้งพื้นที่ให้บริการ">
+          <div class="service-notice-icon" aria-hidden="true">📍</div>
+          <div class="service-notice-content">
+            <h3 class="service-notice-title">บริการนี้ใช้ได้เฉพาะในพื้นที่กรุงเทพมหานคร</h3>
+            <p class="service-notice-desc">โครงการสนับสนุนผ้าอ้อมผู้ใหญ่สำหรับผู้ป่วยที่มีที่พักอาศัยอยู่ใน 50 เขต กรุงเทพมหานครเท่านั้น</p>
+          </div>
+        </div>
+
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">คำถามที่ 1 / 10</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
           <h2 id="step1_title">ท่านกำลังกรอกข้อมูลในฐานะใด?</h2>
-          <p class="question-desc">กรุณาเลือกสถานะของผู้กรอกข้อมูล แล้วกดปุ่มถัดไป</p>
+          <p class="question-desc">กรุณาเลือกสถานะของผู้กรอกข้อมูล แล้วกดปุ่มรับทราบและดำเนินการต่อ</p>
         </div>
         <div class="option-grid" role="radiogroup" aria-labelledby="step1_title">
           <label class="option-card">
@@ -211,55 +181,17 @@
         </div>
       </section>
 
-      <!-- PHASE 3: Location-First & Smart Auto-Fill -->
+      <!-- PHASE 3: Address & Map Pin Location -->
 
-      <!-- STEP 6: Interactive Leaflet Map & Reverse Geocoding -->
+      <!-- STEP 6: BKK Address Autocomplete + Landmark Option -->
       <section class="step-card" data-step="6" aria-labelledby="step6_title">
         <div class="step-header">
           <div class="header-top">
             <span class="question-number">คำถามที่ 6 / 10</span>
             <span class="badge-required">จำเป็นต้องระบุ</span>
           </div>
-          <h2 id="step6_title">พิกัดสถานที่พักอาศัย (ปักหมุดบนแผนที่)</h2>
-          <p class="question-desc">กดปุ่มดึงตำแหน่ง GPS หรือพิมพ์ค้นหา หรือลากหมุดบนแผนที่</p>
-        </div>
-        <div class="map-wrapper">
-          <div class="map-toolbar">
-            <label for="mapSearchInput" class="visually-hidden">ค้นหาตำแหน่งบนแผนที่</label>
-            <input type="text" id="mapSearchInput" class="custom-input map-search-input"
-              placeholder="🔍 ค้นหาชื่อถนน หรือ สถานที่สำคัญใกล้เคียง">
-            <button type="button" id="btnSearchMap" class="btn-map-action">ค้นหา</button>
-          </div>
-
-          <div class="map-action-row">
-            <button type="button" class="btn-location" id="btnGetLocation">
-              🎯 ดึงตำแหน่ง GPS ปัจจุบัน
-            </button>
-            <button type="button" class="btn-fullscreen-map" id="btnToggleFullscreenMap">
-              🔍 ขยายแผนที่เต็มจอ
-            </button>
-          </div>
-
-          <!-- Floating Close Button when Fullscreen (Z-index fixed) -->
-          <button type="button" id="btnCloseFullscreenMap" class="btn-close-fullscreen" style="display: none;">
-            ❌ ย่อแผนที่กลับ
-          </button>
-
-          <div id="map" class="leaflet-map-container" role="region" aria-label="แผนที่สำหรับปักหมุดพิกัดพักอาศัย"></div>
-          <div class="coords-display" id="coordsDisplay" aria-live="polite">ยังไม่ได้เลือกตำแหน่ง (ลากหมุดบนแผนที่)
-          </div>
-        </div>
-      </section>
-
-      <!-- STEP 7: BKK Address Autocomplete + Landmark Option -->
-      <section class="step-card" data-step="7" aria-labelledby="step7_title">
-        <div class="step-header">
-          <div class="header-top">
-            <span class="question-number">คำถามที่ 7 / 10</span>
-            <span class="badge-required">จำเป็นต้องระบุ</span>
-          </div>
-          <h2 id="step7_title">ที่อยู่ปัจจุบันของผู้ป่วยในพื้นที่กรุงเทพมหานคร</h2>
-          <p class="question-desc">พิมพ์ค้นหา แขวง/เขต หรือตรวจสอบข้อมูลที่เติมให้อัตโนมัติจากแผนที่</p>
+          <h2 id="step6_title">ที่อยู่ปัจจุบันของผู้ป่วยในพื้นที่กรุงเทพมหานคร</h2>
+          <p class="question-desc">พิมพ์ค้นหา แขวง/เขต ในกรุงเทพฯ และกรอกบ้านเลขที่ ซอย ถนน</p>
         </div>
         <div class="input-group">
           <!-- Auto-filled Geocode Notification Badge -->
@@ -285,6 +217,55 @@
           <input type="text" id="patient_address_landmark" class="custom-input"
             placeholder="ตัวอย่าง: ตรงข้ามวัดบางนาใน / ปากซอยมีร้านเซเว่น / ข้างร้านขายของชำป้าเจ้น">
           <span class="field-hint">ช่วยให้เจ้าหน้าที่พยาบาลเดินทางไปเยี่ยมบ้านและส่งมอบผ้าอ้อมได้รวดเร็วขึ้น</span>
+        </div>
+      </section>
+
+      <!-- STEP 7: Interactive Leaflet Map & Coordinate Pin -->
+      <section class="step-card" data-step="7" aria-labelledby="step7_title">
+        <div class="step-header">
+          <div class="header-top">
+            <span class="question-number">คำถามที่ 7 / 10</span>
+            <span class="badge-required">จำเป็นต้องระบุ</span>
+          </div>
+          <h2 id="step7_title">พิกัดบ้านพักอาศัยของผู้ป่วย (ปักหมุดบนแผนที่)</h2>
+          <p class="question-desc">ระบุพิกัดบ้านพักของผู้ป่วย เพื่อให้เจ้าหน้าที่ ศบส. ลงพื้นที่เยี่ยมบ้านและจัดส่งผ้าอ้อมได้ถูกต้อง</p>
+        </div>
+        <div class="map-wrapper">
+          <!-- Clarification Notice: Patient's Home Location, NOT mobile device location -->
+          <div class="map-home-notice" role="alert">
+            <div class="map-home-notice-icon" aria-hidden="true">🏠</div>
+            <div class="map-home-notice-text">
+              <strong>สำคัญ: ระบุพิกัด "บ้านพักของผู้ป่วย"</strong>
+              <span>โปรดระบุตำแหน่งบ้านพักจริงของผู้ป่วย (ไม่ใช่ตำแหน่งปัจจุบันของโทรศัพท์มือถือที่กำลังกรอกข้อมูล หากกรอกแทนผู้ป่วยและไม่ได้อยู่ที่บ้านผู้ป่วย กรุณาเลื่อนหมุดไปยังบ้านของผู้ป่วย)</span>
+            </div>
+          </div>
+
+          <!-- Step-by-step Map Usage Guide -->
+          <div class="map-guide-card">
+            <div class="map-guide-title">💡 คำแนะนำการปักหมุดบ้านพักผู้ป่วย:</div>
+            <ol class="map-guide-list">
+              <li><strong>เลื่อนแผนที่</strong> ไปยังตำแหน่งบ้านพักของผู้ป่วย (หรือกดปุ่ม "ดึงพิกัด GPS" หากขณะนี้ท่านอยู่ที่บ้านผู้ป่วย)</li>
+              <li><strong>กดปุ่ม +/-</strong> บนแผนที่ (หรือใช้สองนิ้ว) เพื่อย่อ / ขยายแผนที่ให้ชัดเจน</li>
+              <li><strong>กด / แตะที่แผนที่</strong> หรือ <strong>ลากหมุด</strong> ไปตรงจุดบ้านพักของผู้ป่วย</li>
+            </ol>
+          </div>
+
+          <div class="map-action-row">
+            <button type="button" class="btn-location" id="btnGetLocation">
+              🎯 ดึงพิกัด GPS (กรณีอยู่ที่บ้านผู้ป่วย)
+            </button>
+            <button type="button" class="btn-fullscreen-map" id="btnToggleFullscreenMap">
+              🔍 ขยายแผนที่เต็มจอ
+            </button>
+          </div>
+
+          <!-- Floating Close Button when Fullscreen (Z-index fixed) -->
+          <button type="button" id="btnCloseFullscreenMap" class="btn-close-fullscreen" style="display: none;">
+            ❌ ย่อแผนที่กลับ
+          </button>
+
+          <div id="map" class="leaflet-map-container" role="region" aria-label="แผนที่สำหรับปักหมุดพิกัดพักอาศัย"></div>
+          <div class="coords-display" id="coordsDisplay" aria-live="polite">ยังไม่ได้เลือกตำแหน่ง (ลากหมุดบนแผนที่)</div>
         </div>
       </section>
 
@@ -414,16 +395,16 @@
   </main>
 
   <!-- Bottom Navigation Action Bar -->
-  <footer class="action-footer is-hidden" id="actionFooter" role="contentinfo" hidden>
+  <footer class="action-footer" id="actionFooter" role="contentinfo">
     <button type="button" class="btn-secondary" id="btnPrev" style="display: none;" aria-label="ย้อนกลับไปข้อก่อนหน้า">
       ← ย้อนกลับ
     </button>
     <button type="button" class="btn-primary" id="btnNext" disabled aria-label="ไปยังข้อถัดไป">
-      ถัดไป →
+      รับทราบและดำเนินการต่อ →
     </button>
   </footer>
 
-  <script src="app.js?v=1.2.13"></script>
+  <script src="app.js?v=1.3.0"></script>
 </body>
 
 </html>

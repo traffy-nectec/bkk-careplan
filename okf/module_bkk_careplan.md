@@ -19,16 +19,17 @@ sequenceDiagram
     participant DB as PostgreSQL Database
     participant Nurse as พยาบาลวิชาชีพ ศบส.
 
-    User->>Webview: 1. ปักหมุด GPS พิกัดที่พักอาศัย (Step 6)
-    Webview-->>User: 2. Reverse Geocoding เติม แขวง/เขต ให้อัตโนมัติ (Step 7)
-    User->>Webview: 3. กรอกข้อมูล 10 ข้อ และกดส่งเรื่อง (Step 11)
-    Webview->>API: 4. POST /api/careplan/diaper-requests (JSON Payload)
-    API->>DB: 5. INSERT into diaper_requests & patients
-    API->>Nurse: 6. กระจาย Ticket คำร้องเข้า Queue ของ ศบส. 69 แห่ง
-    Nurse->>User: 7. โทรนัดหมายและลงพื้นที่เยี่ยมบ้าน (Stage 2)
-    Nurse->>DB: 8. ประเมิน ADL 10 ข้อ, สิทธิหลัก, บัตรคนพิการ ➔ INSERT into in_home_assessments
-    Nurse->>DB: 9. อนุมัติโควตาผ้าอ้อม/เดือน ➔ INSERT into diaper_approvals
-    Nurse->>User: 10. ส่งมอบผ้าอ้อมผู้ใหญ่ประจำเดือน
+    User->>Webview: 1. เปิดผ่าน LINE LIFF (2000158432-95uKB5EW) & รับทราบขอบเขต กทม. (Step 1)
+    User->>Webview: 2. ค้นหา แขวง/เขต และพิมพ์ที่อยู่บ้านพัก (Step 6)
+    User->>Webview: 3. ปักหมุดพิกัดบ้านพักผู้ป่วยบนแผนที่ Leaflet (Step 7)
+    User->>Webview: 4. กรอกข้อมูลครบ 10 ข้อ และกดส่งเรื่อง (Step 11)
+    Webview->>API: 5. POST /api/careplan/diaper-requests (JSON Payload)
+    API->>DB: 6. INSERT into diaper_requests & patients
+    API->>Nurse: 7. กระจาย Ticket คำร้องเข้า Queue ของ ศบส. 69 แห่ง
+    Nurse->>User: 8. โทรนัดหมายและลงพื้นที่เยี่ยมบ้าน (Stage 2)
+    Nurse->>DB: 9. ประเมิน ADL 10 ข้อ, สิทธิหลัก, บัตรคนพิการ ➔ INSERT into in_home_assessments
+    Nurse->>DB: 10. อนุมัติโควตาผ้าอ้อม/เดือน ➔ INSERT into diaper_approvals
+    Nurse->>User: 11. ส่งมอบผ้าอ้อมผู้ใหญ่ประจำเดือน
 ```
 
 ---
